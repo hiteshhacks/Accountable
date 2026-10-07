@@ -56,6 +56,8 @@
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 1. Project Name
 
 ### **Accountable — Intelligent Voucher Classification & GST Intelligence Platform Using Open-Source LLMs**
@@ -65,6 +67,8 @@
 Traditional accounting automation relies heavily on rigid regex heuristics or isolated keyword search, both of which collapse under complex multi-field contexts. **Accountable** addresses this vulnerability by treating voucher identification as a **multi-field semantic transaction reasoning problem**. It bridges the gap between raw transaction data and statutory tax compliance by pairing representation learning with deterministic GST validation rules.
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 2. Problem Statement
 
@@ -95,6 +99,8 @@ Target: Predict the ground-truth statutory voucher category across 27 distinct a
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 3. Project Overview
 
 Accountable establishes a **dual-domain hierarchical neuro-symbolic framework** uniting statistical deep learning with symbolic tax rule validation:
@@ -115,6 +121,8 @@ Accountable establishes a **dual-domain hierarchical neuro-symbolic framework** 
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 4. Proposed Solution
 
 The proposed solution follows a **dual-domain hierarchical neuro-symbolic architecture**, unifying multi-field feature extraction, dual representation encoders, open LLM arbitration, and a deterministic GST intelligence engine into an integrated operational pipeline.
@@ -129,6 +137,8 @@ The proposed solution follows a **dual-domain hierarchical neuro-symbolic archit
 * **Symbolic-Neural Decoupling:** Machine learning models excel at semantic disambiguation (identifying whether a record represents Capital Goods Purchase vs. Operational Expense), but can hallucinate numerical calculations. **All arithmetic, tax rate validations, and statutory checks are strictly executed by deterministic symbolic rules.**
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 5. Objectives
 
@@ -149,6 +159,8 @@ The proposed solution follows a **dual-domain hierarchical neuro-symbolic archit
 * **Audit-Proof Artifact Generation:** Produce deterministic JSON, Excel, and PDF schedules ready for GSTR-1 and GSTR-3B filings.
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 6. Target Users & Use Case
 
@@ -186,6 +198,8 @@ System Output:
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 7. Open-Source AI Technology Selected
 
 Accountable is built strictly upon **open-source, self-hosted artificial intelligence components**, ensuring zero data leakage and full compliance with corporate financial data privacy standards.
@@ -216,6 +230,8 @@ Models are benchmarked according to strict enterprise criteria prior to producti
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 8. Why This Technology Was Selected
 
 ### 1. Failure Modes of Keyword Matching
@@ -230,6 +246,8 @@ $$\text{Boundary Encoder: } \text{"Why is this transaction NOT its closest seman
 Neural networks frequently struggle with consistent multi-digit floating point arithmetic. By delegating classification to neural models and **tax computation to deterministic Python rules**, Accountable delivers zero-hallucination tax compliance.
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 9. AI's Role in the System
 
@@ -251,6 +269,8 @@ from raw fields       for spatial separation    arbitration            dataset r
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 10. System Architecture
 
 The end-to-end processing pipeline operates through four interconnected stages:
@@ -261,6 +281,8 @@ The end-to-end processing pipeline operates through four interconnected stages:
 4. **GST Intelligence & Discrepancy Auditing:** Classified records are verified against statutory GST formulas, reconciled with portal data, and formatted into filing-ready artifacts.
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 11. Component-Level Architecture
 
@@ -356,6 +378,8 @@ $$\mathcal{L}_{\text{contrastive}} = -\log \frac{\exp(\text{sim}(z_i, z_i^+) / \
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 12. Data / Information Flow
 
 ```text
@@ -394,6 +418,8 @@ $$\mathcal{L}_{\text{contrastive}} = -\log \frac{\exp(\text{sim}(z_i, z_i^+) / \
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 14. Technology Stack
 
 | Layer | Technology | Version | Purpose |
@@ -413,6 +439,8 @@ $$\mathcal{L}_{\text{contrastive}} = -\log \frac{\exp(\text{sim}(z_i, z_i^+) / \
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 15. Expected Features
 
 ### Enterprise Feature Matrix
@@ -430,6 +458,8 @@ $$\mathcal{L}_{\text{contrastive}} = -\log \frac{\exp(\text{sim}(z_i, z_i^+) / \
 ```
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 16. Implementation Approach
 
@@ -450,6 +480,8 @@ Phase 11: Production Reporting ─────► Export of statutory GSTR-1, GS
 ```
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 17. Expected Final Output
 
@@ -522,6 +554,8 @@ AUDIT DISCREPANCIES DETECTED
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 18. Future Scope & Scalability
 
 * **Multi-Modal Document Fusion:** Direct ingest of scanned invoices via open-weight vision-language models (e.g., Qwen-VL) to supplement tabular exports.
@@ -530,6 +564,8 @@ AUDIT DISCREPANCIES DETECTED
 * **Direct Sandbox API Adapters:** Modular GSP (GST Suvidha Provider) integration layers for seamless filing dispatch upon CA review.
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 19. Open-Source Dependencies & Components
 
@@ -558,6 +594,8 @@ AUDIT DISCREPANCIES DETECTED
 ```
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 20. Expected Challenges and Mitigation
 
