@@ -157,3 +157,93 @@ The project aims to deliver the following outcomes:
 - Operational readiness checks for audit, controls, and policy enforcement.
 
 ---
+
+## 7. Open-Source AI Technology Selected
+
+VYOM+ is built on a modular open-source stack tuned for enterprise accounting workflows:
+
+- **Python 3.10+** as the primary implementation environment.
+- **FastAPI** for secure APIs and orchestration endpoints.
+- **PyTorch** for training and inference of voucher classification models.
+- **Transformers** for language-model-based contextual reasoning.
+- **vLLM** for efficient generation and structured output handling.
+- **FAISS** for vector search and nearest-neighbor retrieval during hard-case review.
+- **PostgreSQL** for metadata storage, reconciliation records, and audit tables.
+- **Docker** for portable deployment and reproducible environment management.
+
+These tools provide a credible open-source path without sacrificing enterprise reliability or privacy constraints.
+
+---
+
+## 8. Why This Technology Was Selected
+
+The selected toolchain balances three critical requirements:
+
+1. **Model Quality:** Transformers and PyTorch support deep semantic representations with domain-aware supervision.
+2. **Operational Ease:** FastAPI and Docker enable containerized deployment and low-friction integrations.
+3. **Compliance Readiness:** PostgreSQL and deterministic validation logic help maintain auditability and explainability.
+
+This stack is intentionally chosen to support a production-grade accounting workflow rather than a lab-only demo.
+
+---
+
+## 9. AI's Role in the System
+
+The AI layer performs a controlled set of tasks rather than acting unboundedly:
+
+- Extract semantic meaning from financial rows and supporting metadata.
+- Rank candidate voucher classes based on contextual probability.
+- Identify confusing edge cases requiring additional logic or explicit rule checks.
+- Generate structured outputs aligned with statutory compliance needs.
+- Support human review with traceable reasoning and policy references.
+
+AI augments the process but does not replace policy control or tax review.
+
+---
+
+## 10. System Architecture
+
+The architecture follows a layered pipeline:
+
+```text
+Data ingestion -> Feature normalization -> Dual-domain encoder -> Contrastive boundary scoring -> GST rule validation -> Filing-ready output
+```
+
+This ensures that no accounting decision is made solely by a black-box model. Statutory logic acts as a second gate before final output is accepted.
+
+---
+
+## 11. Component-Level Architecture
+
+### 11.1 Co-Training Block-Level Architecture (Voucher Classification Engine)
+
+The core model pipeline includes:
+
+- raw ledger ingestion and normalization
+- entity and document-role extraction
+- dual encoders for generalization and hard-case separation
+- multi-label and multi-class classification heads
+- confidence calibration and uncertainty handling
+
+### 11.2 GST Intelligence Layer & Structured Filing Data Generation
+
+The GST layer reasons over:
+
+- supplier/customer GSTIN validity
+- tax rate selection and exemption logic
+- ITC eligibility and reversal checks
+- deemed tax treatment and reversal conditions
+- statutory filing readiness per return schema
+
+### 11.3 Contrastive Metric Boundary Separation
+
+Contrastive learning creates metric-space separation between semantically adjacent classes such as:
+
+- Purchase vs. Receipt Note
+- Payment vs. Contra
+- Sales vs. Export
+- Expense vs. Payroll
+
+This reduces catastrophic confusion and improves classification precision in boundary-heavy cases.
+
+---
