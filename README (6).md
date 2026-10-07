@@ -32,8 +32,8 @@
 - [9. Multi-Tier AI Architecture & Roles](#9-ais-role-in-the-system)
 - [10. System Architecture & End-to-End Pipeline](#10-system-architecture)
 - [11. Component-Level Architecture](#11-component-level-architecture)
-  - [11.1 Co-Training Block-Level Architecture](#111-co-training-block-level-architecture-voucher-classification-engine)
-  - [11.2 GST Intelligence Layer](#112-gst-intelligence-layer--structured-filing-data-generation)
+  - [11.1 Co-Training Block-Level Architecture (Voucher Classification Engine)](#111-co-training-block-level-architecture-voucher-classification-engine)
+  - [11.2 GST Intelligence Layer & Structured Filing Data Generation](#112-gst-intelligence-layer--structured-filing-data-generation)
   - [11.3 Contrastive Metric Boundary Separation](#113-contrastive-metric-boundary-separation)
 - [12. End-to-End Data & Information Flow](#12-data--information-flow)
 - [13. Controlled Orchestration & Verification Workflow](#13-agentic-workflow-if-applicable)
@@ -89,11 +89,12 @@ Target: Predict the ground-truth statutory voucher category across 27 distinct a
 | **Human Capital & Overhead** | `Salary / Payroll`, `Attendance`, `Expense`, `Other / Miscellaneous` |
 
 > [!IMPORTANT]
-> **The Core Challenge: Semantic Boundary Ambiguity**
+> **The Core Challenge: Semantic Boundary Ambiguity**  
 > Many voucher classes share identical keywords and overlapping financial attributes:
 > - `Purchase`, `Receipt Note`, and `Material In` all document inward goods flow, but represent commercial liability, physical inventory receipt, and internal transfer respectively.
 > - `Payment`, `Receipt`, and `Contra` all process bank account ledger mutations, differing solely in the directional vector of funds relative to internal accounts.
-> - Simple keyword search fails systematically. The system requires **multi-field relational reasoning**.
+>
+> Simple keyword search fails systematically. The system requires **multi-field relational reasoning**.
 
 ---
 
@@ -106,110 +107,162 @@ VYOM+ establishes a **dual-domain hierarchical neuro-symbolic framework** unitin
 3. **Contrastive Embedding Space:** Explicit metric-distance separation of semantically adjacent vouchers.
 4. **Hard-Negative Mining:** Automated feedback loop queuing challenging confusion pairs for iterative retraining.
 5. **Hierarchical Label Tree:** Coarse-to-fine candidate filtering reducing the 27-class space into localized classification subspaces.
-6. **Open-Source LLM Contextual Arbitration:** Reasoning over serialized dimensions, policies, and edge-case GST logic.
+6. **Open-Source LLM Contextual Arbitration:** Reasoning over serialized multi-field representations using parameter-efficient open weights.
+7. **Deterministic GST Validation Engine:** Zero-hallucination mathematical verification of GST rates, component splits, and reverse charge applicability.
+8. **Book-to-GST Reconciliation:** Automated three-way matching between internal transaction records and GSTR portal schedules.
+9. **ITC Maximization & Anomaly Discovery:** Identification of missing ITC, mismatched GSTINs, and duplicate invoices.
+10. **Statutory Filing-Ready Reporting:** Generation of structured summaries aligned with GSTR-1 and GSTR-3B formats.
 
-This design is not merely a classification pipeline; it is a decision-support platform for **financial control, tax governance, and statutory confidence**.
+> [!NOTE]
+> VYOM+ strictly processes already-structured tabular transaction data. OCR document parsing is decoupled from this architecture, ensuring 100% computational focus on transaction semantics and compliance accuracy.
 
 ---
 
 ## 4. Proposed Solution
 
-The proposed solution combines multiple operational layers within a single enterprise-ready architecture:
+The proposed solution follows a **dual-domain hierarchical neuro-symbolic architecture**, unifying multi-field feature extraction, dual representation encoders, open LLM arbitration, and a deterministic GST intelligence engine into an integrated operational pipeline.
 
-- **Voucher Understanding Layer:** models line-level accounting semantics, document context, and counterparty roles.
-- **Tax Intelligence Layer:** validates vendor/customer GSTIN, tax rates, ITC eligibility, and reconciliation rules.
-- **Contrastive Boundary Layer:** isolates category confusion by explicitly separating semantically adjacent invoice classes.
-- **Compliance Ledger Layer:** turns each transaction into a machine-verifiable accounting event with audit traces.
-- **Decision Orchestration Layer:** employs deterministic checks before finalization to minimize hallucination and unsupported tax claims.
+![Figure 1: VYOM+ Complete Solution Architecture](DATA/technical-approach-2.png)
 
-Collectively, these layers transform ambiguous operational data into a **traceable, verification-ready compliance record**.
+*Figure 1: VYOM+ Complete Solution Architecture — End-to-End Pipeline from Input Cleaning & Accounting Feature Extraction through Dual-Domain Co-Training, Open-Source LLM Classification, and the Downstream GST Intelligence Layer.*
+
+### Design Rationale
+
+* **Macro Distribution vs. Semantic Boundary Separation:** A flat 27-class classifier struggles with imbalanced, fine-grained classes. Training a dedicated Boundary Encoder allows the system to focus specifically on confusable pairs without distorting the global distribution.
+* **Symbolic-Neural Decoupling:** Machine learning models excel at semantic disambiguation (identifying whether a record represents Capital Goods Purchase vs. Operational Expense), but can hallucinate numerical calculations. **All arithmetic, tax rate validations, and statutory checks are strictly executed by deterministic symbolic rules.**
 
 ---
 
 ## 5. Objectives
 
-The project aims to deliver the following outcomes:
+### Primary AI Objectives
 
-- Build a generalized voucher classification engine for 27 major accounting classes.
-- Detect and reduce tax decision errors through deterministic validation logic.
-- Improve book-to-tax reconciliation quality across ERP and GST workflows.
-- Support privacy-first deployment in on-premise or air-gapped enterprise infrastructures.
-- Produce explainable outputs suitable for audit and filing review.
-- Establish a reusable open-source foundation for accounting AI across India and global GST-like regimes.
+* **High-Precision Multi-Class Classification:** Accurately classify structured transaction rows across all 27 accounting voucher categories.
+* **Contextual Multi-Field Reasoning:** Evaluate combinations of counterparty identities, financial values, tax breakdowns, and temporal sequences simultaneously.
+* **Boundary Hardening:** Maximize separation between semantically overlapping voucher pairs (e.g., `Debit Note` vs. `Credit Note`, `Purchase Order` vs. `Purchase Invoice`).
+* **Open-Source Model Sovereignty:** Rely exclusively on open-weights language models (Qwen, Mistral, LLaMA) executable entirely on private infrastructure.
+* **Calibrated Output Scoring:** Return verified probability confidences with explicit entropy markers for human-in-the-loop review.
+
+### GST Compliance Objectives
+
+* **Automated Data Normalization:** Standardize heterogeneous dates, state codes, and 15-character GSTIN structures.
+* **Deterministic Arithmetic Verification:** Mathematically verify that $\text{Taxable Value} \times \text{Rate} = \text{CGST} + \text{SGST} + \text{IGST}$.
+* **Automated Three-Way Matching:** Reconcile internal book ledgers against inward GSTR-2B datasets.
+* **ITC Leakage Prevention:** Flag unclaimed eligible Input Tax Credit and prevent fraudulent or ineligible claims.
+* **Audit-Proof Artifact Generation:** Produce deterministic JSON, Excel, and PDF schedules ready for GSTR-1 and GSTR-3B filings.
 
 ---
 
 ## 6. Target Users & Use Case
 
-### Primary Users
+### Primary User Personas
 
-- **Finance & Accounts Teams** who need structured voucher categorization and faster month-end processing.
-- **Tax & Compliance Teams** who need deterministic GST validation and ITC eligibility checks.
-- **ERP and Digital Transformation Leaders** seeking AI-assisted process automation without cloud dependency.
-- **Chartered Accountants and Tax Practitioners** reviewing filing-ready evidence and ledger reconciliation.
+* **Chartered Accountants & Tax Auditors:** Expedite monthly GSTR-1/3B preparation and perform automated book audits.
+* **Enterprise Finance & Controllership Teams:** Eliminate manual voucher coding across high-volume ERP ledgers.
+* **MSME Business Owners:** Prevent penalties, late fees, and lost ITC without expensive dedicated accounting teams.
+* **FinTech & ERP Software Vendors:** Integrate an intelligent classification and GST validation API into existing accounting platforms.
 
-### Enterprise Use Cases
+### End-to-End Transaction Processing Example
 
-- Multi-entity invoice categorization across corporate subsidiaries.
-- Bulk voucher processing from ERP exports and accounting software dumps.
-- GST return preparation with tax logic traceability.
-- Input tax credit identification and exception management.
-- Operational readiness checks for audit, controls, and policy enforcement.
+```yaml
+Input Record:
+  Supplier: "Precision Tooling Corp"
+  Buyer: "Apex Manufacturing Ltd"
+  Invoice_No: "PTC-2026-881"
+  Document_Date: "2026-09-12"
+  Taxable_Value: 250000.00
+  CGST: 22500.00
+  SGST: 22500.00
+  IGST: 0.00
+  Payment_Status: "Pending / Credit Term 30 Days"
+  Inventory_Signal: "GRN-9022 Logged"
+
+System Output:
+  Voucher_Classification: "Purchase"
+  Classification_Confidence: 0.982
+  GST_Category: "B2B Inward Supply"
+  Tax_Validation_Status: "Verified Valid (18% Slab)"
+  ITC_Eligibility: "Eligible (Section 16 Compliant)"
+  Reconciliation_Flag: "Matched with Supplier GSTR-1"
+  Action_Required: "None - Ready for GSTR-3B Table 4(A)(5)"
+```
 
 ---
 
 ## 7. Open-Source AI Technology Selected
 
-VYOM+ is built on a modular open-source stack tuned for enterprise accounting workflows:
+VYOM+ is built strictly upon **open-source, self-hosted artificial intelligence components**, ensuring zero data leakage and full compliance with corporate financial data privacy standards.
 
-- **Python 3.10+** as the primary implementation environment.
-- **FastAPI** for secure APIs and orchestration endpoints.
-- **PyTorch** for training and inference of voucher classification models.
-- **Transformers** for language-model-based contextual reasoning.
-- **vLLM** for efficient generation and structured output handling.
-- **FAISS** for vector search and nearest-neighbor retrieval during hard-case review.
-- **PostgreSQL** for metadata storage, reconciliation records, and audit tables.
-- **Docker** for portable deployment and reproducible environment management.
+### Evaluated Model Families & Core Frameworks
 
-These tools provide a credible open-source path without sacrificing enterprise reliability or privacy constraints.
+[![Qwen 2.5](https://img.shields.io/badge/Qwen_2.5_(7B/14B)-Alibaba_Cloud-615CED?style=for-the-badge&logo=alibabacloud&logoColor=white)](https://github.com/QwenLM/Qwen2.5)
+[![Meta LLaMA 3.1](https://img.shields.io/badge/LLaMA_3.1_(8B)-Meta_AI-0467DF?style=for-the-badge&logo=meta&logoColor=white)](https://llama.meta.com/)
+[![Mistral NeMo](https://img.shields.io/badge/Mistral_NeMo_(12B)-Mistral_AI-FF7000?style=for-the-badge&logo=mistral&logoColor=white)](https://mistral.ai/)
+[![Google Gemma 2](https://img.shields.io/badge/Gemma_2_(9B)-Google_DeepMind-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/gemma)
+[![Hugging Face](https://img.shields.io/badge/Hugging_Face-Transformers-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/)
+[![vLLM](https://img.shields.io/badge/vLLM-PagedAttention-4F46E5?style=for-the-badge&logo=accelerate&logoColor=white)](https://vllm.ai/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.2+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![FAISS](https://img.shields.io/badge/FAISS-Vector_Search-0284C7?style=for-the-badge&logo=meta&logoColor=white)](https://github.com/facebookresearch/faiss)
+[![PEFT LoRA](https://img.shields.io/badge/PEFT-LoRA_Adapter-10B981?style=for-the-badge&logo=target&logoColor=white)](https://github.com/huggingface/peft)
+
+### Model Evaluation Benchmark Matrix
+
+Models are benchmarked according to strict enterprise criteria prior to production deployment:
+
+| Evaluation Metric | Target Threshold | Operational Purpose |
+| :--- | :--- | :--- |
+| **Macro F1 Score** | $\ge 0.94$ | Overall accuracy across all 27 voucher categories |
+| **Hard-Case F1 Score** | $\ge 0.89$ | Precision on confusable pairs (e.g., Purchase vs. Material In) |
+| **ECE (Expected Calibration Error)** | $\le 0.05$ | Ensures confidence scores accurately reflect real error margins |
+| **Inference Latency (Batched)** | $\le 35\text{ ms / row}$ | High-throughput batch processing of monthly ledgers |
+| **GPU VRAM Footprint** | $\le 16\text{ GB (4-bit/8-bit)}$ | Cost-effective deployment on standard enterprise hardware |
+| **JSON Schema Adherence** | $100\%$ | Guaranteed structured parsing without markdown extraction failures |
 
 ---
 
 ## 8. Why This Technology Was Selected
 
-The selected toolchain balances three critical requirements:
+### 1. Failure Modes of Keyword Matching
+Accounting meaning is relational, not lexical. A transaction containing the term `"payment for raw materials"` might be an **Advance**, an **Expense**, or an actual **Purchase** depending on whether goods were received, whether an invoice was generated, and how tax was charged.
 
-1. **Model Quality:** Transformers and PyTorch support deep semantic representations with domain-aware supervision.
-2. **Operational Ease:** FastAPI and Docker enable containerized deployment and low-friction integrations.
-3. **Compliance Readiness:** PostgreSQL and deterministic validation logic help maintain auditability and explainability.
+### 2. Dual-Domain Co-Training Advantage
+Training a single global model across highly imbalanced data causes it to ignore rare edge cases. The **Dual-Domain architecture** forces the system to answer two distinct questions:
+$$\text{Global Encoder: } \text{"What broad accounting family does this transaction belong to?"}$$
+$$\text{Boundary Encoder: } \text{"Why is this transaction NOT its closest semantic neighbor?"}$$
 
-This stack is intentionally chosen to support a production-grade accounting workflow rather than a lab-only demo.
+### 3. Separation of Concerns: Neural Semantics + Symbolic Rules
+Neural networks frequently struggle with consistent multi-digit floating point arithmetic. By delegating classification to neural models and **tax computation to deterministic Python rules**, VYOM+ delivers zero-hallucination tax compliance.
 
 ---
 
 ## 9. AI's Role in the System
 
-The AI layer performs a controlled set of tasks rather than acting unboundedly:
+```text
+                  ┌──────────────────────────────────────────────┐
+                  │           MULTI-TIER AI SUB-SYSTEM           │
+                  └──────────────────────┬───────────────────────┘
+                                         │
+    ┌──────────────────────┬─────────────┴────────────┬──────────────────────┐
+    ▼                      ▼                          ▼                      ▼
+[Tier 1: Feature]    [Tier 2: Dual Encoders]   [Tier 3: Open LLM]    [Tier 4: Active Loop]
+Entity & temporal     Global + Boundary         Cross-field contextual Hard-negative mining
+serialization         contrastive embeddings    reasoning & candidate   and automated boundary
+from raw fields       for spatial separation    arbitration            dataset retraining
+```
 
-- Extract semantic meaning from financial rows and supporting metadata.
-- Rank candidate voucher classes based on contextual probability.
-- Identify confusing edge cases requiring additional logic or explicit rule checks.
-- Generate structured outputs aligned with statutory compliance needs.
-- Support human review with traceable reasoning and policy references.
-
-AI augments the process but does not replace policy control or tax review.
+* **Spatial & Temporal Representation:** Encodes relationships between counterparty locations (Inter-state vs. Intra-state) and transaction timelines (PO Date $\to$ Delivery Date $\to$ Invoice Date $\to$ Payment Date).
+* **Calibrated Candidate Arbitration:** If the Boundary Encoder indicates ambiguity between two classes, the serialized record is passed to the open-source LLM for targeted natural-language reasoning.
 
 ---
 
 ## 10. System Architecture
 
-The architecture follows a layered pipeline:
+The end-to-end processing pipeline operates through four interconnected stages:
 
-```text
-Data ingestion -> Feature normalization -> Dual-domain encoder -> Contrastive boundary scoring -> GST rule validation -> Filing-ready output
-```
-
-This ensures that no accounting decision is made solely by a black-box model. Statutory logic acts as a second gate before final output is accepted.
+1. **Ingestion & Feature Normalization:** Spreadsheet files are ingested, stripped of noise, and transformed into standardized numeric and categorical accounting features.
+2. **Dual-Domain Co-Training:** General transaction distributions and confusable boundary pairs are jointly processed via Global and Boundary Encoders.
+3. **Open-Source LLM Cross-Attention Reasoning:** Financial spatial and temporal embeddings are cross-attended to perform contextual classification across 27 voucher categories.
+4. **GST Intelligence & Discrepancy Auditing:** Classified records are verified against statutory GST formulas, reconciled with portal data, and formatted into filing-ready artifacts.
 
 ---
 
@@ -217,161 +270,349 @@ This ensures that no accounting decision is made solely by a black-box model. St
 
 ### 11.1 Co-Training Block-Level Architecture (Voucher Classification Engine)
 
-The core model pipeline includes:
+The core voucher classification engine uses a **Dual-Domain Co-Training Block-Level Architecture** designed to resolve challenging semantic boundaries between confusable accounting classes:
 
-- raw ledger ingestion and normalization
-- entity and document-role extraction
-- dual encoders for generalization and hard-case separation
-- multi-label and multi-class classification heads
-- confidence calibration and uncertainty handling
+![Figure 2: Co-Training Block-Level Architecture for Voucher Classification](DATA/technical-approach-5.png)
+
+*Figure 2: Component Architecture 1 — Co-Training Block-Level Architecture for Voucher Classification: Global Encoder, Boundary Encoder, Confidence Estimator, Agreement Pseudo-Labeling, and Boundary Retraining Loop.*
+
+#### Classification Workflow Specification
+
+1. **Dual Encoders:**
+   * **Global Encoder:** Ingests the General Dataset to learn overarching transaction semantics across all voucher categories.
+   * **Boundary Encoder:** Ingests the Hard-Case DB to model fine-grained decision boundaries for confusable pairs (e.g., `Purchase` vs. `Receipt Note`, `Contra` vs. `Payment`).
+2. **Confidence Estimator & Agreement Logic:**
+   * **Agreement ($\text{Global} = \text{Boundary}$):** High mutual confidence triggers automated **Pseudo-Labeling** for continuous semi-supervised learning.
+   * **Disagreement ($\text{Global} \neq \text{Boundary}$):** Flagged as an **Uncertain Case**. The transaction is automatically queued into the **Hard Negative Queue**.
+3. **Iterative Boundary Retraining:** Samples accumulated in the Hard Negative Queue drive periodic boundary retraining, continuously sharpening the model's discriminatory power on edge cases.
+
+---
 
 ### 11.2 GST Intelligence Layer & Structured Filing Data Generation
 
-The GST layer reasons over:
+The **GST Intelligence Layer** takes classified financial transactions and transforms them into complete, audit-ready data required for GST statutory filing (GSTR-1, GSTR-3B) and period reporting:
 
-- supplier/customer GSTIN validity
-- tax rate selection and exemption logic
-- ITC eligibility and reversal checks
-- deemed tax treatment and reversal conditions
-- statutory filing readiness per return schema
+![Figure 3: GST Intelligence Layer & Feature Pipeline](docs\llm-feature-pipeline.png)
+
+*Figure 3: Component Architecture 2 — GST Intelligence Layer: Structured Transaction Serialization, Dual Financial & Temporal Encoders, Cross-Field Attention, Open LLM Processing, and Statutory JSON Output Generation.*
+
+#### Operational Breakdown
+
+1. **Feature Serialization:** Raw classified transaction rows are decomposed into two specialized feature representations:
+   * **Financial Encoder:** GST tax slabs, counterparty identities, taxable amounts, and inventory movement indicators.
+   * **Temporal Encoder:** Chronological sequences linking invoice date, purchase order date, payment date, and return/debit note date.
+2. **Cross-Field Attention:** Computes multi-head attention across financial attributes and temporal events to understand economic causality.
+3. **Open-Source LLM Serving (vLLM):** Executes local inference using models from the Qwen, LLaMA, or Mistral families, generating constrained, guaranteed-schema JSON output.
+4. **Filing Summary & Report Builder:** Aggregates validated transaction records into statutory tables:
+   * **GSTR-3B Table 3.1:** Outward taxable supplies and tax breakdowns.
+   * **GSTR-3B Table 4:** Eligible and candidate Input Tax Credit (ITC).
+   * **Period Exception Summary:** Pinpoints missing invoices, tax mismatches, and potential ITC leakage.
+
+#### Constrained Structured Output Format
+
+```json
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "transaction_id": "TXN-2026-99042",
+  "prediction": {
+    "voucher_type": "Purchase",
+    "primary_confidence": 0.964,
+    "top_3_candidates": [
+      { "category": "Purchase", "score": 0.964 },
+      { "category": "Receipt Note", "score": 0.024 },
+      { "category": "Material In", "score": 0.012 }
+    ]
+  },
+  "accounting_interpretation": {
+    "direction": "Inward",
+    "commercial_nature": "Taxable B2B Procurement",
+    "inventory_impact": "Physical & Financial Receipt",
+    "cash_flow_impact": "Accounts Payable Created"
+  },
+  "gst_compliance": {
+    "supply_type": "B2B Regular",
+    "gst_rate": 18.0,
+    "taxable_value": 100000.00,
+    "cgst": 9000.00,
+    "sgst": 9000.00,
+    "igst": 0.00,
+    "itc_eligible": true,
+    "filing_period": "2026-09"
+  }
+}
+```
+
+---
 
 ### 11.3 Contrastive Metric Boundary Separation
 
-Contrastive learning creates metric-space separation between semantically adjacent classes such as:
+To prevent embedding collapse between semantically adjacent voucher categories, the feature representation space is optimized using a joint supervised and contrastive objective:
 
-- Purchase vs. Receipt Note
-- Payment vs. Contra
-- Sales vs. Export
-- Expense vs. Payroll
+$$\mathcal{L}_{\text{total}} = \mathcal{L}_{\text{CE}} + \lambda \mathcal{L}_{\text{contrastive}}$$
 
-This reduces catastrophic confusion and improves classification precision in boundary-heavy cases.
+Where the contrastive objective is formulated over normalized representations:
+
+$$\mathcal{L}_{\text{contrastive}} = -\log \frac{\exp(\text{sim}(z_i, z_i^+) / \tau)}{\exp(\text{sim}(z_i, z_i^+) / \tau) + \sum_{j} \exp(\text{sim}(z_i, z_j^-) / \tau)}$$
+
+* **Anchor ($z_i$):** Target transaction sample (e.g., commercial Purchase Invoice).
+* **Positive Sample ($z_i^+$):** Legitimate Purchase transaction from another supplier.
+* **Hard Negative ($z_j^-$):** Inward Delivery Challan presenting identical items and supplier names but missing tax charge fields.
 
 ---
 
 ## 12. Data / Information Flow
 
-The system consumes structured ledger exports and transforms them through a multi-stage flow:
-
-1. Input extraction from ERP and accounting workbooks.
-2. Schema normalization and field-level validation.
-3. Financial feature generation and semantic enrichment.
-4. Candidate class ranking and boundary scoring.
-5. Rule-based GST and ITC verification.
-6. Filing-oriented output generation and audit log creation.
-
-This end-to-end flow guarantees traceability from raw row to final compliance output.
+```text
+[Step 1: Input Ingestion]
+  Spreadsheet Document (.xlsx / .csv)
+         │
+         ▼
+[Step 2: Canonical Normalization]
+  Regex Date Normalization ──► Numeric Value Cleaning ──► GSTIN Format Validation
+         │
+         ▼
+[Step 3: Feature Synthesis]
+  Party Role Vectorization ──► Cash Flow Indicators ──► Tax Split Vectors
+         │
+         ▼
+[Step 4: Dual-Encoder Embedding]
+  Global Macro Embeddings ◄─── Co-Training ───► Boundary Specialization Embeddings
+         │
+         ▼
+[Step 5: Metric Evaluation & Filter]
+  If Confidence >= 0.95: Direct Prediction
+  If Confidence < 0.95: Pass to Open LLM Arbitration
+         │
+         ▼
+[Step 6: Compliance Validation]
+  Deterministic Rule Matrix Verification (Zero-Hallucination)
+         │
+         ▼
+[Step 7: Ledger Reconciliation]
+  Match against GSTR-2B Inward Data via Composite Key: [GSTIN + Inv_No + Date + Value]
+         │
+         ▼
+[Step 8: Output Delivery]
+  JSON API Payload ──► Excel Summary Workbook ──► GSTR Filing Table Artifacts
+```
 
 ---
 
 ## 13. Agentic Workflow (If Applicable)
 
-The orchestration layer is designed as a reviewable workflow:
+> [!NOTE]
+> **Deterministic Design Philosophy**  
+> VYOM+ strictly avoids unconstrained autonomous agent loops for core transaction classification and tax calculations. Financial records require deterministic, auditable, and repeatable execution.
 
-- receive record batches
-- perform lightweight validation
-- route uncertain cases to a high-precision review mode
-- trigger deterministic GST checks
-- prepare evidence bundles for human approval
+An **agentic investigation pattern** is activated exclusively for **Discrepancy Resolution & Audit Trail Generation**:
 
-This resembles an agentic control loop in which model predictions are validated before compliance output is finalized.
+```text
+[Discrepancy Event Detected]
+             │
+             ▼
+[Step 1: Ledger Retrieval] ────────► Query historical transactions for supplier GSTIN
+             │
+             ▼
+[Step 2: Cross-Period Lookback] ───► Inspect prior 6 months for delayed credit notes or payments
+             │
+             ▼
+[Step 3: Variance Hypothesis] ─────► Propose root cause:
+                                     (e.g., "Supplier reported under B2C instead of B2B")
+             │
+             ▼
+[Step 4: Recommendation Engine] ───► Generate action recommendation for tax practitioner review
+```
 
 ---
 
 ## 14. Technology Stack
 
-| Layer | Core Technology |
-| :--- | :--- |
-| Ingestion & Data Handling | Python, Pandas, Parquet, Excel pipelines |
-| Model Training | PyTorch, Transformers, vLLM |
-| Retrieval & Similarity | FAISS |
-| Application Layer | FastAPI |
-| Storage | PostgreSQL |
-| Deployment | Docker, Compose, local enterprise hosting |
-| Monitoring & Audit | structured logs, reconciliation events, validation traces |
+| Layer | Technology | Version | Purpose |
+| :--- | :--- | :--- | :--- |
+| **Language Runtime** | **Python** | `3.10+` | Core asynchronous backend runtime |
+| **API Framework** | **FastAPI** | `0.110+` | High-throughput asynchronous REST microservices |
+| **Data Processing** | **Pandas & NumPy** | `2.2+` | Tabular vectorization, cleaning, and normalization |
+| **Spreadsheet Engine** | **OpenPyXL** | `3.1+` | High-performance streaming Excel parsing & formatting |
+| **Deep Learning** | **PyTorch** | `2.2+` | Dual-domain neural encoders and contrastive training |
+| **Model Registry** | **Hugging Face** | `4.38+` | Transformer tokenizers, weights, and PEFT / LoRA |
+| **LLM Inference** | **vLLM** | `0.4+` | PagedAttention local inference engine |
+| **Vector Search** | **FAISS** | `1.8+` | Dense retrieval of known hard-case boundary samples |
+| **Validation Layer** | **Pydantic V2** | `2.6+` | Strict schema validation and statutory type enforcement |
+| **Database** | **PostgreSQL** | `16+` | Transaction audit logs and reconciliation datastore |
+| **Cache & Queuing** | **Redis** | `7.2+` | Hard negative task queue and intermediate result caching |
+| **Containerization** | **Docker** | `25.0+` | Reproducible deployment and GPU container orchestration |
 
 ---
 
 ## 15. Expected Features
 
-- 27-class voucher classification with calibrated confidence
-- deterministic GST rule validation and ITC checks
-- audit-ready explanations and log trails
-- data privacy-first enterprise deployment
-- support for large multi-entity transaction pipelines
-- integration with ERP outputs and filing workflows
+### Enterprise Feature Matrix
+
+```text
+┌─────────────────────────┬─────────────────────────┬─────────────────────────┐
+│     CLASSIFICATION      │     MODEL LEARNING      │     GST COMPLIANCE      │
+├─────────────────────────┼─────────────────────────┼─────────────────────────┤
+│ • 27-Class Prediction   │ • Dual-Domain Encoders  │ • GSTIN Verification    │
+│ • Multi-Field Reasoning │ • Contrastive Learning  │ • Math Split Validation │
+│ • Hierarchical Pruning  │ • Hard-Negative Mining  │ • Book ↔ 2B Matching    │
+│ • Calibrated Confidence │ • Active Co-Training    │ • ITC Recovery Engine   │
+│ • Ambiguity Detection   │ • LoRA Domain Tuning    │ • GSTR-3B Schedule Gen  │
+└─────────────────────────┴─────────────────────────┴─────────────────────────┘
+```
 
 ---
 
 ## 16. Implementation Approach
 
-The implementation is phased as follows:
+The deployment roadmap is divided into structured, verifiable phases:
 
-1. **Phase 1:** dataset assembly and schema consolidation
-2. **Phase 2:** base classifier training and hard-case mining
-3. **Phase 3:** GST rule engine and output formatting
-4. **Phase 4:** enterprise deployment, audit validation, and feedback loops
-
-This phased rollout minimizes risk while enabling measurable operational gains early in the project lifecycle.
+```text
+Phase 1: Dataset Canonicalization ──► Schema mapping, null handling, column normalization
+Phase 2: Feature Engineering ───────► Construction of directional flows, party and tax vectors
+Phase 3: Global Model Training ─────► Macro transformer encoder trained across 27 voucher classes
+Phase 4: Hard-Case Mining ──────────► Clustering semantic confusion pairs into specialized dataset
+Phase 5: Boundary & Contrastive ────► Siamese network training with metric distance optimization
+Phase 6: Co-Training Calibration ───► Dual-encoder agreement testing and pseudo-labeling
+Phase 7: Hierarchical Architecture ─► Coarse family filtering reducing candidate label search spaces
+Phase 8: Open LLM Integration ──────► vLLM serving with constrained JSON schema enforcement
+Phase 9: Deterministic GST Engine ──► Hardened Python rule engine verifying GST rates and math
+Phase 10: Reconciliation Engine ────► Multi-key matching between internal books and portal data
+Phase 11: Production Reporting ─────► Export of statutory GSTR-1, GSTR-3B, and discrepancy reports
+```
 
 ---
 
 ## 17. Expected Final Output
 
-The system is designed to output:
+### 1. Enriched Transaction Output (JSON)
 
-- classified voucher records with confidence scores
-- tax validation notes and exception flags
-- compliance-ready line-item summaries
-- GST filing support records and audit logs
-- reconciliation prepared for finance review
+```json
+{
+  "document_metadata": {
+    "invoice_number": "INV-2026-1042",
+    "invoice_date": "2026-09-15",
+    "filing_period": "2026-09"
+  },
+  "parties": {
+    "supplier_name": "ABC Traders Pvt Ltd",
+    "supplier_gstin": "27ABCDE1234F1Z5",
+    "buyer_name": "XYZ Manufacturing Pvt Ltd",
+    "buyer_gstin": "27XYZAB5678C1D2",
+    "place_of_supply": "27-Maharashtra"
+  },
+  "financials": {
+    "taxable_value": 100000.00,
+    "gst_rate_percent": 18.0,
+    "cgst_amount": 9000.00,
+    "sgst_amount": 9000.00,
+    "igst_amount": 0.00,
+    "cess_amount": 0.00,
+    "total_invoice_value": 118000.00
+  },
+  "intelligence": {
+    "voucher_classification": "Purchase",
+    "classification_confidence": 0.984,
+    "supply_type": "B2B Regular",
+    "reverse_charge": false,
+    "itc_eligibility": "Eligible",
+    "reconciliation_status": "Matched",
+    "exception_detected": null
+  }
+}
+```
+
+### 2. Statutory Period Reconciliation Summary
+
+```text
+========================================================================================
+                         VYOM+ GST PERIOD RECONCILIATION SUMMARY
+                                   PERIOD: SEPTEMBER 2026
+========================================================================================
+
+OUTWARD SUPPLIES (TABLE 3.1)
+----------------------------------------------------------------------------------------
+  Total Taxable Value                                                  ₹ 12,40,000.00
+  Central Tax (CGST)                                                   ₹    62,000.00
+  State Tax (SGST)                                                     ₹    62,000.00
+  Integrated Tax (IGST)                                                ₹    18,000.00
+
+ELIGIBLE INPUT TAX CREDIT (TABLE 4)
+----------------------------------------------------------------------------------------
+  Book Inward ITC Available                                            ₹  1,56,300.00
+  GSTR-2B Reconciled & Claimable                                       ₹  1,42,500.00
+  Potential ITC Variance (Action Required)                             ₹    13,800.00
+
+AUDIT DISCREPANCIES DETECTED
+----------------------------------------------------------------------------------------
+  [!] Invoices with Invalid / Missing GSTIN                            4 Records
+  [!] Tax Arithmetic Mismatches (Rounding Exceeded)                    2 Records
+  [!] Book Invoices Unmatched in Supplier GSTR-1                       3 Records
+  [!] Potential Duplicate Invoices Flagged                             1 Record
+========================================================================================
+```
 
 ---
 
 ## 18. Future Scope & Scalability
 
-Potential extensions include:
-
-- support for additional statutory regimes beyond GST
-- multilingual invoice and ledger handling
-- cross-border compliance adaptation
-- richer explainability layers for human operators
-- integration with enterprise policy and approval workflows
+* **Multi-Modal Document Fusion:** Direct ingest of scanned invoices via open-weight vision-language models (e.g., Qwen-VL) to supplement tabular exports.
+* **Domain-Specific QLoRA Adapters:** LoRA fine-tuning tailored to industry-specific chart of accounts (e.g., Pharmaceuticals, Real Estate, Automotive).
+* **Automated Vendor Follow-Up Bots:** Automated generation of supplier communication drafts requesting prompt GSTR-1 uploads for missing ITC.
+* **Direct Sandbox API Adapters:** Modular GSP (GST Suvidha Provider) integration layers for seamless filing dispatch upon CA review.
 
 ---
 
 ## 19. Open-Source Dependencies & Components
 
-The project explicitly relies on a transparent and open-source foundation:
-
-- Python ecosystem
-- PyTorch and Transformers
-- FastAPI and PostgreSQL
-- Docker and container orchestration
-- FAISS and vector retrieval tooling
-
-This fosters maintainability, transparency, and reproducible deployment.
+```text
+├── AI & Deep Learning
+│   ├── torch (v2.2+) ────────────────────── Tensor execution & neural graph runtime
+│   ├── transformers (v4.38+) ────────────── Tokenizers, weights, and model loading
+│   ├── peft (v0.9+) ─────────────────────── Parameter-Efficient Fine-Tuning (LoRA)
+│   ├── sentence-transformers (v2.6+) ────── Contrastive semantic embeddings
+│   └── vllm (v0.4+) ─────────────────────── Optimized batched LLM inference
+│
+├── Data Wrangling & Serialization
+│   ├── pandas (v2.2+) ───────────────────── Fast columnar dataset manipulation
+│   ├── numpy (v1.26+) ───────────────────── Vectorized mathematical calculations
+│   └── openpyxl (v3.1+) ─────────────────── Excel file reading and report writing
+│
+├── API Microservices & Compliance
+│   ├── fastapi (v0.110+) ────────────────── Asynchronous web server API framework
+│   ├── uvicorn (v0.28+) ─────────────────── ASGI production web server
+│   └── pydantic (v2.6+) ─────────────────── Strict runtime schema validation
+│
+└── Infrastructure & Storage
+    ├── faiss-cpu / faiss-gpu (v1.8+) ────── High-performance similarity vector search
+    ├── redis (v5.0+) ────────────────────── Task distribution and memory caching
+    └── sqlalchemy (v2.0+) ───────────────── PostgreSQL ORM for audit ledger tracking
+```
 
 ---
 
 ## 20. Expected Challenges and Mitigation
 
-| Challenge | Risk | Mitigation |
+| Challenge | Impact | Engineering Mitigation Strategy |
 | :--- | :--- | :--- |
-| boundary ambiguity | wrong voucher assignment | contrastive learning + rule validation |
-| tax edge cases | compliance mistakes | deterministic GST engine + review workflow |
-| noisy enterprise data | poor prediction quality | schema cleaning and validation |
-| privacy constraints | cloud dependence | on-prem deployment and self-hosted infrastructure |
-
----
+| **Purchase vs. Sales Confusion** | High | Counterparty role extraction + directional money-flow vector analysis |
+| **Material In vs. Purchase** | High | Distinguish inventory movement notes lacking tax/commercial charges |
+| **Contra vs. Payment / Receipt** | Medium | Internal bank-to-bank account identity matching |
+| **Class Imbalance Across 27 Types** | High | Class-weighted Focal Loss + synthetic boundary oversampling |
+| **LLM Output Hallucination** | Critical | Strict Pydantic JSON schema decoding + temperature set to $0.0$ |
+| **Tax Calculation Inaccuracy** | Critical | Completely decouple numerical tax verification from neural components |
+| **Missing or Corrupted GSTINs** | High | Algorithmic checksum validation (ISO 7064 Mod 11, 10 compliant) |
+| **Duplicate Invoices Across Periods** | Medium | Composite key hash matching: `MD5(GSTIN + InvNo + TaxableValue)` |
+| **Enterprise Data Privacy** | Critical | Zero cloud API dependencies; 100% self-hosted on private infrastructure |
 
 ---
 
 ## Research Basis
 
-The architectural framework of VYOM+ is grounded in established peer-reviewed research in automated financial document understanding, particularly studies showing that structured invoice schemas combined with text representations yield superior performance when classified via hierarchical architectures.
+The architectural framework of VYOM+ is grounded in established peer-reviewed research in automated financial document understanding, particularly studies showing that structured invoice schemas combined with text representations yield superior performance when classified via hierarchical architectures:
 
 > **Academic Reference:**  
 ![Figure 3: GST Intelligence Layer & Feature Pipeline](docs\VYOM_ResearchandReferencesInfographic.png)
+
 
 VYOM+ substantially extends this baseline by introducing **dual-domain co-training**, **contrastive metric boundaries**, and **symbolic GST compliance validation**.
 
@@ -381,25 +622,9 @@ VYOM+ substantially extends this baseline by introducing **dual-domain co-traini
 
 VYOM+ directly addresses critical friction points across the corporate financial supply chain:
 
-```text
-                           BUSINESS IMPACT MATRIX
-┌─────────────────────────────────┬─────────────────────────────────┐
-│     OPERATIONAL EFFICIENCY      │       COMPLIANCE ASSURANCE      │
-├─────────────────────────────────┼─────────────────────────────────┤
-│ • 85% reduction in manual data  │ • Zero penalties from incorrect │
-│   entry and voucher coding      │   GST slab assignments          │
-│ • Real-time processing of high- │ • 100% auditable deterministic  │
-│   volume multi-thousand-row ERP │   validation trail for every    │
-│   transaction ledgers           │   statutory tax claim           │
-├─────────────────────────────────┼─────────────────────────────────┤
-│        ITC RECOVERY VALUE       │         DATA SOVEREIGNTY        │
-├─────────────────────────────────┼─────────────────────────────────┤
-│ • Immediate identification of   │ • Complete elimination of third-│
-│   unclaimed Input Tax Credit    │   party API data transmission   │
-│ • Automated discovery of non-   │ • Fully on-premise and air-gapped│
-│   filing suppliers              │   deployment capability         │
-└─────────────────────────────────┴─────────────────────────────────┘
-```
+
+![Figure 3: GST Intelligence Layer & Feature Pipeline](docs\business.png)
+
 
 ---
 
