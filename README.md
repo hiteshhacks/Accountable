@@ -403,49 +403,22 @@ $$\mathcal{L}_{\text{contrastive}} = -\log \frac{\exp(\text{sim}(z_i, z_i^+) / \
 
 ---
 
-## 13. Agentic Workflow (If Applicable)
-
-> [!NOTE]
-> **Deterministic Design Philosophy**  
-> VYOM+ strictly avoids unconstrained autonomous agent loops for core transaction classification and tax calculations. Financial records require deterministic, auditable, and repeatable execution.
-
-An **agentic investigation pattern** is activated exclusively for **Discrepancy Resolution & Audit Trail Generation**:
-
-```text
-[Discrepancy Event Detected]
-             │
-             ▼
-[Step 1: Ledger Retrieval] ────────► Query historical transactions for supplier GSTIN
-             │
-             ▼
-[Step 2: Cross-Period Lookback] ───► Inspect prior 6 months for delayed credit notes or payments
-             │
-             ▼
-[Step 3: Variance Hypothesis] ─────► Propose root cause:
-                                     (e.g., "Supplier reported under B2C instead of B2B")
-             │
-             ▼
-[Step 4: Recommendation Engine] ───► Generate action recommendation for tax practitioner review
-```
-
----
-
 ## 14. Technology Stack
 
 | Layer | Technology | Version | Purpose |
 | :--- | :--- | :--- | :--- |
-| **Language Runtime** | **Python** | `3.10+` | Core asynchronous backend runtime |
-| **API Framework** | **FastAPI** | `0.110+` | High-throughput asynchronous REST microservices |
-| **Data Processing** | **Pandas & NumPy** | `2.2+` | Tabular vectorization, cleaning, and normalization |
-| **Spreadsheet Engine** | **OpenPyXL** | `3.1+` | High-performance streaming Excel parsing & formatting |
-| **Deep Learning** | **PyTorch** | `2.2+` | Dual-domain neural encoders and contrastive training |
-| **Model Registry** | **Hugging Face** | `4.38+` | Transformer tokenizers, weights, and PEFT / LoRA |
-| **LLM Inference** | **vLLM** | `0.4+` | PagedAttention local inference engine |
-| **Vector Search** | **FAISS** | `1.8+` | Dense retrieval of known hard-case boundary samples |
-| **Validation Layer** | **Pydantic V2** | `2.6+` | Strict schema validation and statutory type enforcement |
-| **Database** | **PostgreSQL** | `16+` | Transaction audit logs and reconciliation datastore |
-| **Cache & Queuing** | **Redis** | `7.2+` | Hard negative task queue and intermediate result caching |
-| **Containerization** | **Docker** | `25.0+` | Reproducible deployment and GPU container orchestration |
+| Language Runtime | [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)](https://www.python.org/) | `3.10+` | Core asynchronous backend runtime |
+| API Framework | [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688)](https://fastapi.tiangolo.com/) | `0.110+` | High-throughput asynchronous REST microservices |
+| Data Processing | [![Pandas](https://img.shields.io/badge/Pandas%20%26%20NumPy-2.2%2B-150458)](https://pandas.pydata.org/) | `2.2+` | Tabular vectorization, cleaning, and normalization |
+| Spreadsheet Engine | [![OpenPyXL](https://img.shields.io/badge/OpenPyXL-3.1%2B-2E7D32)](https://openpyxl.readthedocs.io/) | `3.1+` | Excel parsing & formatting |
+| Deep Learning | [![PyTorch](https://img.shields.io/badge/PyTorch-2.2%2B-EE4C2C)](https://pytorch.org/) | `2.2+` | Dual-domain encoders and contrastive training |
+| Model Registry | [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-4.38%2B-FFD21E)](https://huggingface.co/) | `4.38+` | Transformers, weights, and PEFT / LoRA |
+| LLM Inference | [![vLLM](https://img.shields.io/badge/vLLM-0.4%2B-4F46E5)](https://vllm.ai/) | `0.4+` | Local LLM inference |
+| Vector Search | [![FAISS](https://img.shields.io/badge/FAISS-1.8%2B-0284C7)](https://github.com/facebookresearch/faiss) | `1.8+` | Hard-case semantic retrieval |
+| Validation Layer | [![Pydantic](https://img.shields.io/badge/Pydantic_V2-2.6%2B-E92063)](https://docs.pydantic.dev/) | `2.6+` | Schema validation |
+| Database | [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16%2B-4169E1)](https://www.postgresql.org/) | `16+` | Audit logs and reconciliation datastore |
+| Cache & Queuing | [![Redis](https://img.shields.io/badge/Redis-7.2%2B-DC382D)](https://redis.io/) | `7.2+` | Task queue and caching |
+| Containerization | [![Docker](https://img.shields.io/badge/Docker-25.0%2B-2496ED)](https://www.docker.com/) | `25.0+` | Reproducible deployment |
 
 ---
 
@@ -615,7 +588,7 @@ AUDIT DISCREPANCIES DETECTED
 
 The architectural framework of VYOM+ is grounded in established peer-reviewed research in automated financial document understanding, particularly studies showing that structured invoice schemas combined with text representations yield superior performance when classified via hierarchical architectures:
 
-> **Academic Reference:**  
+ **Academic Reference:**  
 ![Figure 3: GST Intelligence Layer & Feature Pipeline](docs\VYOM_ResearchandReferencesInfographic.png)
 
 
