@@ -93,14 +93,6 @@ Target: Predict the ground-truth statutory voucher category across 27 distinct a
 | **Job Work & Outsourcing** | `Job Work In Order`, `Job Work Out Order` |
 | **Human Capital & Overhead** | `Salary / Payroll`, `Attendance`, `Expense`, `Other / Miscellaneous` |
 
-> [!IMPORTANT]
-> **The Core Challenge: Semantic Boundary Ambiguity**  
-> Many voucher classes share identical keywords and overlapping financial attributes:
-> - `Purchase`, `Receipt Note`, and `Material In` all document inward goods flow, but represent commercial liability, physical inventory receipt, and internal transfer respectively.
-> - `Payment`, `Receipt`, and `Contra` all process bank account ledger mutations, differing solely in the directional vector of funds relative to internal accounts.
->
-> Simple keyword search fails systematically. The system requires **multi-field relational reasoning**.
-
 ---
 
 ## 3. Project Overview
