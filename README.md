@@ -589,7 +589,7 @@ AUDIT DISCREPANCIES DETECTED
 The architectural framework of VYOM+ is grounded in established peer-reviewed research in automated financial document understanding, particularly studies showing that structured invoice schemas combined with text representations yield superior performance when classified via hierarchical architectures:
 
  **Academic Reference:**  
-![Figure 3: GST Intelligence Layer & Feature Pipeline](docs\VYOM_ResearchandReferencesInfographic.png)
+![Figure 3: Research and Refrences](docs\VYOM_ResearchandReferencesInfographic.png)
 
 
 VYOM+ substantially extends this baseline by introducing **dual-domain co-training**, **contrastive metric boundaries**, and **symbolic GST compliance validation**.
