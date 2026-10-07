@@ -192,13 +192,12 @@ VYOM+ is built strictly upon **open-source, self-hosted artificial intelligence 
 
 ### Evaluated Model Families & Core Frameworks
 
-[![Qwen 2.5](https://img.shields.io/badge/Qwen_2.5_(7B/14B)-Alibaba_Cloud-615CED?style=for-the-badge&logo=alibabacloud&logoColor=white)](https://github.com/QwenLM/Qwen2.5)
-[![Meta LLaMA 3.1](https://img.shields.io/badge/LLaMA_3.1_(8B)-Meta_AI-0467DF?style=for-the-badge&logo=meta&logoColor=white)](https://llama.meta.com/)
-[![Mistral NeMo](https://img.shields.io/badge/Mistral_NeMo_(12B)-Mistral_AI-FF7000?style=for-the-badge&logo=mistral&logoColor=white)](https://mistral.ai/)
-![Google Gemma 2](https://img.shields.io/badge/Gemma_4-E4B-7c3aed)
-[![Hugging Face](https://img.shields.io/badge/Hugging_Face-Transformers-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/)
-[![vLLM](https://img.shields.io/badge/vLLM-PagedAttention-4F46E5?style=for-the-badge&logo=accelerate&logoColor=white)](https://vllm.ai/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.2+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Gemma 4 E2B](https://img.shields.io/badge/Gemma_4_(E2B)-Google-7c3aed?style=for-the-badge&logo=google&logoColor=white)](https://huggingface.co/google/gemma-4-E2B-it)
+[![Qwen3 4B Instruct](https://img.shields.io/badge/Qwen3_4B_Instruct-Alibaba_Cloud-615CED?style=for-the-badge&logo=alibabacloud&logoColor=white)](https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507)
+[![Hugging Face Transformers](https://img.shields.io/badge/Hugging_Face-Transformers-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/docs/transformers/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-Training_%26_Inference-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-Evaluation-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
+[![Nemotron 3 Nano 4B](https://img.shields.io/badge/Nemotron_3_Nano_(4B)-NVIDIA-76B900?style=for-the-badge&logo=nvidia&logoColor=white)](https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-4B-BF16)
 [![FAISS](https://img.shields.io/badge/FAISS-Vector_Search-0284C7?style=for-the-badge&logo=meta&logoColor=white)](https://github.com/facebookresearch/faiss)
 [![PEFT LoRA](https://img.shields.io/badge/PEFT-LoRA_Adapter-10B981?style=for-the-badge&logo=target&logoColor=white)](https://github.com/huggingface/peft)
 
