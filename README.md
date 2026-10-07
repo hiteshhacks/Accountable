@@ -407,7 +407,7 @@ $$\mathcal{L}_{\text{contrastive}} = -\log \frac{\exp(\text{sim}(z_i, z_i^+) / \
 
 | Layer | Technology | Version | Purpose |
 | :--- | :--- | :--- | :--- |
-| Language Runtime | [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)](https://www.python.org/) | `3.10+` | multi Core asynchronous backend runtime |
+| Language Runtime | [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)](https://www.python.org/) | `3.10+` | Core asynchronous backend runtime |
 | API Framework | [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688)](https://fastapi.tiangolo.com/) | `0.110+` | High-throughput asynchronous REST microservices |
 | Data Processing | [![Pandas](https://img.shields.io/badge/Pandas%20%26%20NumPy-2.2%2B-150458)](https://pandas.pydata.org/) | `2.2+` | Tabular vectorization, cleaning, and normalization |
 | Spreadsheet Engine | [![OpenPyXL](https://img.shields.io/badge/OpenPyXL-3.1%2B-2E7D32)](https://openpyxl.readthedocs.io/) | `3.1+` | Excel parsing & formatting |
@@ -601,7 +601,7 @@ VYOM+ substantially extends this baseline by introducing **dual-domain co-traini
 VYOM+ directly addresses critical friction points across the corporate financial supply chain:
 
 
-![Figure 3: GST Intelligence Layer & Feature Pipeline](docs\business.png)
+![Figure 3: GST Intelligence Layer & Feature Pipeline](DATA\business.png)
 
 
 ---
