@@ -602,6 +602,7 @@ VYOM+ directly addresses critical friction points across the corporate financial
 
 
 ![Figure 3: GST Intelligence Layer & Feature Pipeline](DATA\business.png)
+![Figure 3: GST Intelligence Layer & Feature Pipeline](DATA/llm-feature-pipeline.png)
 
 
 ---
