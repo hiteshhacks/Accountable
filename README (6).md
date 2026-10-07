@@ -247,3 +247,119 @@ Contrastive learning creates metric-space separation between semantically adjace
 This reduces catastrophic confusion and improves classification precision in boundary-heavy cases.
 
 ---
+
+## 12. Data / Information Flow
+
+The system consumes structured ledger exports and transforms them through a multi-stage flow:
+
+1. Input extraction from ERP and accounting workbooks.
+2. Schema normalization and field-level validation.
+3. Financial feature generation and semantic enrichment.
+4. Candidate class ranking and boundary scoring.
+5. Rule-based GST and ITC verification.
+6. Filing-oriented output generation and audit log creation.
+
+This end-to-end flow guarantees traceability from raw row to final compliance output.
+
+---
+
+## 13. Agentic Workflow (If Applicable)
+
+The orchestration layer is designed as a reviewable workflow:
+
+- receive record batches
+- perform lightweight validation
+- route uncertain cases to a high-precision review mode
+- trigger deterministic GST checks
+- prepare evidence bundles for human approval
+
+This resembles an agentic control loop in which model predictions are validated before compliance output is finalized.
+
+---
+
+## 14. Technology Stack
+
+| Layer | Core Technology |
+| :--- | :--- |
+| Ingestion & Data Handling | Python, Pandas, Parquet, Excel pipelines |
+| Model Training | PyTorch, Transformers, vLLM |
+| Retrieval & Similarity | FAISS |
+| Application Layer | FastAPI |
+| Storage | PostgreSQL |
+| Deployment | Docker, Compose, local enterprise hosting |
+| Monitoring & Audit | structured logs, reconciliation events, validation traces |
+
+---
+
+## 15. Expected Features
+
+- 27-class voucher classification with calibrated confidence
+- deterministic GST rule validation and ITC checks
+- audit-ready explanations and log trails
+- data privacy-first enterprise deployment
+- support for large multi-entity transaction pipelines
+- integration with ERP outputs and filing workflows
+
+---
+
+## 16. Implementation Approach
+
+The implementation is phased as follows:
+
+1. **Phase 1:** dataset assembly and schema consolidation
+2. **Phase 2:** base classifier training and hard-case mining
+3. **Phase 3:** GST rule engine and output formatting
+4. **Phase 4:** enterprise deployment, audit validation, and feedback loops
+
+This phased rollout minimizes risk while enabling measurable operational gains early in the project lifecycle.
+
+---
+
+## 17. Expected Final Output
+
+The system is designed to output:
+
+- classified voucher records with confidence scores
+- tax validation notes and exception flags
+- compliance-ready line-item summaries
+- GST filing support records and audit logs
+- reconciliation prepared for finance review
+
+---
+
+## 18. Future Scope & Scalability
+
+Potential extensions include:
+
+- support for additional statutory regimes beyond GST
+- multilingual invoice and ledger handling
+- cross-border compliance adaptation
+- richer explainability layers for human operators
+- integration with enterprise policy and approval workflows
+
+---
+
+## 19. Open-Source Dependencies & Components
+
+The project explicitly relies on a transparent and open-source foundation:
+
+- Python ecosystem
+- PyTorch and Transformers
+- FastAPI and PostgreSQL
+- Docker and container orchestration
+- FAISS and vector retrieval tooling
+
+This fosters maintainability, transparency, and reproducible deployment.
+
+---
+
+## 20. Expected Challenges and Mitigation
+
+| Challenge | Risk | Mitigation |
+| :--- | :--- | :--- |
+| boundary ambiguity | wrong voucher assignment | contrastive learning + rule validation |
+| tax edge cases | compliance mistakes | deterministic GST engine + review workflow |
+| noisy enterprise data | poor prediction quality | schema cleaning and validation |
+| privacy constraints | cloud dependence | on-prem deployment and self-hosted infrastructure |
+
+---
