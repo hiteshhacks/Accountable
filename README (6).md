@@ -1,4 +1,4 @@
-[![Python 3.10+](https://img.shields.io/badge/PYTHON-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+﻿[![Python 3.10+](https://img.shields.io/badge/PYTHON-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FASTAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
 [![PyTorch](https://img.shields.io/badge/PYTORCH-2.2+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![Hugging Face](https://img.shields.io/badge/HUGGING%20FACE-TRANSFORMERS-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/)
@@ -32,8 +32,8 @@
 - [9. Multi-Tier AI Architecture & Roles](#9-ais-role-in-the-system)
 - [10. System Architecture & End-to-End Pipeline](#10-system-architecture)
 - [11. Component-Level Architecture](#11-component-level-architecture)
-  - [11.1 Co-Training Block-Level Architecture (Voucher Classification Engine)](#111-co-training-block-level-architecture-voucher-classification-engine)
-  - [11.2 GST Intelligence Layer & Structured Filing Data Generation](#112-gst-intelligence-layer--structured-filing-data-generation)
+  - [11.1 Co-Training Block-Level Architecture](#111-co-training-block-level-architecture-voucher-classification-engine)
+  - [11.2 GST Intelligence Layer](#112-gst-intelligence-layer--structured-filing-data-generation)
   - [11.3 Contrastive Metric Boundary Separation](#113-contrastive-metric-boundary-separation)
 - [12. End-to-End Data & Information Flow](#12-data--information-flow)
 - [13. Controlled Orchestration & Verification Workflow](#13-agentic-workflow-if-applicable)
@@ -61,3 +61,99 @@ Traditional accounting automation relies heavily on rigid regex heuristics or is
 
 ---
 
+## 2. Problem Statement
+
+Enterprise transaction exports typically arrive in tabular workbook formats (`.xlsx`, `.csv`, `.parquet`). While line items contain rich granular metadata, the **statutory voucher type is frequently missing, ambiguously mapped, or misclassified during data ingestion**.
+
+Each row encapsulates heterogeneous financial signals across dozens of transactional fields:
+
+* **Parties:** Supplier / Seller, Buyer / Customer, Consignee, Agent, Counterparty GSTIN
+* **Document Identifiers:** Invoice / Bill number, Reference ID, Document date, Posting date
+* **Commercial Specifics:** Item descriptions, HSN/SAC codes, Quantities, Unit of Measurement (UOM)
+* **Financial Quantities:** Taxable value, Discount structures, Freight/Insurance, Total transaction amount
+* **Tax Dimensions:** CGST, SGST, IGST, Compensation Cess, RCM (Reverse Charge Mechanism) indicators
+* **Flow & Movement:** Payment status, Mode of remittance, Inward/Outward inventory indicators, Delivery notes
+* **Specialized Operational Context:** Cross-border import/export declarations, Bill of Entry, Shipping Bill, Payroll line items, Credit/Debit notes
+
+```text
+Target: Predict the ground-truth statutory voucher category across 27 distinct accounting classes:
+```
+
+| Domain Group | Statutory / Internal Voucher Categories |
+| :--- | :--- |
+| **Commercial Sales** | `Sales`, `Sales Order`, `Delivery Note`, `Sales Return / Credit Note`, `Export` |
+| **Procurement & Inward** | `Purchase`, `Purchase Order`, `Receipt Note`, `Purchase Return / Debit Note`, `Import` |
+| **Cash & Banking Flow** | `Payment`, `Receipt`, `Contra`, `Advance / Prepayment` |
+| **Adjustments & Stock** | `Journal`, `Stock Journal`, `Physical Stock`, `Material In`, `Material Out` |
+| **Job Work & Outsourcing** | `Job Work In Order`, `Job Work Out Order` |
+| **Human Capital & Overhead** | `Salary / Payroll`, `Attendance`, `Expense`, `Other / Miscellaneous` |
+
+> [!IMPORTANT]
+> **The Core Challenge: Semantic Boundary Ambiguity**
+> Many voucher classes share identical keywords and overlapping financial attributes:
+> - `Purchase`, `Receipt Note`, and `Material In` all document inward goods flow, but represent commercial liability, physical inventory receipt, and internal transfer respectively.
+> - `Payment`, `Receipt`, and `Contra` all process bank account ledger mutations, differing solely in the directional vector of funds relative to internal accounts.
+> - Simple keyword search fails systematically. The system requires **multi-field relational reasoning**.
+
+---
+
+## 3. Project Overview
+
+VYOM+ establishes a **dual-domain hierarchical neuro-symbolic framework** uniting statistical deep learning with symbolic tax rule validation:
+
+1. **Accounting-Aware Feature Engineering:** Extraction of financial directions, party roles, and movement vectors.
+2. **Dual-Domain Representation Learning:** Co-training between a Global Distribution Encoder and a Hard-Case Boundary Encoder.
+3. **Contrastive Embedding Space:** Explicit metric-distance separation of semantically adjacent vouchers.
+4. **Hard-Negative Mining:** Automated feedback loop queuing challenging confusion pairs for iterative retraining.
+5. **Hierarchical Label Tree:** Coarse-to-fine candidate filtering reducing the 27-class space into localized classification subspaces.
+6. **Open-Source LLM Contextual Arbitration:** Reasoning over serialized dimensions, policies, and edge-case GST logic.
+
+This design is not merely a classification pipeline; it is a decision-support platform for **financial control, tax governance, and statutory confidence**.
+
+---
+
+## 4. Proposed Solution
+
+The proposed solution combines multiple operational layers within a single enterprise-ready architecture:
+
+- **Voucher Understanding Layer:** models line-level accounting semantics, document context, and counterparty roles.
+- **Tax Intelligence Layer:** validates vendor/customer GSTIN, tax rates, ITC eligibility, and reconciliation rules.
+- **Contrastive Boundary Layer:** isolates category confusion by explicitly separating semantically adjacent invoice classes.
+- **Compliance Ledger Layer:** turns each transaction into a machine-verifiable accounting event with audit traces.
+- **Decision Orchestration Layer:** employs deterministic checks before finalization to minimize hallucination and unsupported tax claims.
+
+Collectively, these layers transform ambiguous operational data into a **traceable, verification-ready compliance record**.
+
+---
+
+## 5. Objectives
+
+The project aims to deliver the following outcomes:
+
+- Build a generalized voucher classification engine for 27 major accounting classes.
+- Detect and reduce tax decision errors through deterministic validation logic.
+- Improve book-to-tax reconciliation quality across ERP and GST workflows.
+- Support privacy-first deployment in on-premise or air-gapped enterprise infrastructures.
+- Produce explainable outputs suitable for audit and filing review.
+- Establish a reusable open-source foundation for accounting AI across India and global GST-like regimes.
+
+---
+
+## 6. Target Users & Use Case
+
+### Primary Users
+
+- **Finance & Accounts Teams** who need structured voucher categorization and faster month-end processing.
+- **Tax & Compliance Teams** who need deterministic GST validation and ITC eligibility checks.
+- **ERP and Digital Transformation Leaders** seeking AI-assisted process automation without cloud dependency.
+- **Chartered Accountants and Tax Practitioners** reviewing filing-ready evidence and ledger reconciliation.
+
+### Enterprise Use Cases
+
+- Multi-entity invoice categorization across corporate subsidiaries.
+- Bulk voucher processing from ERP exports and accounting software dumps.
+- GST return preparation with tax logic traceability.
+- Input tax credit identification and exception management.
+- Operational readiness checks for audit, controls, and policy enforcement.
+
+---
