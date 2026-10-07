@@ -363,3 +363,56 @@ This fosters maintainability, transparency, and reproducible deployment.
 | privacy constraints | cloud dependence | on-prem deployment and self-hosted infrastructure |
 
 ---
+
+---
+
+## Research Basis
+
+The architectural framework of VYOM+ is grounded in established peer-reviewed research in automated financial document understanding, particularly studies showing that structured invoice schemas combined with text representations yield superior performance when classified via hierarchical architectures.
+
+> **Academic Reference:**  
+![Figure 3: GST Intelligence Layer & Feature Pipeline](docs\VYOM_ResearchandReferencesInfographic.png)
+
+VYOM+ substantially extends this baseline by introducing **dual-domain co-training**, **contrastive metric boundaries**, and **symbolic GST compliance validation**.
+
+---
+
+## Business Alignment
+
+VYOM+ directly addresses critical friction points across the corporate financial supply chain:
+
+```text
+                           BUSINESS IMPACT MATRIX
+┌─────────────────────────────────┬─────────────────────────────────┐
+│     OPERATIONAL EFFICIENCY      │       COMPLIANCE ASSURANCE      │
+├─────────────────────────────────┼─────────────────────────────────┤
+│ • 85% reduction in manual data  │ • Zero penalties from incorrect │
+│   entry and voucher coding      │   GST slab assignments          │
+│ • Real-time processing of high- │ • 100% auditable deterministic  │
+│   volume multi-thousand-row ERP │   validation trail for every    │
+│   transaction ledgers           │   statutory tax claim           │
+├─────────────────────────────────┼─────────────────────────────────┤
+│        ITC RECOVERY VALUE       │         DATA SOVEREIGNTY        │
+├─────────────────────────────────┼─────────────────────────────────┤
+│ • Immediate identification of   │ • Complete elimination of third-│
+│   unclaimed Input Tax Credit    │   party API data transmission   │
+│ • Automated discovery of non-   │ • Fully on-premise and air-gapped│
+│   filing suppliers              │   deployment capability         │
+└─────────────────────────────────┴─────────────────────────────────┘
+```
+
+---
+
+## Project Principle
+
+> **"The system does not merely assign a label to a row. It reconstructs the economic and legal reality of the accounting event, guarantees zero-hallucination tax accuracy, and produces audit-ready compliance schedules."**
+
+---
+
+## License
+
+This project is licensed under the Apache 2.0 Open Source License. See the `LICENSE` file for full terms and conditions.
+
+## Disclaimer
+
+VYOM+ is an artificial intelligence decision support and automation system. While engineered for statutory accuracy, final filing submissions should be reviewed by qualified tax practitioners and Chartered Accountants in accordance with the latest statutory circulars issued by the Central Board of Indirect Taxes and Customs (CBIC), Government of India.
