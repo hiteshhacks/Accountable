@@ -11,7 +11,7 @@
 
 </p>
 
-<h1 align="center"> VYOM+ — Intelligent Voucher Classification & GST Intelligence Platform</h1>
+<h1 align="center"> Accountable — Intelligent Voucher Classification & GST Intelligence Platform</h1>
 
 <p align="center">
   <strong>An end-to-end neuro-symbolic AI system for structured financial transaction understanding, 27-class voucher classification, deterministic GST validation, book-to-tax reconciliation, and filing preparation — powered by open-source LLMs, dual-domain contrastive co-training, and automated compliance intelligence.</strong>
@@ -58,11 +58,11 @@
 
 ## 1. Project Name
 
-### **VYOM+ — Intelligent Voucher Classification & GST Intelligence Platform Using Open-Source LLMs**
+### **Accountable — Intelligent Voucher Classification & GST Intelligence Platform Using Open-Source LLMs**
 
-**VYOM+** is an enterprise-grade accounting intelligence system designed to ingest **already-structured transactional records** (such as general ledgers, daybooks, and raw ERP tables) and transform them into standardized statutory accounting events, calibrated voucher classifications, and GST filing-ready schedules.
+**Accountable** is an enterprise-grade accounting intelligence system designed to ingest **already-structured transactional records** (such as general ledgers, daybooks, and raw ERP tables) and transform them into standardized statutory accounting events, calibrated voucher classifications, and GST filing-ready schedules.
 
-Traditional accounting automation relies heavily on rigid regex heuristics or isolated keyword search, both of which collapse under complex multi-field contexts. **VYOM+** addresses this vulnerability by treating voucher identification as a **multi-field semantic transaction reasoning problem**. It bridges the gap between raw transaction data and statutory tax compliance by pairing representation learning with deterministic GST validation rules.
+Traditional accounting automation relies heavily on rigid regex heuristics or isolated keyword search, both of which collapse under complex multi-field contexts. **Accountable** addresses this vulnerability by treating voucher identification as a **multi-field semantic transaction reasoning problem**. It bridges the gap between raw transaction data and statutory tax compliance by pairing representation learning with deterministic GST validation rules.
 
 ---
 
@@ -97,7 +97,7 @@ Target: Predict the ground-truth statutory voucher category across 27 distinct a
 
 ## 3. Project Overview
 
-VYOM+ establishes a **dual-domain hierarchical neuro-symbolic framework** uniting statistical deep learning with symbolic tax rule validation:
+Accountable establishes a **dual-domain hierarchical neuro-symbolic framework** uniting statistical deep learning with symbolic tax rule validation:
 
 1. **Accounting-Aware Feature Engineering:** Extraction of financial directions, party roles, and movement vectors.
 2. **Dual-Domain Representation Learning:** Co-training between a Global Distribution Encoder and a Hard-Case Boundary Encoder.
@@ -111,7 +111,7 @@ VYOM+ establishes a **dual-domain hierarchical neuro-symbolic framework** unitin
 10. **Statutory Filing-Ready Reporting:** Generation of structured summaries aligned with GSTR-1 and GSTR-3B formats.
 
 > [!NOTE]
-> VYOM+ strictly processes already-structured tabular transaction data. OCR document parsing is decoupled from this architecture, ensuring 100% computational focus on transaction semantics and compliance accuracy.
+> Accountable strictly processes already-structured tabular transaction data. OCR document parsing is decoupled from this architecture, ensuring 100% computational focus on transaction semantics and compliance accuracy.
 
 ---
 
@@ -119,9 +119,9 @@ VYOM+ establishes a **dual-domain hierarchical neuro-symbolic framework** unitin
 
 The proposed solution follows a **dual-domain hierarchical neuro-symbolic architecture**, unifying multi-field feature extraction, dual representation encoders, open LLM arbitration, and a deterministic GST intelligence engine into an integrated operational pipeline.
 
-![Figure 1: VYOM+ Complete Solution Architecture](DATA/technical-approach-2.png)
+![Figure 1: Accountable Complete Solution Architecture](DATA/technical-approach-2.png)
 
-*Figure 1: VYOM+ Complete Solution Architecture — End-to-End Pipeline from Input Cleaning & Accounting Feature Extraction through Dual-Domain Co-Training, Open-Source LLM Classification, and the Downstream GST Intelligence Layer.*
+*Figure 1: Accountable Complete Solution Architecture — End-to-End Pipeline from Input Cleaning & Accounting Feature Extraction through Dual-Domain Co-Training, Open-Source LLM Classification, and the Downstream GST Intelligence Layer.*
 
 ### Design Rationale
 
@@ -188,7 +188,7 @@ System Output:
 
 ## 7. Open-Source AI Technology Selected
 
-VYOM+ is built strictly upon **open-source, self-hosted artificial intelligence components**, ensuring zero data leakage and full compliance with corporate financial data privacy standards.
+Accountable is built strictly upon **open-source, self-hosted artificial intelligence components**, ensuring zero data leakage and full compliance with corporate financial data privacy standards.
 
 ### Evaluated Model Families & Core Frameworks
 
@@ -227,7 +227,7 @@ $$\text{Global Encoder: } \text{"What broad accounting family does this transact
 $$\text{Boundary Encoder: } \text{"Why is this transaction NOT its closest semantic neighbor?"}$$
 
 ### 3. Separation of Concerns: Neural Semantics + Symbolic Rules
-Neural networks frequently struggle with consistent multi-digit floating point arithmetic. By delegating classification to neural models and **tax computation to deterministic Python rules**, VYOM+ delivers zero-hallucination tax compliance.
+Neural networks frequently struggle with consistent multi-digit floating point arithmetic. By delegating classification to neural models and **tax computation to deterministic Python rules**, Accountable delivers zero-hallucination tax compliance.
 
 ---
 
@@ -494,7 +494,7 @@ Phase 11: Production Reporting ─────► Export of statutory GSTR-1, GS
 
 ```text
 ========================================================================================
-                         VYOM+ GST PERIOD RECONCILIATION SUMMARY
+                         Accountable GST PERIOD RECONCILIATION SUMMARY
                                    PERIOD: SEPTEMBER 2026
 ========================================================================================
 
@@ -577,19 +577,19 @@ AUDIT DISCREPANCIES DETECTED
 
 ## Research Basis
 
-The architectural framework of VYOM+ is grounded in established peer-reviewed research in automated financial document understanding, particularly studies showing that structured invoice schemas combined with text representations yield superior performance when classified via hierarchical architectures:
+The architectural framework of Accountable is grounded in established peer-reviewed research in automated financial document understanding, particularly studies showing that structured invoice schemas combined with text representations yield superior performance when classified via hierarchical architectures:
 
  **Academic Reference:**  
 ![Figure 3: Research and Refrences](docs/VYOM_ResearchandReferencesInfographic.png)
 
 
-VYOM+ substantially extends this baseline by introducing **dual-domain co-training**, **contrastive metric boundaries**, and **symbolic GST compliance validation**.
+Accountable substantially extends this baseline by introducing **dual-domain co-training**, **contrastive metric boundaries**, and **symbolic GST compliance validation**.
 
 ---
 
 ## Business Alignment
 
-VYOM+ directly addresses critical friction points across the corporate financial supply chain:
+Accountable directly addresses critical friction points across the corporate financial supply chain:
 
 
 ![Figure 3: Business Alignment](DATA/business.png)
@@ -610,4 +610,4 @@ This project is licensed under the Apache 2.0 Open Source License. See the `LICE
 
 ## Disclaimer
 
-VYOM+ is an artificial intelligence decision support and automation system. While engineered for statutory accuracy, final filing submissions should be reviewed by qualified tax practitioners and Chartered Accountants in accordance with the latest statutory circulars issued by the Central Board of Indirect Taxes and Customs (CBIC), Government of India.
+Accountable is an artificial intelligence decision support and automation system. While engineered for statutory accuracy, final filing submissions should be reviewed by qualified tax practitioners and Chartered Accountants in accordance with the latest statutory circulars issued by the Central Board of Indirect Taxes and Customs (CBIC), Government of India.
