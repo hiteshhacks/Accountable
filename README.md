@@ -601,8 +601,8 @@ VYOM+ substantially extends this baseline by introducing **dual-domain co-traini
 VYOM+ directly addresses critical friction points across the corporate financial supply chain:
 
 
-![Figure 3: GST Intelligence Layer & Feature Pipeline](DATA\business.png)
-![Figure 3: GST Intelligence Layer & Feature Pipeline](DATA/llm-feature-pipeline.png)
+![Figure 3: Business Alignment](DATA/business.png)
+
 
 
 ---
