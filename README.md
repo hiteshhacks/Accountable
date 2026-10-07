@@ -292,7 +292,7 @@ The core voucher classification engine uses a **Dual-Domain Co-Training Block-Le
 
 The **GST Intelligence Layer** takes classified financial transactions and transforms them into complete, audit-ready data required for GST statutory filing (GSTR-1, GSTR-3B) and period reporting:
 
-![Figure 3: GST Intelligence Layer & Feature Pipeline](docs\llm-feature-pipeline.png)
+![Figure 3: GST Intelligence Layer & Feature Pipeline](DATA/llm-feature-pipeline.png)
 
 *Figure 3: Component Architecture 2 — GST Intelligence Layer: Structured Transaction Serialization, Dual Financial & Temporal Encoders, Cross-Field Attention, Open LLM Processing, and Statutory JSON Output Generation.*
 
