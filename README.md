@@ -320,7 +320,7 @@ The **GST Intelligence Layer** takes classified financial transactions and trans
    * **Financial Encoder:** GST tax slabs, counterparty identities, taxable amounts, and inventory movement indicators.
    * **Temporal Encoder:** Chronological sequences linking invoice date, purchase order date, payment date, and return/debit note date.
 2. **Cross-Field Attention:** Computes multi-head attention across financial attributes and temporal events to understand economic causality.
-3. **Open-Source LLM Serving (vLLM):** Executes local inference using models from the Qwen, LLaMA, or Mistral families, generating constrained, guaranteed-schema JSON output.
+3. **Open-Source LLM Serving (vLLM):** Executes local inference using models from the Qwen, LLaMA, Gemma, Nemotron, generating constrained, guaranteed-schema JSON output.
 4. **Filing Summary & Report Builder:** Aggregates validated transaction records into statutory tables:
    * **GSTR-3B Table 3.1:** Outward taxable supplies and tax breakdowns.
    * **GSTR-3B Table 4:** Eligible and candidate Input Tax Credit (ITC).
