@@ -1,19 +1,24 @@
-﻿[![Python 3.10+](https://img.shields.io/badge/PYTHON-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FASTAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![PyTorch](https://img.shields.io/badge/PYTORCH-2.2+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![Hugging Face](https://img.shields.io/badge/HUGGING%20FACE-TRANSFORMERS-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/)
-[![vLLM](https://img.shields.io/badge/INFERENCE-vLLM-4F46E5?style=for-the-badge&logo=accelerate&logoColor=white)](https://vllm.ai/)
-[![FAISS](https://img.shields.io/badge/FAISS-VECTOR%20SEARCH-0284C7?style=for-the-badge&logo=meta&logoColor=white)](https://github.com/facebookresearch/faiss)
-[![PostgreSQL](https://img.shields.io/badge/POSTGRESQL-16+-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![Docker](https://img.shields.io/badge/DOCKER-READY-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+﻿<p align="center">
 
-# 📑 VYOM+ — Intelligent Voucher Classification & GST Intelligence Platform
+  <img src="https://img.shields.io/badge/PYTHON-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.10+">
+  <img src="https://img.shields.io/badge/FASTAPI-0.110%2B-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI">
+  <img src="https://img.shields.io/badge/PYTORCH-2.2%2B-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white" alt="PyTorch">
+  <img src="https://img.shields.io/badge/HUGGING%20FACE-TRANSFORMERS-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black" alt="Hugging Face Transformers">
+  <img src="https://img.shields.io/badge/INFERENCE-vLLM-4F46E5?style=for-the-badge&logo=accelerate&logoColor=white" alt="vLLM">
+  <img src="https://img.shields.io/badge/FAISS-VECTOR%20SEARCH-0284C7?style=for-the-badge&logo=meta&logoColor=white" alt="FAISS">
+  <img src="https://img.shields.io/badge/POSTGRESQL-16%2B-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/DOCKER-READY-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 
-**An end-to-end neuro-symbolic AI system for structured financial transaction understanding, 27-class voucher classification, deterministic GST validation, book-to-tax reconciliation, and filing preparation — powered by open-source LLMs, dual-domain contrastive co-training, and automated compliance intelligence.**
+</p>
 
----
+<h1 align="center"> VYOM+ — Intelligent Voucher Classification & GST Intelligence Platform</h1>
 
-| 🎯 Core Capability | 🧠 AI Architecture | 🏛️ Model Layer | 📊 Compliance Engine | 🔒 Privacy & Deployment |
+<p align="center">
+  <strong>An end-to-end neuro-symbolic AI system for structured financial transaction understanding, 27-class voucher classification, deterministic GST validation, book-to-tax reconciliation, and filing preparation — powered by open-source LLMs, dual-domain contrastive co-training, and automated compliance intelligence.</strong>
+</p>
+
+
+| Core Capability |  AI Architecture |  Model Layer |  Compliance Engine |  Privacy & Deployment |
 | :--- | :--- | :--- | :--- | :--- |
 | **27-Class Voucher Inference** | Dual-Domain Co-Training + Contrastive Learning | Open-Source LLMs (Qwen / LLaMA / Mistral) | Deterministic GST & ITC Engine | 100% Self-Hosted & Local |
 
@@ -198,7 +203,7 @@ VYOM+ is built strictly upon **open-source, self-hosted artificial intelligence 
 [![Qwen 2.5](https://img.shields.io/badge/Qwen_2.5_(7B/14B)-Alibaba_Cloud-615CED?style=for-the-badge&logo=alibabacloud&logoColor=white)](https://github.com/QwenLM/Qwen2.5)
 [![Meta LLaMA 3.1](https://img.shields.io/badge/LLaMA_3.1_(8B)-Meta_AI-0467DF?style=for-the-badge&logo=meta&logoColor=white)](https://llama.meta.com/)
 [![Mistral NeMo](https://img.shields.io/badge/Mistral_NeMo_(12B)-Mistral_AI-FF7000?style=for-the-badge&logo=mistral&logoColor=white)](https://mistral.ai/)
-[![Google Gemma 2](https://img.shields.io/badge/Gemma_2_(9B)-Google_DeepMind-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/gemma)
+![Google Gemma 2](https://img.shields.io/badge/Gemma_4-E4B-7c3aed)
 [![Hugging Face](https://img.shields.io/badge/Hugging_Face-Transformers-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/)
 [![vLLM](https://img.shields.io/badge/vLLM-PagedAttention-4F46E5?style=for-the-badge&logo=accelerate&logoColor=white)](https://vllm.ai/)
 [![PyTorch](https://img.shields.io/badge/PyTorch-2.2+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
