@@ -6,6 +6,11 @@ Run from the VYOM_PLUS_project folder:
 
 Then open http://127.0.0.1:8000/docs to try the endpoints.
 
+GST analysis: POST /gst/analyze (JSON, same `records` shape as /predict, or a
+`json_string`) and POST /gst/analyze/file (Excel/CSV upload) both run the shared
+vyom.gst.service.GstAnalysisService, which reuses this classifier. The existing
+/predict and /predict/file contracts are unchanged.
+
 The model is a TF-IDF + LogisticRegression pipeline over wide-schema records
 (columns such as "PO Number", "Supplier", "Vendor Name"), serialized with
 vyom.adapter.serialize_wide_row ("Column: value | ..."). It predicts 24 classes.
@@ -18,16 +23,21 @@ with a record are dropped before prediction.
 """
 
 from io import BytesIO
+import json
+import logging
+import os
 import pickle
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import pandas as pd
-from fastapi import FastAPI, File, HTTPException, UploadFile
-from fastapi.responses import StreamingResponse
+from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
+from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
 from vyom.adapter import LABEL_COLUMN, serialize_wide_row
+from vyom.gst.config import ConfigError
+from vyom.gst.schemas import GstAnalysisResponse, GstJsonRequest
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -151,3 +161,77 @@ async def predict_file(file: UploadFile = File(...)):
     return StreamingResponse(
         buffer, media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers={"Content-Disposition": 'attachment; filename="voucher_classifier_predictions.xlsx"'})
+
+
+# ==========================================
+# GST INTELLIGENCE LAYER
+# ==========================================
+
+_gst_service = None
+gst_logger = logging.getLogger("vyom.gst")
+if not gst_logger.handlers:
+    # Structured one-line JSON events (request_id, stage, duration, model, token usage); never payloads or keys.
+    _handler = logging.StreamHandler()
+    _handler.setFormatter(logging.Formatter("%(asctime)s %(levelname)s %(name)s %(message)s"))
+    gst_logger.addHandler(_handler)
+    gst_logger.setLevel(os.environ.get("GST_LOG_LEVEL", "INFO").upper())
+    gst_logger.propagate = False
+
+
+def get_gst_service():
+    """Build the shared analysis service on first use, so a GST misconfiguration never breaks /predict."""
+    global _gst_service
+    if _gst_service is None:
+        from vyom.gst.service import GstAnalysisService
+        _gst_service = GstAnalysisService(predict_frame, list(MODEL.classes_))
+    return _gst_service
+
+
+def _gst_response(result, status_code: int) -> JSONResponse:
+    return JSONResponse(result.model_dump(mode="json"), status_code=status_code)
+
+
+def _config_error(exc: ConfigError) -> JSONResponse:
+    gst_logger.error(json.dumps({"event": "gst_config_error", "error": str(exc)}))
+    return JSONResponse({"success": False, "status": "PROCESSING_FAILED", "report": "# GST Intelligence Report\n\n"
+                         "GST analysis is not configured correctly on the server.", "warnings": [], "summary": {},
+                         "discrepancies": [], "request_id": "", "errors": [f"Server configuration error: {exc}"]},
+                        status_code=500)
+
+
+@app.middleware("http")
+async def limit_gst_json_size(request: Request, call_next):
+    """Reject oversized JSON bodies for GST analysis before they are parsed."""
+    if request.url.path == "/gst/analyze":
+        length = request.headers.get("content-length")
+        try:
+            limit = get_gst_service().settings.limits.max_json_bytes
+        except ConfigError as exc:
+            return _config_error(exc)
+        if length is not None and length.isdigit() and int(length) > limit:
+            return JSONResponse({"detail": f"Request body exceeds {limit} bytes"}, status_code=413)
+    return await call_next(request)
+
+
+@app.post("/gst/analyze", response_model=GstAnalysisResponse)
+def gst_analyze(request: GstJsonRequest):
+    """GST analysis of JSON records (same record shape as /predict) or a `json_string` containing them."""
+    try:
+        service = get_gst_service()
+    except ConfigError as exc:
+        return _config_error(exc)
+    return _gst_response(*service.analyze_json(request))
+
+
+@app.post("/gst/analyze/file", response_model=GstAnalysisResponse)
+async def gst_analyze_file(file: UploadFile = File(...), business_gstin: Optional[str] = Form(None)):
+    """GST analysis of an uploaded .xlsx/.xlsm/.csv (all sheets are read; rows keep sheet/row references)."""
+    try:
+        service = get_gst_service()
+    except ConfigError as exc:
+        return _config_error(exc)
+    limit = service.settings.limits.max_upload_bytes
+    content = await file.read(limit + 1)
+    if len(content) > limit:
+        return JSONResponse({"detail": f"File exceeds {limit} bytes"}, status_code=413)
+    return _gst_response(*service.analyze_workbook(content, file.filename or "", business_gstin))
