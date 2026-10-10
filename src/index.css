@@ -1,0 +1,61 @@
+/* Inter — navigation, body copy, labels, buttons */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import 'tailwindcss';
+
+:root {
+  --font-heading: 'Helvetica Now Display Bold', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --color-background: #000000;
+  --color-surface: #0e0d0a;
+  --color-text: #f5f1e8;
+  --color-text-muted: #b6ae9e;
+  --color-accent: #d4af61;
+  --color-accent-hover: #e6c782;
+  --color-login-bg: transparent;
+  --color-border: rgba(212, 175, 97, 0.24);
+}
+
+/*
+ * The webfont declares a single face at font-weight: normal even though the
+ * glyphs are already bold. Disabling synthesis stops the browser stacking a
+ * faux-bold on top, while the sans-serif fallback still renders bold.
+ */
+@utility font-heading {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-synthesis: none;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-background);
+    color-scheme: dark;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    font-family: var(--font-body);
+    color: var(--color-text);
+    background-color: var(--color-background);
+  }
+
+  /*
+   * Colour the ring before focus arrives: `transition-colors` includes
+   * outline-color, which would otherwise fade in from currentColor.
+   */
+  * {
+    outline-color: var(--color-accent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  ::selection {
+    background-color: rgba(212, 175, 97, 0.35);
+    color: var(--color-text);
+  }
+}
