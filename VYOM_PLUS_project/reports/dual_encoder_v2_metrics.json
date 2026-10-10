@@ -1,0 +1,13 @@
+{
+  "model": "dual_encoder_v2",
+  "train": 273,
+  "validation_evaluable": 61,
+  "test_total": 95,
+  "test_evaluable": 93,
+  "test_excluded_unseen_labels": 2,
+  "training_classes": 25,
+  "accuracy": 0.9354838709677419,
+  "macro_f1_all_trained_classes": 0.6167272727272727,
+  "macro_f1_observed_classes": 0.8114832535885167,
+  "warning": "Provisional synthetic-derived labels. Missing classes and excluded test labels limit evaluation. Not a real-world accuracy estimate."
+}

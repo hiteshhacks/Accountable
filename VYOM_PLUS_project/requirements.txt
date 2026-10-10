@@ -1,0 +1,13 @@
+pandas>=2.0,<3.0
+openpyxl>=3.1,<4.0
+scikit-learn>=1.4,<2.0
+numpy>=1.26,<3.0
+transformers>=4.30,<5.0
+torch>=2.0,<3.0
+fastapi>=0.110
+uvicorn[standard]>=0.29
+python-multipart>=0.0.9
+langgraph>=1.0,<2.0
+langchain-core>=1.0,<2.0
+langchain-groq>=1.0,<2.0
+python-dotenv>=1.0

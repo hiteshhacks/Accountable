@@ -1,0 +1,22 @@
+config_id,configuration,input_variant,rule_clauses,fallback_model,n_records,rules_fired,rules_fired_correct,rule_precision,fallback_records,fallback_correct,correct,accuracy,macro_f1,weighted_f1,changed_vs_A
+MODEL_ONLY_original,"Model alone, no rules",original,none,TF-IDF baseline,120,0,0,,120,54,54,0.45,0.3832,0.3832,
+MODEL_ONLY_original,"Model alone, no rules",original,none,Dual Encoder V2,120,0,0,,120,45,45,0.375,0.2745,0.2745,
+MODEL_ONLY_identifiers_removed,"Model alone, no rules",removed,none,TF-IDF baseline,120,0,0,,120,58,58,0.4833,0.4217,0.4217,
+MODEL_ONLY_identifiers_removed,"Model alone, no rules",removed,none,Dual Encoder V2,120,0,0,,120,43,43,0.3583,0.2567,0.2567,
+MODEL_ONLY_identifiers_neutralized,"Model alone, no rules",neutralized,none,TF-IDF baseline,120,0,0,,120,53,53,0.4417,0.37,0.37,
+MODEL_ONLY_identifiers_neutralized,"Model alone, no rules",neutralized,none,Dual Encoder V2,120,0,0,,120,45,45,0.375,0.2785,0.2785,
+A,All rules enabled,original,all,none (unmatched = Unclassified),120,120,120,1.0,0,0,120,1.0,1.0,1.0,0
+A,All rules enabled,original,all,TF-IDF baseline,120,120,120,1.0,0,0,120,1.0,1.0,1.0,0
+A,All rules enabled,original,all,Dual Encoder V2,120,120,120,1.0,0,0,120,1.0,1.0,1.0,0
+B,Own-identifier prefix clauses disabled; all other clauses unchanged,original,no_own_prefix,none (unmatched = Unclassified),120,97,97,1.0,23,0,97,0.8083,0.7829,0.8155,23
+B,Own-identifier prefix clauses disabled; all other clauses unchanged,original,no_own_prefix,TF-IDF baseline,120,97,97,1.0,23,5,102,0.85,0.8284,0.8284,18
+B,Own-identifier prefix clauses disabled; all other clauses unchanged,original,no_own_prefix,Dual Encoder V2,120,97,97,1.0,23,7,104,0.8667,0.8355,0.8355,16
+C,Identifier values removed (own and reference IDs blanked),removed,all,none (unmatched = Unclassified),120,80,80,1.0,40,0,80,0.6667,0.64,0.6667,40
+C,Identifier values removed (own and reference IDs blanked),removed,all,TF-IDF baseline,120,80,80,1.0,40,12,92,0.7667,0.7213,0.7213,28
+C,Identifier values removed (own and reference IDs blanked),removed,all,Dual Encoder V2,120,80,80,1.0,40,14,94,0.7833,0.7264,0.7264,26
+D,Identifier prefixes neutralized to DOC-<digits> (presence kept),neutralized,all,none (unmatched = Unclassified),120,80,80,1.0,40,0,80,0.6667,0.64,0.6667,40
+D,Identifier prefixes neutralized to DOC-<digits> (presence kept),neutralized,all,TF-IDF baseline,120,80,80,1.0,40,10,90,0.75,0.7004,0.7004,30
+D,Identifier prefixes neutralized to DOC-<digits> (presence kept),neutralized,all,Dual Encoder V2,120,80,80,1.0,40,14,94,0.7833,0.7334,0.7334,26
+E,Field-presence clauses only (all own- and reference-ID prefix clauses disabled),original,presence_only,none (unmatched = Unclassified),120,80,80,1.0,40,0,80,0.6667,0.64,0.6667,40
+E,Field-presence clauses only (all own- and reference-ID prefix clauses disabled),original,presence_only,TF-IDF baseline,120,80,80,1.0,40,10,90,0.75,0.7004,0.7004,30
+E,Field-presence clauses only (all own- and reference-ID prefix clauses disabled),original,presence_only,Dual Encoder V2,120,80,80,1.0,40,13,93,0.775,0.7182,0.7182,27
