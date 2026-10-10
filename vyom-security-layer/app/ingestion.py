@@ -13,6 +13,7 @@ MAX_CSV_COLUMNS = 80
 MAX_ZIP_ENTRIES = 200
 MAX_ZIP_UNCOMPRESSED_BYTES = 5_000_000
 FORMULA_PREFIXES = ("=", "+", "-", "@")
+OPTIONAL_HEADER_ALIASES = {"discount", "discount_amount"}
 REQUIRED_HEADER_GROUPS = {
     "seller_supplier": {"seller", "supplier", "vendor"},
     "buyer_customer": {"buyer", "customer", "recipient"},
@@ -32,7 +33,6 @@ REQUIRED_HEADER_GROUPS = {
                       "payment_amount", "received_amount", "amount_claimed", "free_on_board_value",
                       "cost_insurance_freight", "transfer_amount"},
     "gst": {"gst", "gst_amount", "tax", "tax_amount", "import_gst"},
-    "discount": {"discount", "discount_amount"},
     "freight": {"freight", "shipping", "transport", "freight_charges", "transport_cost", "courier_transport",
                 "other_charges"},
     "payment_information": {"payment_information", "payment_info", "payment_status", "payment_mode",
@@ -112,7 +112,7 @@ def inspect_headers(headers: list[str]) -> dict:
         for group, aliases in REQUIRED_HEADER_GROUPS.items()
         if normalized.isdisjoint(aliases)
     ]
-    known_aliases = set().union(*REQUIRED_HEADER_GROUPS.values())
+    known_aliases = set().union(*REQUIRED_HEADER_GROUPS.values()).union(OPTIONAL_HEADER_ALIASES)
     abrupt = sorted(header for header in normalized if header and header not in known_aliases)
     return {
         "raw_headers": headers,

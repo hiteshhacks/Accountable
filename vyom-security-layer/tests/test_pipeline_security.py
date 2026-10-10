@@ -84,7 +84,7 @@ def test_upload_missing_mandatory_headers_rejected(app_and_client):
     assert "invoice_number" in detail["diagnostics"]["matched_required_groups"]
 
 
-def test_real_workbook_style_headers_only_missing_discount(app_and_client):
+def test_real_workbook_style_headers_accepted_without_discount(app_and_client):
     _, client = app_and_client
     headers = login(client, "finance_analyst@vyom.in", "finance_analyst_vyom")
     workbook_like_header = (
@@ -99,13 +99,12 @@ def test_real_workbook_style_headers_only_missing_discount(app_and_client):
         "filename": "workbook-style.csv",
         "content_base64": b64(workbook_like_header + b"PO-1,Supplier A,Org,2026-10-10,Item A,1,1000,180,INR,Customer B,DOC-1,2026-10-10,1000,50,bank,Oct,5000,Dr,Cr,none,DEL-1,2026-10-10,0,EXP-1,UAE,purchase,note\n"),
     })
-    assert response.status_code == 400
-    detail = response.json()["detail"]
-    assert detail["reason"] == "missing_required_headers"
-    assert detail["diagnostics"]["missing_required_groups"] == ["discount"]
-    assert "invoice_number" in detail["diagnostics"]["matched_required_groups"]
-    assert "payroll_information" in detail["diagnostics"]["matched_required_groups"]
-    assert "delivery_information" in detail["diagnostics"]["matched_required_groups"]
+    assert response.status_code == 200
+    diagnostics = response.json()["diagnostics"]
+    assert diagnostics["missing_required_groups"] == []
+    assert "invoice_number" in diagnostics["matched_required_groups"]
+    assert "payroll_information" in diagnostics["matched_required_groups"]
+    assert "delivery_information" in diagnostics["matched_required_groups"]
 
 
 def test_llm_prompt_injection_rejected(app_and_client):

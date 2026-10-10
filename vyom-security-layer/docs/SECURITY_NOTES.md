@@ -34,7 +34,7 @@
 ## Assumptions
 - The API remains a standalone security-layer prototype, not the full VYOM+ production backend.
 - Demo GST source metadata points to the CBIC GST goods/services rates page, but this prototype does not scrape or continuously update statutory rate tables.
-- `.csv` and `.xlsx` validation require mandatory business headers covering seller/supplier, buyer/customer, invoice number/date, item details, quantities, taxable value, GST, discounts, freight, payment, currency, import/export, payroll, debit/credit, return, order, delivery, and metadata fields.
+- `.csv` and `.xlsx` validation require mandatory business headers covering seller/supplier, buyer/customer, invoice number/date, item details, quantities, taxable value, GST, freight, payment, currency, import/export, payroll, debit/credit, return, order, delivery, and metadata fields. Discount is recognized when present but is not mandatory.
 - `.xlsx` validation inspects archive structure and worksheet XML for formulas/external links; it does not fully evaluate workbook semantics.
 - `.parquet` is recognized by magic bytes but rejected until a schema parser is integrated, because mandatory headers cannot be verified safely without reading the schema.
 - LLM validation protects the boundary around model input/output; no model is invoked by this prototype.
