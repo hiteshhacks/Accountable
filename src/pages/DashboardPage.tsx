@@ -1,12 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import {
-  FileSpreadsheet,
-  CheckCircle2,
-  Clock,
-  Upload,
-  ArrowRight,
-  MoreHorizontal,
-  FolderOpen,
+  FileSpreadsheet, CheckCircle2, Clock, Upload,
+  ArrowRight, MoreHorizontal, FolderOpen,
 } from 'lucide-react';
 import { AppLayout } from '../components/common/AppLayout';
 import { useApp } from '../context/AppContext';
@@ -19,103 +14,101 @@ export function DashboardPage() {
   const processedTransactions = transactions.filter((t) => t.status === 'High').length;
   const lastUploadDate = uploads.length > 0 ? uploads[0].date : 'None';
 
+  const card = {
+    borderColor: 'var(--border)',
+    background: 'var(--surface)',
+    boxShadow: 'var(--shadow-card)',
+  };
+
   return (
     <AppLayout>
-      {/* Top Greeting */}
+      {/* Greeting */}
       <div className="mb-9">
-        <p className="text-xs font-semibold tracking-widest text-[#C8A85A] uppercase">
+        <p className="text-xs font-semibold tracking-widest uppercase" style={{ color: 'var(--accent)' }}>
           Dashboard Overview
         </p>
-        <h1 className="mt-1.5 font-serif text-3xl font-normal text-[#F0E5CA] sm:text-4xl lg:text-5xl">
+        <h1 className="mt-1.5 font-serif text-3xl font-normal sm:text-4xl lg:text-5xl" style={{ color: 'var(--text)' }}>
           Let's process your financial data.
         </h1>
       </div>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-        {/* Card 1 */}
-        <div className="rounded-2xl border border-[rgba(200,168,90,0.25)] bg-[#17130D] p-7 shadow-[0_4px_28px_rgba(0,0,0,0.6)] transition-all hover:border-[rgba(200,168,90,0.45)]">
-          <div className="flex items-center gap-5">
-            <div className="flex size-14 items-center justify-center rounded-2xl border border-[rgba(200,168,90,0.35)] bg-[#1D1810] text-[#C8A85A]">
-              <FileSpreadsheet className="size-7" />
-            </div>
-            <div>
-              <p className="font-serif text-3xl font-normal text-[#F0E5CA] sm:text-4xl">
-                {totalTransactions.toLocaleString()}
-              </p>
-              <p className="mt-1 text-sm font-medium text-[#E8D29A]">Total transactions</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 2 */}
-        <div className="rounded-2xl border border-[rgba(200,168,90,0.25)] bg-[#17130D] p-7 shadow-[0_4px_28px_rgba(0,0,0,0.6)] transition-all hover:border-[rgba(200,168,90,0.45)]">
-          <div className="flex items-center gap-5">
-            <div className="flex size-14 items-center justify-center rounded-2xl border border-[rgba(200,168,90,0.35)] bg-[#1D1810] text-[#C8A85A]">
-              <CheckCircle2 className="size-7" />
-            </div>
-            <div>
-              <p className="font-serif text-3xl font-normal text-[#F0E5CA] sm:text-4xl">
-                {processedTransactions.toLocaleString()}
-              </p>
-              <p className="mt-1 text-sm font-medium text-[#E8D29A]">Processed</p>
+        {[
+          { Icon: FileSpreadsheet, value: totalTransactions.toLocaleString(),        label: 'Total transactions' },
+          { Icon: CheckCircle2,    value: processedTransactions.toLocaleString(),    label: 'Processed' },
+          { Icon: Clock,           value: lastUploadDate,                             label: 'Last uploaded', small: true },
+        ].map(({ Icon, value, label, small }) => (
+          <div key={label} className="rounded-2xl border p-7 transition-all hover:border-opacity-80" style={card}>
+            <div className="flex items-center gap-5">
+              <div
+                className="flex size-14 items-center justify-center rounded-2xl border"
+                style={{ borderColor: 'var(--border-strong)', background: 'var(--surface-elevated)', color: 'var(--accent)' }}
+              >
+                <Icon className="size-7" />
+              </div>
+              <div>
+                <p
+                  className={`font-serif font-normal ${small ? 'text-2xl sm:text-3xl' : 'text-3xl sm:text-4xl'}`}
+                  style={{ color: 'var(--text)' }}
+                >
+                  {value}
+                </p>
+                <p className="mt-1 text-sm font-medium" style={{ color: 'var(--text-secondary)' }}>{label}</p>
+              </div>
             </div>
           </div>
-        </div>
-
-        {/* Card 3 */}
-        <div className="rounded-2xl border border-[rgba(200,168,90,0.25)] bg-[#17130D] p-7 shadow-[0_4px_28px_rgba(0,0,0,0.6)] transition-all hover:border-[rgba(200,168,90,0.45)]">
-          <div className="flex items-center gap-5">
-            <div className="flex size-14 items-center justify-center rounded-2xl border border-[rgba(200,168,90,0.35)] bg-[#1D1810] text-[#C8A85A]">
-              <Clock className="size-7" />
-            </div>
-            <div>
-              <p className="font-serif text-2xl font-normal text-[#F0E5CA] sm:text-3xl">
-                {lastUploadDate}
-              </p>
-              <p className="mt-1 text-sm font-medium text-[#E8D29A]">Last uploaded</p>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
 
-      {/* Primary Action Horizontal Banner */}
+      {/* Upload CTA Banner */}
       <div
         onClick={() => navigate('/upload')}
-        className="group mt-9 cursor-pointer rounded-2xl border border-[rgba(200,168,90,0.35)] bg-gradient-to-r from-[#17130D] to-[#1D1810] p-8 shadow-[0_8px_40px_rgba(0,0,0,0.65)] transition-all duration-300 hover:border-[#C8A85A] hover:shadow-[0_12px_48px_rgba(200,168,90,0.18)] sm:p-9"
+        className="group mt-9 cursor-pointer rounded-2xl border p-8 transition-all duration-300 sm:p-9"
+        style={{
+          borderColor: 'var(--border)',
+          background: `linear-gradient(to right, var(--surface), var(--surface-elevated))`,
+          boxShadow: 'var(--shadow-card)',
+        }}
+        onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)')}
+        onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.borderColor = 'var(--border)')}
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-6">
-            <div className="flex size-16 items-center justify-center rounded-2xl border border-[rgba(200,168,90,0.4)] bg-[#100D08] text-[#C8A85A] transition-colors group-hover:border-[#C8A85A] group-hover:bg-[#C8A85A] group-hover:text-[#090704]">
+            <div
+              className="flex size-16 items-center justify-center rounded-2xl border transition-colors group-hover:border-[var(--accent)]"
+              style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)', color: 'var(--accent)' }}
+            >
               <Upload className="size-8" />
             </div>
             <div>
-              <h2 className="font-serif text-2xl font-normal text-[#F0E5CA] sm:text-3xl">
+              <h2 className="font-serif text-2xl font-normal sm:text-3xl" style={{ color: 'var(--text)' }}>
                 Upload Transactions
               </h2>
-              <p className="mt-1.5 text-base text-[#E8D29A]">
+              <p className="mt-1.5 text-base" style={{ color: 'var(--text-secondary)' }}>
                 Upload your Excel or CSV file to begin intelligent voucher classification.
               </p>
             </div>
           </div>
-
-          <div className="flex size-14 items-center justify-center rounded-full border border-[rgba(200,168,90,0.4)] bg-[#100D08] text-[#C8A85A] transition-all group-hover:border-[#C8A85A] group-hover:bg-[#C8A85A] group-hover:text-[#090704]">
+          <div
+            className="flex size-14 items-center justify-center rounded-full border transition-all"
+            style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)', color: 'var(--accent)' }}
+          >
             <ArrowRight className="size-6" />
           </div>
         </div>
       </div>
 
-      {/* Recent Uploads Section / High-Readability Empty State */}
+      {/* Recent Uploads */}
       <div className="mt-12">
         <div className="mb-6 flex items-center justify-between">
-          <h3 className="font-serif text-2xl font-normal text-[#F0E5CA]">
-            Recent uploads
-          </h3>
+          <h3 className="font-serif text-2xl font-normal" style={{ color: 'var(--text)' }}>Recent uploads</h3>
           {uploads.length > 0 && (
             <button
               type="button"
               onClick={() => navigate('/results/job-latest')}
-              className="flex items-center gap-2 text-sm font-medium text-[#E8D29A] transition-colors hover:text-[#F0E5CA]"
+              className="flex items-center gap-2 text-sm font-medium transition-colors"
+              style={{ color: 'var(--text-secondary)' }}
             >
               <span>View classification results</span>
               <ArrowRight className="size-4" />
@@ -124,65 +117,73 @@ export function DashboardPage() {
         </div>
 
         {uploads.length === 0 ? (
-          /* Empty State */
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-[rgba(200,168,90,0.25)] bg-[#17130D]/90 px-6 py-16 text-center">
-            <div className="flex size-16 items-center justify-center rounded-2xl border border-[rgba(200,168,90,0.3)] bg-[#100D08] text-[#C8A85A]">
+          <div
+            className="flex flex-col items-center justify-center rounded-2xl border px-6 py-16 text-center"
+            style={{ borderColor: 'var(--border)', background: 'color-mix(in srgb, var(--surface) 90%, transparent)' }}
+          >
+            <div
+              className="flex size-16 items-center justify-center rounded-2xl border"
+              style={{ borderColor: 'var(--border)', background: 'var(--bg-elevated)', color: 'var(--accent)' }}
+            >
               <FolderOpen className="size-8" />
             </div>
-            <h4 className="mt-6 font-serif text-2xl font-normal text-[#F0E5CA] sm:text-3xl">
+            <h4 className="mt-6 font-serif text-2xl font-normal sm:text-3xl" style={{ color: 'var(--text)' }}>
               No transactions yet.
             </h4>
-            <p className="mt-2.5 max-w-lg text-base text-[#E8D29A]">
+            <p className="mt-2.5 max-w-lg text-base" style={{ color: 'var(--text-secondary)' }}>
               Upload your first transaction file to begin intelligent voucher classification and GST intelligence.
             </p>
             <button
               type="button"
               onClick={() => navigate('/upload')}
-              className="mt-7 inline-flex items-center gap-2.5 rounded-xl bg-[#D8BC78] px-7 py-3.5 text-base font-semibold text-[#090704] transition-all hover:bg-[#E8D29A]"
+              className="mt-7 inline-flex items-center gap-2.5 rounded-xl px-7 py-3.5 text-base font-semibold transition-all"
+              style={{ background: 'var(--accent-warm)', color: 'var(--accent-contrast)' }}
             >
               <Upload className="size-5" />
               <span>Upload Transactions →</span>
             </button>
           </div>
         ) : (
-          /* Uploads Table */
-          <div className="overflow-hidden rounded-2xl border border-[rgba(200,168,90,0.22)] bg-[#17130D]">
+          <div
+            className="overflow-hidden rounded-2xl border"
+            style={{ borderColor: 'var(--border)', background: 'var(--surface)' }}
+          >
             {uploads.map((item, index) => (
               <div
                 key={item.id}
                 onClick={() => navigate('/results/job-latest')}
-                className={`flex cursor-pointer items-center justify-between px-8 py-5.5 transition-colors hover:bg-[#1D1810] ${
-                  index !== uploads.length - 1 ? 'border-b border-[rgba(200,168,90,0.12)]' : ''
-                }`}
+                className="flex cursor-pointer items-center justify-between px-8 py-5 transition-colors"
+                style={{
+                  borderBottom: index !== uploads.length - 1 ? `1px solid var(--border)` : 'none',
+                }}
+                onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.background = 'var(--surface-elevated)')}
+                onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.background = 'transparent')}
               >
                 <div className="flex items-center gap-5">
-                  <FileSpreadsheet className="size-6 text-[#C8A85A]" />
-                  <span className="font-mono text-base font-medium text-[#F0E5CA]">
+                  <FileSpreadsheet className="size-6" style={{ color: 'var(--accent)' }} />
+                  <span className="font-mono text-base font-medium" style={{ color: 'var(--text)' }}>
                     {item.filename}
                   </span>
                 </div>
-
                 <div className="flex items-center gap-9">
-                  <span className="text-base font-mono text-[#E8D29A]">
-                    {item.rows}
-                  </span>
-
-                  <span className="inline-flex items-center gap-2 rounded-full border border-[#4E7A58]/40 bg-[#4E7A58]/20 px-3.5 py-1 text-xs font-semibold text-[#78A882]">
-                    <span className="size-2 rounded-full bg-[#78A882]" />
+                  <span className="font-mono text-base" style={{ color: 'var(--text-secondary)' }}>{item.rows}</span>
+                  <span
+                    className="inline-flex items-center gap-2 rounded-full border px-3.5 py-1 text-xs font-semibold"
+                    style={{
+                      borderColor: 'rgba(78,122,88,0.40)',
+                      background: 'rgba(78,122,88,0.20)',
+                      color: 'var(--status-success-text)',
+                    }}
+                  >
+                    <span className="size-2 rounded-full" style={{ background: 'var(--status-success-text)' }} />
                     {item.status}
                   </span>
-
-                  <span className="text-sm font-medium text-[#B9AD92]">
-                    {item.date}
-                  </span>
-
+                  <span className="text-sm font-medium" style={{ color: 'var(--text-muted)' }}>{item.date}</span>
                   <button
                     type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate('/results/job-latest');
-                    }}
-                    className="text-[#756B58] transition-colors hover:text-[#C8A85A]"
+                    onClick={(e) => { e.stopPropagation(); navigate('/results/job-latest'); }}
+                    className="transition-colors"
+                    style={{ color: 'var(--text-faint)' }}
                   >
                     <MoreHorizontal className="size-5" />
                   </button>

@@ -23,7 +23,6 @@ export function BackgroundVideo({ showOverlay = true, dimmed = false }: Backgrou
     if (reduceMotion) {
       video.pause();
     } else {
-      // Force autoplay attempt if browser requires explicit play call
       video.play().catch(() => {
         // Autoplay policy fallback
       });
@@ -54,14 +53,30 @@ export function BackgroundVideo({ showOverlay = true, dimmed = false }: Backgrou
 
       {showOverlay && (
         <div aria-hidden="true" className="absolute inset-0 z-0">
-          {/* Subtle warm key light glow on 3D mechanical object */}
-          <div className="absolute inset-0 bg-radial-[ellipse_65%_65%_at_70%_40%] from-[#C8A85A]/25 to-transparent mix-blend-soft-light" />
-          {/* Soft atmospheric vignette layer */}
-          <div className="absolute inset-0 bg-radial-[ellipse_85%_85%_at_45%_45%] from-transparent via-black/15 to-[#090704]/75" />
-          {/* Top subtle navbar fade */}
-          <div className="absolute inset-x-0 top-0 h-28 bg-linear-to-b from-[#090704]/80 to-transparent" />
-          {/* Bottom subtle scroll fade */}
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-linear-to-t from-[#090704]/85 to-transparent" />
+          {/* Theme-aware warm/dark key light */}
+          <div
+            className="absolute inset-0 mix-blend-soft-light"
+            style={{
+              background: 'radial-gradient(ellipse 65% 65% at 70% 40%, color-mix(in srgb, var(--accent) 25%, transparent), transparent)',
+            }}
+          />
+          {/* Atmospheric vignette using CSS tokens */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: 'radial-gradient(ellipse 85% 85% at 45% 45%, transparent, color-mix(in srgb, var(--bg) 60%, transparent))',
+            }}
+          />
+          {/* Top scrim — theme-aware */}
+          <div
+            className="absolute inset-x-0 top-0 h-28"
+            style={{ background: 'var(--scrim)' }}
+          />
+          {/* Bottom fade */}
+          <div
+            className="absolute inset-x-0 bottom-0 h-32"
+            style={{ background: 'linear-gradient(to top, var(--bg), transparent)' }}
+          />
         </div>
       )}
     </div>

@@ -8,7 +8,10 @@ interface AppLayoutProps {
 
 export function AppLayout({ children }: AppLayoutProps) {
   return (
-    <div className="flex min-h-screen bg-[#0A0805] text-[#F1E7CF]">
+    <div
+      className="flex min-h-screen"
+      style={{ background: 'var(--bg)', color: 'var(--text)' }}
+    >
       <Sidebar />
       <div className="flex flex-1 flex-col pl-56">
         <TopBar />

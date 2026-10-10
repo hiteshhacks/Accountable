@@ -20,6 +20,21 @@
     />
 
     <title>Accountable — Intelligent Voucher Classification &amp; GST Intelligence</title>
+
+    <!-- Flash-of-wrong-theme prevention: runs synchronously before first paint -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('accountable-theme');
+          if (t === 'light') {
+            document.documentElement.setAttribute('data-theme', 'light');
+            document.documentElement.style.colorScheme = 'light';
+          } else {
+            document.documentElement.style.colorScheme = 'dark';
+          }
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

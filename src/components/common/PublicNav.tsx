@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { ThemeToggle } from './ThemeToggle';
 
 export function PublicNav() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -18,7 +19,7 @@ export function PublicNav() {
       <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-x-0 top-0 z-39 h-[140px]"
-        style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.35), transparent)' }}
+        style={{ background: 'var(--scrim)' }}
       />
 
       <header
@@ -28,31 +29,29 @@ export function PublicNav() {
         {/* ── Brand ── */}
         <Link
           to="/"
-          className="font-serif text-2xl font-normal tracking-tight text-[#E8D29A] transition-opacity hover:opacity-90 sm:text-3xl lg:text-4xl"
-          style={{ textShadow: '0 1px 8px rgba(0,0,0,0.45)' }}
+          className="font-serif text-2xl font-normal tracking-tight transition-opacity hover:opacity-90 sm:text-3xl lg:text-4xl"
+          style={{
+            color: 'var(--text)',
+            textShadow: '0 1px 8px rgba(0,0,0,0.45)',
+          }}
         >
           Accountable
         </Link>
 
         {/* ── Center nav — single frosted-glass pill ── */}
-        <nav
-          aria-label="Primary"
-          className="hidden md:flex items-center gap-8"
-          style={{ gap: '32px' }}
-        >
-          {/* The single pill wraps all three links */}
+        <nav aria-label="Primary" className="hidden md:flex items-center">
           <div className="public-nav-pill flex items-center" style={{ gap: '32px' }}>
             <button
               type="button"
               onClick={() => scrollToSection('product')}
-              className="public-nav-link font-serif text-base font-medium tracking-wide text-[#F0E5CA]/85 transition-all duration-200 cursor-pointer rounded-full px-3 py-1 hover:text-[#F0E5CA]"
+              className="public-nav-link font-serif text-base font-medium tracking-wide transition-all duration-200 cursor-pointer rounded-full px-3 py-1"
             >
               Product
             </button>
             <button
               type="button"
               onClick={() => scrollToSection('how-it-works')}
-              className="public-nav-link font-serif text-base font-medium tracking-wide text-[#F0E5CA]/85 transition-all duration-200 cursor-pointer rounded-full px-3 py-1 hover:text-[#F0E5CA]"
+              className="public-nav-link font-serif text-base font-medium tracking-wide transition-all duration-200 cursor-pointer rounded-full px-3 py-1"
             >
               How it works
             </button>
@@ -60,48 +59,69 @@ export function PublicNav() {
               href="https://github.com/hiteshhacks/Accountable#table-of-contents"
               target="_blank"
               rel="noopener noreferrer"
-              className="public-nav-link font-serif text-base font-medium tracking-wide text-[#F0E5CA]/85 transition-all duration-200 rounded-full px-3 py-1 hover:text-[#F0E5CA]"
+              className="public-nav-link font-serif text-base font-medium tracking-wide transition-all duration-200 rounded-full px-3 py-1"
             >
               Security
             </a>
           </div>
         </nav>
 
-        {/* ── Right: Sign in ── */}
-        <div className="hidden md:flex items-center">
+        {/* ── Right: ThemeToggle + Sign in ── */}
+        <div className="hidden md:flex items-center gap-3">
+          <ThemeToggle />
           <Link
             to="/login"
-            className="rounded-full border border-[rgba(217,188,122,0.40)] bg-[rgba(255,255,255,0.08)] px-7 py-2.5 text-base font-serif font-medium tracking-wide text-[#E8D29A] transition-all duration-200 hover:border-[#C8A85A] hover:bg-[rgba(217,188,122,0.15)] hover:text-[#F0E5CA]"
+            className="rounded-full border px-7 py-2.5 text-base font-serif font-medium tracking-wide transition-all duration-200"
             style={{
+              borderColor: 'var(--glass-border)',
+              background: 'var(--glass-bg)',
+              color: 'var(--text-secondary)',
               backdropFilter: 'blur(16px) saturate(140%)',
               WebkitBackdropFilter: 'blur(16px) saturate(140%)',
-              boxShadow: '0 8px 32px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.18)',
-              textShadow: '0 1px 8px rgba(0,0,0,0.45)',
+              boxShadow: 'var(--glass-shadow)',
+              textShadow: '0 1px 8px rgba(0,0,0,0.30)',
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLElement).style.borderColor = 'var(--accent)';
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLElement).style.borderColor = 'var(--glass-border)';
             }}
           >
             Sign in
           </Link>
         </div>
 
-        {/* ── Mobile hamburger ── */}
-        <button
-          type="button"
-          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-          aria-expanded={mobileOpen}
-          onClick={() => setMobileOpen((v) => !v)}
-          className="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-[5px] rounded-full border border-[rgba(217,188,122,0.3)] bg-[rgba(255,255,255,0.06)] transition-all duration-200 hover:border-[#C8A85A] hover:bg-[rgba(217,188,122,0.1)]"
-          style={{ backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)' }}
-        >
-          <span
-            className={`block h-[1.5px] w-5 bg-[#E8D29A] rounded-full transition-all duration-200 origin-center ${mobileOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`}
-          />
-          <span
-            className={`block h-[1.5px] w-5 bg-[#E8D29A] rounded-full transition-all duration-200 ${mobileOpen ? 'opacity-0 scale-x-0' : ''}`}
-          />
-          <span
-            className={`block h-[1.5px] w-5 bg-[#E8D29A] rounded-full transition-all duration-200 origin-center ${mobileOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`}
-          />
-        </button>
+        {/* ── Mobile: ThemeToggle + Hamburger ── */}
+        <div className="md:hidden flex items-center gap-2">
+          <ThemeToggle />
+          <button
+            type="button"
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((v) => !v)}
+            className="flex flex-col justify-center items-center w-10 h-10 gap-[5px] rounded-full border transition-all duration-200"
+            style={{
+              borderColor: 'var(--glass-border)',
+              background: 'var(--glass-bg)',
+              backdropFilter: 'blur(12px)',
+              WebkitBackdropFilter: 'blur(12px)',
+            }}
+          >
+            <span
+              className={`block h-[1.5px] w-5 rounded-full transition-all duration-200 origin-center ${mobileOpen ? 'rotate-45 translate-y-[6.5px]' : ''}`}
+              style={{ background: 'var(--text-secondary)' }}
+            />
+            <span
+              className={`block h-[1.5px] w-5 rounded-full transition-all duration-200 ${mobileOpen ? 'opacity-0 scale-x-0' : ''}`}
+              style={{ background: 'var(--text-secondary)' }}
+            />
+            <span
+              className={`block h-[1.5px] w-5 rounded-full transition-all duration-200 origin-center ${mobileOpen ? '-rotate-45 -translate-y-[6.5px]' : ''}`}
+              style={{ background: 'var(--text-secondary)' }}
+            />
+          </button>
+        </div>
       </header>
 
       {/* ── Mobile menu panel ── */}
@@ -110,17 +130,17 @@ export function PublicNav() {
           className="fixed inset-0 z-50 md:hidden"
           onClick={() => setMobileOpen(false)}
         >
-          {/* Backdrop */}
-          <div className="absolute inset-0 bg-black/60" style={{ backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' }} />
-
-          {/* Glass panel */}
+          <div
+            className="absolute inset-0 bg-black/60"
+            style={{ backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)' }}
+          />
           <div
             className="absolute inset-x-4 top-[80px] rounded-2xl p-6 flex flex-col gap-5"
             style={{
-              background: 'rgba(14, 10, 6, 0.82)',
+              background: 'color-mix(in srgb, var(--surface) 90%, transparent)',
               backdropFilter: 'blur(24px) saturate(140%)',
               WebkitBackdropFilter: 'blur(24px) saturate(140%)',
-              border: '1px solid rgba(217,188,122,0.25)',
+              border: '1px solid var(--glass-border)',
               boxShadow: '0 16px 48px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.08)',
             }}
             onClick={(e) => e.stopPropagation()}
@@ -128,14 +148,16 @@ export function PublicNav() {
             <button
               type="button"
               onClick={() => scrollToSection('product')}
-              className="font-serif text-lg font-medium text-[#F0E5CA]/85 hover:text-[#F0E5CA] text-left py-2 border-b border-[rgba(217,188,122,0.12)] transition-colors duration-200"
+              className="font-serif text-lg font-medium text-left py-2 border-b transition-colors duration-200"
+              style={{ color: 'var(--text)', borderColor: 'var(--border)' }}
             >
               Product
             </button>
             <button
               type="button"
               onClick={() => scrollToSection('how-it-works')}
-              className="font-serif text-lg font-medium text-[#F0E5CA]/85 hover:text-[#F0E5CA] text-left py-2 border-b border-[rgba(217,188,122,0.12)] transition-colors duration-200"
+              className="font-serif text-lg font-medium text-left py-2 border-b transition-colors duration-200"
+              style={{ color: 'var(--text)', borderColor: 'var(--border)' }}
             >
               How it works
             </button>
@@ -144,14 +166,20 @@ export function PublicNav() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setMobileOpen(false)}
-              className="font-serif text-lg font-medium text-[#F0E5CA]/85 hover:text-[#F0E5CA] py-2 border-b border-[rgba(217,188,122,0.12)] transition-colors duration-200"
+              className="font-serif text-lg font-medium py-2 border-b transition-colors duration-200"
+              style={{ color: 'var(--text)', borderColor: 'var(--border)' }}
             >
               Security
             </a>
             <Link
               to="/login"
               onClick={() => setMobileOpen(false)}
-              className="mt-1 rounded-full border border-[rgba(217,188,122,0.40)] bg-[rgba(217,188,122,0.08)] px-6 py-3 text-center font-serif text-base font-medium text-[#E8D29A] transition-all duration-200 hover:bg-[rgba(217,188,122,0.18)] hover:text-[#F0E5CA]"
+              className="mt-1 rounded-full border px-6 py-3 text-center font-serif text-base font-medium transition-all duration-200"
+              style={{
+                borderColor: 'var(--glass-border)',
+                background: 'var(--glass-bg)',
+                color: 'var(--text-secondary)',
+              }}
             >
               Sign in
             </Link>
