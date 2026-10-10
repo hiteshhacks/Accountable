@@ -1,15 +1,17 @@
-[![Python 3.10+](https://img.shields.io/badge/PYTHON-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FASTAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![PyTorch](https://img.shields.io/badge/PYTORCH-2.2+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Python 3.10+](https://img.shields.io/badge/PYTHON-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![FastAPI](https://img.shields.io/badge/FASTAPI-0.110%2B-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
+[![PyTorch](https://img.shields.io/badge/PYTORCH-2.2%2B-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![Hugging Face](https://img.shields.io/badge/HUGGING%20FACE-TRANSFORMERS-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/)
 [![vLLM](https://img.shields.io/badge/INFERENCE-vLLM-4F46E5?style=for-the-badge&logo=accelerate&logoColor=white)](https://vllm.ai/)
 [![FAISS](https://img.shields.io/badge/FAISS-VECTOR%20SEARCH-0284C7?style=for-the-badge&logo=meta&logoColor=white)](https://github.com/facebookresearch/faiss)
-[![PostgreSQL](https://img.shields.io/badge/POSTGRESQL-16+-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![PostgreSQL](https://img.shields.io/badge/POSTGRESQL-16%2B-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
 [![Docker](https://img.shields.io/badge/DOCKER-READY-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+
+> **Repository structure:** Keep the `DATA/` folder beside this `README.md`. All architecture diagrams in this document use standard Markdown image paths, so they render correctly on GitHub and other Markdown viewers.
 
 # 📑 VYOM+ — Intelligent Voucher Classification & GST Intelligence Platform
 
-**An end-to-end neuro-symbolic AI system for structured financial transaction understanding, 27-class voucher classification, deterministic GST validation, book-to-tax reconciliation, and filing preparation — powered by open-source LLMs, dual-domain contrastive co-training, and automated compliance intelligence.**
+> **An end-to-end neuro-symbolic AI system for structured financial transaction understanding, 27-class voucher classification, deterministic GST validation, book-to-tax reconciliation, and filing preparation — powered by open-source LLMs, dual-domain contrastive co-training, and automated compliance intelligence.**
 
 ---
 
@@ -122,9 +124,11 @@ VYOM+ establishes a **dual-domain hierarchical neuro-symbolic framework** unitin
 
 The proposed solution follows a **dual-domain hierarchical neuro-symbolic architecture**, unifying multi-field feature extraction, dual representation encoders, open LLM arbitration, and a deterministic GST intelligence engine into an integrated operational pipeline.
 
-![Figure 1: VYOM+ Complete Solution Architecture](DATA/technical-approach-2.png)
+<p align="center">
+  <img src="docs/architechturaldiagram.jpeg" alt="Jeevan System Architecture Diagram" width="100%" />
+</p>
 
-*Figure 1: VYOM+ Complete Solution Architecture (`DATA/Technical Apprach (2).png`) — End-to-End Pipeline from Input Cleaning & Accounting Feature Extraction through Dual-Domain Co-Training, Open-Source LLM Classification, and the Downstream GST Intelligence Layer.*
+*Figure 1: VYOM+ Complete Solution Architecture (DATA/technical_approach.png) — End-to-End Pipeline from Input Cleaning & Accounting Feature Extraction through Dual-Domain Co-Training, Open-Source LLM Classification, and the Downstream GST Intelligence Layer.*
 
 ### Pipeline Architecture Breakdown
 
@@ -245,15 +249,15 @@ VYOM+ is built strictly upon **open-source, self-hosted artificial intelligence 
 
 ### Evaluated Model Families & Core Frameworks
 
-[![Qwen 2.5](https://img.shields.io/badge/Qwen_2.5_(7B/14B)-Alibaba_Cloud-615CED?style=for-the-badge&logo=alibabacloud&logoColor=white)](https://github.com/QwenLM/Qwen2.5)
-[![Meta LLaMA 3.1](https://img.shields.io/badge/LLaMA_3.1_(8B)-Meta_AI-0467DF?style=for-the-badge&logo=meta&logoColor=white)](https://llama.meta.com/)
+[![Qwen 2.5](https://img.shields.io/badge/Qwen_2.5_(7B%2F14B)-Alibaba_Cloud-615CED?style=for-the-badge&logo=alibabacloud&logoColor=white)](https://github.com/QwenLM/Qwen2.5)
+[![LLaMA 3.1](https://img.shields.io/badge/LLaMA_3.1_(8B)-Meta_AI-0467DF?style=for-the-badge&logo=meta&logoColor=white)](https://llama.meta.com/)
 [![Mistral NeMo](https://img.shields.io/badge/Mistral_NeMo_(12B)-Mistral_AI-FF7000?style=for-the-badge&logo=mistral&logoColor=white)](https://mistral.ai/)
-[![Google Gemma 2](https://img.shields.io/badge/Gemma_2_(9B)-Google_DeepMind-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/gemma)
+[![Gemma 2](https://img.shields.io/badge/Gemma_2_(9B)-Google_DeepMind-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/gemma)
 [![Hugging Face](https://img.shields.io/badge/Hugging_Face-Transformers-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/)
 [![vLLM](https://img.shields.io/badge/vLLM-PagedAttention-4F46E5?style=for-the-badge&logo=accelerate&logoColor=white)](https://vllm.ai/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.2+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.2%2B-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
 [![FAISS](https://img.shields.io/badge/FAISS-Vector_Search-0284C7?style=for-the-badge&logo=meta&logoColor=white)](https://github.com/facebookresearch/faiss)
-[![PEFT LoRA](https://img.shields.io/badge/PEFT-LoRA_Adapter-10B981?style=for-the-badge&logo=target&logoColor=white)](https://github.com/huggingface/peft)
+[![PEFT](https://img.shields.io/badge/PEFT-LoRA_Adapter-10B981?style=for-the-badge&logo=target&logoColor=white)](https://github.com/huggingface/peft)
 
 ### Model Evaluation Benchmark Matrix
 
@@ -322,9 +326,9 @@ The end-to-end processing pipeline operates through four interconnected stages:
 
 The core voucher classification engine uses a **Dual-Domain Co-Training Block-Level Architecture** designed to resolve challenging semantic boundaries between confusable accounting classes:
 
-![Figure 2: Co-Training Block-Level Architecture for Voucher Classification](DATA/technical-approach-5.png)
+![VYOM+ Co-Training Architecture](DATA/co_training_architecture.png)
 
-*Figure 2: Component Architecture 1 (`DATA/Technical Apprach (5).png`) — Co-Training Block-Level Architecture for Voucher Classification: Global Encoder, Boundary Encoder, Confidence Estimator, Agreement Pseudo-Labeling, and Boundary Retraining Loop.*
+*Figure 2: Component Architecture 1 (DATA/co_training_architecture.png) — Co-Training Block-Level Architecture for Voucher Classification: Global Encoder, Boundary Encoder, Confidence Estimator, Agreement Pseudo-Labeling, and Boundary Retraining Loop.*
 
 #### Classification Workflow Specification
 
@@ -342,9 +346,9 @@ The core voucher classification engine uses a **Dual-Domain Co-Training Block-Le
 
 The **GST Intelligence Layer** takes classified financial transactions and transforms them into complete, audit-ready data required for GST statutory filing (GSTR-1, GSTR-3B) and period reporting:
 
-![Figure 3: GST Intelligence Layer & Feature Pipeline](DATA/technical-approach-6.png)
+![VYOM+ GST Intelligence Architecture](DATA/gst_intelligence_architecture.png)
 
-*Figure 3: Component Architecture 2 (`DATA/Technical Apprach (6).png`) — GST Intelligence Layer: Structured Transaction Serialization, Dual Financial & Temporal Encoders, Cross-Field Attention, Open LLM Processing, and Statutory JSON Output Generation.*
+*Figure 3: Component Architecture 2 (DATA/gst_intelligence_architecture.png) — GST Intelligence Layer: Structured Transaction Serialization, Dual Financial & Temporal Encoders, Cross-Field Attention, Open LLM Processing, and Statutory JSON Output Generation.*
 
 #### Operational Breakdown
 
@@ -391,6 +395,25 @@ The **GST Intelligence Layer** takes classified financial transactions and trans
   }
 }
 ```
+
+---
+
+### 11.3 Open-Source LLM Engine
+
+The LLM engine converts the structured transaction representation into a compact financial-temporal representation and performs contextual voucher reasoning before the hierarchical classification head produces the final category.
+
+![VYOM+ Open-Source LLM Engine](DATA/open_source_llm_architecture.png)
+
+*Figure 4: Open-Source LLM component showing financial and temporal encoders feeding contextual voucher classification.*
+
+#### Core Components
+
+1. **Structured Transaction Representation:** Financial, temporal, textual, and categorical fields are serialized into a consistent model input.
+2. **Financial Encoder:** Represents party relationships, monetary values, tax/GST attributes, and inventory-flow signals.
+3. **Temporal Encoder:** Represents invoice, order, delivery, payment, and return timing.
+4. **Cross-Field Attention:** Learns relationships between financial and temporal attributes rather than treating each field independently.
+5. **Open-Source LLM / SLM:** Performs contextual reasoning over the candidate voucher set.
+6. **Hierarchical Voucher Head:** Classifies the transaction from family to direction to final voucher type.
 
 ---
 
