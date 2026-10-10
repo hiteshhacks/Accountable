@@ -57,6 +57,17 @@ python -m vyom.predict --input data/input/client_transactions.xlsx --output data
 
 The output retains input columns and adds `predicted_voucher_type`, `model_score_uncalibrated`, `top_3_predictions`, and `review_status`. Do not overwrite the original client file.
 
+## Evaluate a labelled wide-schema workbook
+```powershell
+python -m vyom.evaluate_workbook --input data/input/<workbook>.xlsx --output reports/<new_name>.xlsx
+```
+Without `--output`, a new timestamped file is created in `reports/`. Existing outputs and their side-reports are never overwritten unless `--overwrite` is passed. The output keeps these separate:
+- the prediction (`Predicted Voucher Category`);
+- the rule status: `RULE_MATCH`, `REVIEW_REQUIRED` for conflicting evidence, `AMBIGUOUS` for insufficient evidence, or `NO_RULE`;
+- the model's uncalibrated score.
+
+Rule matches are not probabilities. Results on the supplied 120-record workbook are development results; see `reports/rule_audit_summary.md` and `reports/independent_evaluation_design.md`.
+
 ## Rebuild the exploratory baseline
 This requires the included synthetic workbook and provisional comparison/adjudication workbook:
 

@@ -1,12 +1,41 @@
 """Voucher Semantic Rule Engine.
 
-Applies deterministic, explainable semantic rules based on explicit transaction
-evidence present in wide voucher fields. Rules do not use the target label.
+Collects explicit transaction evidence from wide voucher fields and decides a
+category only when that evidence is consistent. Rules do not use the target label.
+
+Every rule is evaluated; there is no first-match precedence. Each satisfied
+clause becomes an Evidence item with one of these bases:
+
+- ``identifier``         the record's own document-number prefix, nothing else
+- ``identifier+fields``  a document-number prefix together with supporting fields
+- ``reference+fields``   the prefix of a referenced document plus transaction fields
+- ``fields``             transaction fields only
+
+Decision statuses describe the evidence; they are not probabilities:
+
+- ``RULE_MATCH``       exactly one category is supported, by at least one clause
+                       that goes beyond an identifier prefix, and nothing contradicts it.
+- ``REVIEW_REQUIRED``  the evidence supports two or more categories. An identifier
+                       prefix therefore never overrides contradictory transaction evidence.
+- ``AMBIGUOUS``        the evidence is insufficient: an identifier prefix alone, or
+                       return / rejection details that do not establish a direction.
+- ``NO_RULE``          no rule evidence; the caller's model prediction stands.
 """
 
+from dataclasses import dataclass
 from typing import Any, Dict, Optional, Tuple
-import re
 import pandas as pd
+
+
+RULE_MATCH = "RULE_MATCH"
+REVIEW_REQUIRED = "REVIEW_REQUIRED"
+AMBIGUOUS = "AMBIGUOUS"
+NO_RULE = "NO_RULE"
+
+IDENTIFIER = "identifier"
+IDENTIFIER_FIELDS = "identifier+fields"
+REFERENCE_FIELDS = "reference+fields"
+FIELDS = "fields"
 
 
 def _clean(val: Any) -> str:
@@ -19,242 +48,253 @@ def _clean(val: Any) -> str:
     return val_str
 
 
+@dataclass(frozen=True)
+class Clause:
+    """A conjunction of tests on one record; satisfied when every test holds."""
+    prefix: Optional[Tuple[str, str]] = None     # (field, prefix) on the record's own document number
+    reference: Optional[Tuple[str, str]] = None  # (field, prefix) on a referenced document number
+    all_of: Tuple[str, ...] = ()                 # every field must be present
+    any_of: Tuple[Tuple[str, ...], ...] = ()     # each group needs at least one present field
+    none_of: Tuple[str, ...] = ()                # every field must be empty
+
+    @property
+    def basis(self) -> str:
+        has_fields = bool(self.all_of or self.any_of)
+        if self.prefix:
+            return IDENTIFIER_FIELDS if has_fields else IDENTIFIER
+        if self.reference:
+            return REFERENCE_FIELDS
+        return FIELDS
+
+    def match(self, row) -> Optional[Dict[str, str]]:
+        """Return the triggering field values, or None when the clause does not hold."""
+        evidence: Dict[str, str] = {}
+        for test in (self.prefix, self.reference):
+            if test:
+                field, prefix = test
+                value = _clean(row.get(field))
+                if not value.startswith(prefix):
+                    return None
+                evidence[field] = value
+        for field in self.all_of:
+            value = _clean(row.get(field))
+            if not value:
+                return None
+            evidence[field] = value
+        for group in self.any_of:
+            hits = {f: _clean(row.get(f)) for f in group}
+            hits = {f: v for f, v in hits.items() if v}
+            if not hits:
+                return None
+            evidence.update(hits)
+        if any(_clean(row.get(f)) for f in self.none_of):
+            return None
+        return evidence
+
+
+@dataclass(frozen=True)
+class Rule:
+    rule_id: str
+    category: str
+    clauses: Tuple[Clause, ...]
+    unless: Tuple[str, ...] = ()  # rule is skipped when any of these fields is present
+
+
+@dataclass(frozen=True)
+class Evidence:
+    rule_id: str
+    category: str
+    basis: str
+    fields: Tuple[Tuple[str, str], ...]
+
+    def describe(self) -> str:
+        values = ", ".join(f"{k}={v}" for k, v in self.fields)
+        return f"{self.category} [{self.rule_id}, {self.basis}: {values}]"
+
+
+@dataclass(frozen=True)
+class RuleDecision:
+    status: str
+    category: Optional[str]      # set only when status is RULE_MATCH
+    candidates: Tuple[str, ...]  # categories the evidence points to
+    evidence: Tuple[Evidence, ...]
+    explanation: str
+
+
+REJECTION_DETAILS = ("Item Rejected", "Quantity Rejected", "Rejection Reason")
+RETURN_DETAILS = ("Units Returned", "Reason for Return")
+
+# Clauses carry over the audited engine's conditions (vyom.legacy_rule_engine) with
+# one exception: Rejection In no longer requires Customer and DN Reference to be
+# empty. That exclusion silently resolved inward/outward conflicts in favour of
+# Rejection Out; without it, both directions produce evidence and the record is
+# sent to review.
+RULES: Tuple[Rule, ...] = (
+    Rule("R01", "Rejection In", (
+        Clause(prefix=("Rejection Note No", "RJN-IN")),
+        Clause(any_of=(REJECTION_DETAILS, ("GRN Reference", "Receiving Company"))),
+    )),
+    Rule("R02", "Rejection Out", (
+        Clause(prefix=("Rejection Note No", "RJN-OUT")),
+        Clause(any_of=(REJECTION_DETAILS, ("DN Reference", "Customer"))),
+    )),
+    Rule("R03", "Purchase Return / Debit Note", (
+        Clause(prefix=("Document Number", "DBN")),
+        Clause(reference=("Original Doc Ref", "PUR"), any_of=(RETURN_DETAILS,)),
+    )),
+    Rule("R04", "Sales Return / Credit Note", (
+        Clause(prefix=("Document Number", "CRN")),
+        Clause(reference=("Original Invoice Ref", "SAL"), any_of=(RETURN_DETAILS,)),
+    )),
+    Rule("R05", "Purchase", (
+        Clause(prefix=("Document Number", "PUR-")),
+        Clause(reference=("PO Ref", "PO"), all_of=("Vendor Name",)),
+    ), unless=RETURN_DETAILS),
+    Rule("R06", "Sales", (
+        Clause(prefix=("Document Number", "SAL-")),
+        Clause(reference=("Delivery Ref", "DN"), all_of=("Product",)),
+    ), unless=RETURN_DETAILS),
+    Rule("R07", "Purchase Order", (
+        Clause(prefix=("PO Number", "PO"), any_of=(("Quantity Required", "Supplier", "Promised Delivery"),)),
+    )),
+    Rule("R08", "Sales Order", (
+        Clause(prefix=("SO Number", "SO"), any_of=(("Quantity Ordered", "Selling Company", "Customer"),)),
+    )),
+    Rule("R09", "Delivery Note", (
+        Clause(prefix=("Delivery Challan No", "DC")),
+        Clause(all_of=("Item Dispatched", "Quantity Shipped")),
+    )),
+    Rule("R10", "Receipt Note", (
+        Clause(prefix=("GRN Number", "GRN")),
+        Clause(all_of=("Item Received", "Quantity Received"), none_of=("Outward Job Work No",)),
+    )),
+    Rule("R11", "Contra", (
+        Clause(prefix=("Contra ID", "CTR")),
+        Clause(all_of=("Source Account", "Destination Account", "Transfer Amount")),
+    )),
+    Rule("R12", "Payment", (
+        Clause(prefix=("Payment ID", "PMT")),
+        Clause(all_of=("Payment Amount",), any_of=(("Payer Organization", "Payee Organization"),)),
+    )),
+    Rule("R13", "Receipt", (
+        Clause(prefix=("Receipt ID", "RCP")),
+        Clause(all_of=("Received Amount",), any_of=(("Receipt Nature", "Receiving Organization"),)),
+    )),
+    Rule("R14", "Salary / Payroll", (
+        Clause(prefix=("Employee Code", "EMP")),
+        Clause(all_of=("Gross Salary", "Net Payable", "Payroll Period")),
+    )),
+    Rule("R15", "Expense", (
+        Clause(prefix=("Expense Claim No", "EXP"), any_of=(("Expense Type", "Amount Claimed"),)),
+    )),
+    Rule("R16", "Export", (
+        Clause(prefix=("Export Invoice No", "EXP"), any_of=(("Destination Country", "Units Exported", "Free on Board Value"),)),
+    )),
+    Rule("R17", "Import", (
+        Clause(prefix=("Import Bill No", "IBL")),
+        Clause(all_of=("Originating Country",), any_of=(("Units Imported", "Customs Duty"),)),
+    )),
+    Rule("R18", "Journal", (
+        Clause(prefix=("Journal ID", "JNL")),
+        Clause(all_of=("Debit Side", "Credit Side", "Journal Type")),
+    )),
+    Rule("R19", "Stock Journal", (
+        Clause(prefix=("Stock Adj ID", "SA")),
+        Clause(all_of=("Adjustment Qty", "Storage Facility")),
+    )),
+    Rule("R20", "Physical Stock", (
+        Clause(prefix=("Stock Count ID", "SC")),
+        Clause(all_of=("Book Quantity", "Counted Quantity")),
+    )),
+    Rule("R21", "Job Work In Order", (
+        Clause(prefix=("JWIO Ref", "JWIO")),
+        Clause(all_of=("Processing Rate", "Processor"), none_of=("Service Charge",)),
+    )),
+    Rule("R22", "Job Work Out Order", (
+        Clause(prefix=("JWOO Ref", "JWOO")),
+        Clause(all_of=("Service Charge", "Agreement Terms")),
+    )),
+    Rule("R23", "Material In", (
+        Clause(prefix=("Inward Job Work No", "MIW")),
+        Clause(all_of=("Subcontractor", "Quantity Sent", "Date of Dispatch")),
+    )),
+    Rule("R24", "Material Out", (
+        Clause(prefix=("Outward Job Work No", "MOW")),
+        Clause(all_of=("Contractor", "Quantity Received", "Date of Receipt")),
+    )),
+)
+
+# Details that establish a transaction family but not its direction.
+FAMILIES = (
+    ("Return", RETURN_DETAILS, ("Purchase Return / Debit Note", "Sales Return / Credit Note")),
+    ("Rejection", REJECTION_DETAILS, ("Rejection In", "Rejection Out")),
+)
+
+
+def collect_evidence(row) -> Tuple[Evidence, ...]:
+    """Evaluate every rule and return all satisfied clauses as evidence."""
+    found = []
+    for rule in RULES:
+        if any(_clean(row.get(f)) for f in rule.unless):
+            continue
+        for clause in rule.clauses:
+            matched = clause.match(row)
+            if matched is not None:
+                found.append(Evidence(rule.rule_id, rule.category, clause.basis, tuple(matched.items())))
+    return tuple(found)
+
+
+def assess_transaction(row) -> RuleDecision:
+    """Decide from the evidence in ``row``; never reads the target label."""
+    evidence = collect_evidence(row)
+    candidates = tuple(dict.fromkeys(e.category for e in evidence))
+    described = "; ".join(e.describe() for e in evidence)
+
+    if len(candidates) > 1:
+        return RuleDecision(REVIEW_REQUIRED, None, candidates, evidence,
+                            f"Conflicting evidence for {' vs '.join(candidates)}: {described}")
+
+    for family, details, members in FAMILIES:
+        present = [f for f in details if _clean(row.get(f))]
+        if present and not set(candidates) & set(members):
+            if candidates:
+                return RuleDecision(
+                    REVIEW_REQUIRED, None, candidates + members, evidence,
+                    f"{family} details ({', '.join(present)}) contradict {candidates[0]} evidence: {described}")
+            return RuleDecision(
+                AMBIGUOUS, None, members, evidence,
+                f"{family} details ({', '.join(present)}) without direction evidence: {' or '.join(members)}")
+
+    if not candidates:
+        return RuleDecision(NO_RULE, None, (), evidence, "No rule evidence")
+
+    category = candidates[0]
+    if all(e.basis == IDENTIFIER for e in evidence):
+        return RuleDecision(AMBIGUOUS, None, candidates, evidence,
+                            f"Identifier prefix only, no supporting transaction fields: {described}")
+    return RuleDecision(RULE_MATCH, category, candidates, evidence, f"Consistent evidence for {described}")
+
+
 def evaluate_transaction_rules(
     row: pd.Series,
     base_prediction: Optional[str] = None,
 ) -> Tuple[str, str, bool]:
     """
     Evaluate explicit transaction-specific evidence.
-    
+
     Args:
         row: Series of transaction fields. MUST NOT contain target label.
-        base_prediction: Baseline model prediction to fall back on if no rule fires.
-        
+        base_prediction: Model prediction kept whenever the rules do not decide.
+
     Returns:
-        (prediction, explanation, rule_applied)
+        (prediction, explanation, rule_applied). rule_applied is True only for
+        RULE_MATCH; use assess_transaction for the REVIEW_REQUIRED / AMBIGUOUS status.
     """
-    # 1. Rejection In vs Rejection Out
-    rejection_note = _clean(row.get("Rejection Note No"))
-    item_rejected = _clean(row.get("Item Rejected"))
-    qty_rejected = _clean(row.get("Quantity Rejected"))
-    rejection_reason = _clean(row.get("Rejection Reason"))
-    has_rejection_data = bool(item_rejected or qty_rejected or rejection_reason)
-    
-    if rejection_note.startswith("RJN-IN") or (
-        has_rejection_data and (_clean(row.get("GRN Reference")) or _clean(row.get("Receiving Company")))
-        and not _clean(row.get("Customer")) and not _clean(row.get("DN Reference"))
-    ):
-        return (
-            "Rejection In",
-            f"Explicit inward rejection evidence (Note: {rejection_note or 'GRN linked'})",
-            True,
-        )
-        
-    if rejection_note.startswith("RJN-OUT") or (
-        has_rejection_data and (_clean(row.get("DN Reference")) or _clean(row.get("Customer")))
-    ):
-        return (
-            "Rejection Out",
-            f"Explicit outward rejection evidence (Note: {rejection_note or 'DN linked'})",
-            True,
-        )
-
-    # 2. Purchase Return / Debit Note vs Sales Return / Credit Note
-    doc_num = _clean(row.get("Document Number"))
-    units_returned = _clean(row.get("Units Returned"))
-    reason_for_return = _clean(row.get("Reason for Return"))
-    orig_doc_ref = _clean(row.get("Original Doc Ref"))
-    orig_inv_ref = _clean(row.get("Original Invoice Ref"))
-    has_return = bool(units_returned or reason_for_return)
-    
-    if doc_num.startswith("DBN") or (has_return and orig_doc_ref.startswith("PUR")):
-        return (
-            "Purchase Return / Debit Note",
-            f"Explicit debit note / supplier return evidence ({doc_num or orig_doc_ref})",
-            True,
-        )
-        
-    if doc_num.startswith("CRN") or (has_return and orig_inv_ref.startswith("SAL")):
-        return (
-            "Sales Return / Credit Note",
-            f"Explicit credit note / customer return evidence ({doc_num or orig_inv_ref})",
-            True,
-        )
-
-    # 3. Invoices: Purchase vs Sales (only when not a return note)
-    if not has_return:
-        if doc_num.startswith("PUR-") or (_clean(row.get("PO Ref")).startswith("PO") and _clean(row.get("Vendor Name"))):
-            return (
-                "Purchase",
-                f"Explicit purchase invoice document ({doc_num or 'PO Ref linked'})",
-                True,
-            )
-        if doc_num.startswith("SAL-") or (_clean(row.get("Delivery Ref")).startswith("DN") and _clean(row.get("Product"))):
-            return (
-                "Sales",
-                f"Explicit sales invoice document ({doc_num or 'Delivery Ref linked'})",
-                True,
-            )
-
-    # 4. Purchase Order vs Sales Order
-    po_number = _clean(row.get("PO Number"))
-    qty_req = _clean(row.get("Quantity Required"))
-    if po_number.startswith("PO") and (qty_req or _clean(row.get("Supplier")) or _clean(row.get("Promised Delivery"))):
-        return (
-            "Purchase Order",
-            f"Explicit purchase order evidence ({po_number})",
-            True,
-        )
-        
-    so_number = _clean(row.get("SO Number"))
-    qty_ord = _clean(row.get("Quantity Ordered"))
-    if so_number.startswith("SO") and (qty_ord or _clean(row.get("Selling Company")) or _clean(row.get("Customer"))):
-        return (
-            "Sales Order",
-            f"Explicit sales order evidence ({so_number})",
-            True,
-        )
-
-    # 5. Delivery Note vs Receipt Note
-    dc_no = _clean(row.get("Delivery Challan No"))
-    if dc_no.startswith("DC") or (_clean(row.get("Item Dispatched")) and _clean(row.get("Quantity Shipped"))):
-        return (
-            "Delivery Note",
-            f"Explicit delivery challan evidence ({dc_no or 'dispatched goods'})",
-            True,
-        )
-        
-    grn_no = _clean(row.get("GRN Number"))
-    if grn_no.startswith("GRN") or (_clean(row.get("Item Received")) and _clean(row.get("Quantity Received")) and not _clean(row.get("Outward Job Work No"))):
-        return (
-            "Receipt Note",
-            f"Explicit goods receipt note evidence ({grn_no or 'received goods'})",
-            True,
-        )
-
-    # 6. Banking & Cash: Contra vs Payment vs Receipt
-    contra_id = _clean(row.get("Contra ID"))
-    src_acct = _clean(row.get("Source Account"))
-    dst_acct = _clean(row.get("Destination Account"))
-    if contra_id.startswith("CTR") or (src_acct and dst_acct and _clean(row.get("Transfer Amount"))):
-        return (
-            "Contra",
-            f"Explicit contra inter-account transfer evidence ({contra_id or src_acct + ' -> ' + dst_acct})",
-            True,
-        )
-        
-    pmt_id = _clean(row.get("Payment ID"))
-    if pmt_id.startswith("PMT") or (_clean(row.get("Payment Amount")) and (_clean(row.get("Payer Organization")) or _clean(row.get("Payee Organization")))):
-        return (
-            "Payment",
-            f"Explicit disbursement payment evidence ({pmt_id or 'disbursement'})",
-            True,
-        )
-        
-    rcp_id = _clean(row.get("Receipt ID"))
-    if rcp_id.startswith("RCP") or (_clean(row.get("Received Amount")) and (_clean(row.get("Receipt Nature")) or _clean(row.get("Receiving Organization")))):
-        return (
-            "Receipt",
-            f"Explicit receipt transaction evidence ({rcp_id or 'received amount'})",
-            True,
-        )
-
-    # 7. Salary / Payroll
-    emp_code = _clean(row.get("Employee Code"))
-    if emp_code.startswith("EMP") or (_clean(row.get("Gross Salary")) and _clean(row.get("Net Payable")) and _clean(row.get("Payroll Period"))):
-        return (
-            "Salary / Payroll",
-            f"Explicit payroll record with employee code ({emp_code})",
-            True,
-        )
-
-    # 8. Expense
-    exp_claim = _clean(row.get("Expense Claim No"))
-    if exp_claim.startswith("EXP") and (_clean(row.get("Expense Type")) or _clean(row.get("Amount Claimed"))):
-        return (
-            "Expense",
-            f"Explicit expense claim record ({exp_claim})",
-            True,
-        )
-
-    # 9. International Trade: Export vs Import
-    exp_inv = _clean(row.get("Export Invoice No"))
-    if exp_inv.startswith("EXP") and (_clean(row.get("Destination Country")) or _clean(row.get("Units Exported")) or _clean(row.get("Free on Board Value"))):
-        return (
-            "Export",
-            f"Explicit foreign export transaction ({exp_inv})",
-            True,
-        )
-        
-    ibl_no = _clean(row.get("Import Bill No"))
-    if ibl_no.startswith("IBL") or (_clean(row.get("Originating Country")) and (_clean(row.get("Units Imported")) or _clean(row.get("Customs Duty")))):
-        return (
-            "Import",
-            f"Explicit customs import bill of entry ({ibl_no})",
-            True,
-        )
-
-    # 10. General Journal
-    jnl_id = _clean(row.get("Journal ID"))
-    if jnl_id.startswith("JNL") or (_clean(row.get("Debit Side")) and _clean(row.get("Credit Side")) and _clean(row.get("Journal Type"))):
-        return (
-            "Journal",
-            f"Explicit journal entry ({jnl_id or 'Debit/Credit entries'})",
-            True,
-        )
-
-    # 11. Inventory: Stock Journal vs Physical Stock
-    stock_adj = _clean(row.get("Stock Adj ID"))
-    if stock_adj.startswith("SA") or (_clean(row.get("Adjustment Qty")) and _clean(row.get("Storage Facility"))):
-        return (
-            "Stock Journal",
-            f"Explicit stock adjustment journal ({stock_adj})",
-            True,
-        )
-        
-    stock_cnt = _clean(row.get("Stock Count ID"))
-    if stock_cnt.startswith("SC") or (_clean(row.get("Book Quantity")) and _clean(row.get("Counted Quantity"))):
-        return (
-            "Physical Stock",
-            f"Explicit physical stock count audit ({stock_cnt})",
-            True,
-        )
-
-    # 12. Job Work Orders: Inward vs Outward
-    jwio_ref = _clean(row.get("JWIO Ref"))
-    if jwio_ref.startswith("JWIO") or (_clean(row.get("Processing Rate")) and _clean(row.get("Processor")) and not _clean(row.get("Service Charge"))):
-        return (
-            "Job Work In Order",
-            f"Explicit job work inward order ({jwio_ref or 'processing rate'})",
-            True,
-        )
-        
-    jwoo_ref = _clean(row.get("JWOO Ref"))
-    if jwoo_ref.startswith("JWOO") or (_clean(row.get("Service Charge")) and _clean(row.get("Agreement Terms"))):
-        return (
-            "Job Work Out Order",
-            f"Explicit job work outward order ({jwoo_ref or 'service charge'})",
-            True,
-        )
-
-    # 13. Material Movement: Inward vs Outward
-    miw_no = _clean(row.get("Inward Job Work No"))
-    if miw_no.startswith("MIW") or (_clean(row.get("Subcontractor")) and _clean(row.get("Quantity Sent")) and _clean(row.get("Date of Dispatch"))):
-        return (
-            "Material In",
-            f"Explicit material inward record ({miw_no})",
-            True,
-        )
-        
-    mow_no = _clean(row.get("Outward Job Work No"))
-    if mow_no.startswith("MOW") or (_clean(row.get("Contractor")) and _clean(row.get("Quantity Received")) and _clean(row.get("Date of Receipt"))):
-        return (
-            "Material Out",
-            f"Explicit material outward record ({mow_no})",
-            True,
-        )
-
-    # Fallback if no specific rule matched
-    if base_prediction:
-        return (base_prediction, "Model statistical prediction (no rule override)", False)
-    return ("Unclassified", "Insufficient evidence for deterministic rule", False)
+    decision = assess_transaction(row)
+    if decision.status == RULE_MATCH:
+        return decision.category, decision.explanation, True
+    if decision.status == NO_RULE:
+        if base_prediction:
+            return base_prediction, "Model statistical prediction (no rule override)", False
+        return "Unclassified", "Insufficient evidence for deterministic rule", False
+    return base_prediction or "Unclassified", f"{decision.status}: {decision.explanation}", False

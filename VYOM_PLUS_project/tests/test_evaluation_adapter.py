@@ -1,5 +1,6 @@
 """Comprehensive tests for the VYOM+ evaluation workbook adapter and pipeline."""
 
+import inspect
 import unittest
 from pathlib import Path
 import tempfile
@@ -15,12 +16,31 @@ from vyom.adapter import (
     map_wide_to_canonical,
 )
 from vyom.rule_engine import evaluate_transaction_rules
-from vyom.evaluate_workbook import run_pipeline
+from vyom.evaluate_workbook import (
+    compute_metrics,
+    run_pipeline,
+    side_report_paths,
+    unique_output_path,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
 WORKBOOK_PATH = ROOT / "data/input/Voucher_Classification_Test_Cases_v2.xlsx"
 BASELINE_PATH = ROOT / "models/vyom_plus_tfidf_baseline_model.pkl"
+
+DECISION_COLUMNS = [
+    "Predicted Voucher Category", "Decision Source", "Rule Status", "Rule Candidates",
+    "Model Prediction", "Model Score (Uncalibrated)", "Rule Overrode Model",
+    "Review Required", "Review Reason", "Prediction Explanation",
+]
+
+
+def run_to(tmpdir, name="out.xlsx", input_path=WORKBOOK_PATH, sheet_name="Test Cases", **kwargs):
+    """Run the pipeline without the model comparison into a temporary folder."""
+    out_file = Path(tmpdir) / name
+    summary = run_pipeline(input_path=input_path, sheet_name=sheet_name, output_path=out_file,
+                           run_comparison=False, **kwargs)
+    return summary, pd.read_excel(out_file)
 
 
 class TestEvaluationAdapter(unittest.TestCase):
@@ -77,8 +97,11 @@ class TestEvaluationAdapter(unittest.TestCase):
         # Evaluate rules on genuine X
         preds_1 = [evaluate_transaction_rules(X.iloc[i])[0] for i in range(len(X))]
 
-        # Evaluate rules on copy of X (where external label is different)
+        # Evaluate rules on a copy of X whose rows carry wrong labels and prior outputs
         X_copy = X.copy()
+        X_copy[LABEL_COLUMN] = fake_labels.values
+        X_copy["Correct"] = False
+        X_copy["Predicted Voucher Category"] = y.values
         preds_2 = [evaluate_transaction_rules(X_copy.iloc[i])[0] for i in range(len(X_copy))]
 
         self.assertListEqual(preds_1, preds_2, "Predictions must be completely invariant to labels.")
@@ -180,24 +203,47 @@ class TestEvaluationAdapter(unittest.TestCase):
             "Rejection Note No": "RJN-OUT-202",
             "DN Reference": "DC-888",
             "Customer": "Acme Corp",
+            "Item Rejected": "Panels",
         })
         pred, _, applied = evaluate_transaction_rules(rej_out)
         self.assertEqual(pred, "Rejection Out")
         self.assertTrue(applied)
 
-    def test_11_metrics_calculation(self):
-        """Verify metrics calculated correctly."""
+    def test_11_metric_calculation(self):
+        """Metrics match hand-computed values; no accuracy target is asserted."""
+        m = compute_metrics(["A", "A", "B", "C"], ["A", "B", "B", "C"])
+        self.assertEqual(m["correct"], 3)
+        self.assertAlmostEqual(m["accuracy"], 0.75)
+        # F1: A = 2/3, B = 2/3, C = 1
+        self.assertAlmostEqual(m["macro_f1"], (2 / 3 + 2 / 3 + 1) / 3)
+        self.assertAlmostEqual(m["weighted_f1"], (2 * 2 / 3 + 1 * 2 / 3 + 1 * 1) / 4)
+
+        # A predicted label absent from the truth counts in the macro average with F1 = 0.
+        m = compute_metrics(["A", "B"], ["A", "X"])
+        self.assertAlmostEqual(m["accuracy"], 0.5)
+        self.assertAlmostEqual(m["macro_f1"], 1 / 3)
+        self.assertAlmostEqual(m["weighted_f1"], 0.5)
+
+        with self.assertRaises(ValueError):
+            compute_metrics(["A"], ["A", "B"])
+
+        # The pipeline's reported metrics equal a recomputation from its own output columns.
         with tempfile.TemporaryDirectory() as tmpdir:
-            out_file = Path(tmpdir) / "metrics_test.xlsx"
-            summary = run_pipeline(
-                input_path=WORKBOOK_PATH,
-                sheet_name="Test Cases",
-                output_path=out_file,
-                run_comparison=False,
-            )
-            pipe_metrics = summary["pipeline"]
-            self.assertGreater(pipe_metrics["accuracy"], 0.95)
-            self.assertGreater(pipe_metrics["macro_f1"], 0.95)
+            summary, out_df = run_to(tmpdir)
+            actual = out_df[LABEL_COLUMN].astype(str).tolist()
+            predicted = out_df["Predicted Voucher Category"].astype(str).tolist()
+            recomputed = compute_metrics(actual, predicted)
+            for key in ("n_samples", "correct", "accuracy", "macro_f1", "weighted_f1"):
+                self.assertAlmostEqual(summary["pipeline"][key], recomputed[key])
+            self.assertEqual(summary["pipeline"]["correct"], int(out_df["Correct"].sum()))
+
+            side = side_report_paths(Path(tmpdir) / "out.xlsx", Path(tmpdir))
+            cm = pd.read_csv(side["confusion"], index_col=0)
+            self.assertEqual(int(cm.values.sum()), len(out_df))
+            self.assertEqual(int(np.trace(cm.values)), recomputed["correct"])
+            per_class = pd.read_csv(side["per_class"], index_col=0)
+            labels = sorted(set(actual))
+            self.assertEqual(int(per_class.loc[labels, "support"].sum()), len(out_df))
 
     def test_12_deterministic_results(self):
         """Ensure evaluation gives identical predictions across repeated calls."""
@@ -222,6 +268,95 @@ class TestEvaluationAdapter(unittest.TestCase):
         self.assertTrue((ROOT / "reports/baseline_test_predictions.xlsx").exists())
         self.assertTrue((ROOT / "reports/baseline_error_summary.csv").exists())
 
+    def test_15_rule_status_and_score_kept_separate(self):
+        """Prediction, rule status and model score are separate; a rule match carries no probability."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            _, out_df = run_to(tmpdir)
+            self.assertNotIn("Prediction Confidence", out_df.columns)
+            for col in DECISION_COLUMNS:
+                self.assertIn(col, out_df.columns)
+            valid = {"RULE_MATCH", "REVIEW_REQUIRED", "AMBIGUOUS", "NO_RULE"}
+            self.assertTrue(set(out_df["Rule Status"]) <= valid)
+            is_match = out_df["Rule Status"] == "RULE_MATCH"
+            self.assertListEqual((out_df["Decision Source"] == "RULE").tolist(), is_match.tolist())
+            # Without a rule match the prediction is the model's own prediction.
+            model_rows = out_df[~is_match]
+            self.assertListEqual(model_rows["Predicted Voucher Category"].tolist(),
+                                 model_rows["Model Prediction"].tolist())
+            # Conflicting or insufficient rule evidence is always flagged for review.
+            flagged = out_df["Rule Status"].isin(["REVIEW_REQUIRED", "AMBIGUOUS"])
+            self.assertTrue(out_df.loc[flagged, "Review Required"].all())
+            scores = out_df["Model Score (Uncalibrated)"]
+            self.assertTrue(((scores >= 0) & (scores <= 1)).all())
+            overrides = is_match & (out_df["Predicted Voucher Category"] != out_df["Model Prediction"])
+            self.assertListEqual(out_df["Rule Overrode Model"].tolist(), overrides.tolist())
+
+    def test_16_label_isolation_in_pipeline(self):
+        """Predictions are identical with true labels, wrong labels, or no label column."""
+        raw = pd.read_excel(WORKBOOK_PATH, sheet_name="Test Cases")
+        with tempfile.TemporaryDirectory() as tmpdir:
+            wrong = raw.copy()
+            wrong[LABEL_COLUMN] = list(raw[LABEL_COLUMN].iloc[1:]) + [raw[LABEL_COLUMN].iloc[0]]
+            wrong_path = Path(tmpdir) / "wrong_labels.xlsx"
+            wrong.to_excel(wrong_path, sheet_name="Test Cases", index=False)
+            blind_path = Path(tmpdir) / "no_labels.xlsx"
+            raw.drop(columns=[LABEL_COLUMN]).to_excel(blind_path, sheet_name="Test Cases", index=False)
+
+            _, true_out = run_to(tmpdir, "true.xlsx")
+            _, wrong_out = run_to(tmpdir, "wrong.xlsx", input_path=wrong_path)
+            _, blind_out = run_to(tmpdir, "blind.xlsx", input_path=blind_path)
+
+            compared = ["Predicted Voucher Category", "Rule Status", "Model Prediction", "Model Score (Uncalibrated)"]
+            pd.testing.assert_frame_equal(true_out[compared], wrong_out[compared])
+            pd.testing.assert_frame_equal(true_out[compared], blind_out[compared])
+            self.assertNotIn(LABEL_COLUMN, blind_out.columns)
+
+    def test_17_output_integrity(self):
+        """Every input row appears once, in order, with its fields and label unchanged."""
+        X, y = load_evaluation_workbook(WORKBOOK_PATH, sheet_name="Test Cases")
+        with tempfile.TemporaryDirectory() as tmpdir:
+            _, out_df = run_to(tmpdir)
+        self.assertEqual(len(out_df), len(X))
+        self.assertListEqual(list(out_df.columns[:len(X.columns)]), list(X.columns))
+        self.assertTrue((out_df[list(X.columns)].astype(str).values == X.astype(str).values).all())
+        self.assertListEqual(out_df[LABEL_COLUMN].tolist(), y.tolist())
+        self.assertListEqual(out_df["Correct"].tolist(),
+                             (out_df["Predicted Voucher Category"] == out_df[LABEL_COLUMN]).tolist())
+        self.assertEqual(int(out_df[list(X.columns)].duplicated().sum()), int(X.duplicated().sum()))
+
+    def test_18_pipeline_deterministic(self):
+        """Two runs on the same input produce identical decision columns."""
+        with tempfile.TemporaryDirectory() as tmpdir:
+            _, first = run_to(tmpdir, "first.xlsx")
+            _, second = run_to(tmpdir, "second.xlsx")
+        pd.testing.assert_frame_equal(first[DECISION_COLUMNS], second[DECISION_COLUMNS])
+
+    def test_19_never_overwrites_reports(self):
+        """Existing outputs and side-reports are refused unless overwrite is requested."""
+        self.assertIsNone(inspect.signature(run_pipeline).parameters["output_path"].default)
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tmp = Path(tmpdir)
+            first = unique_output_path(tmp)
+            self.assertFalse(first.exists())
+            first.touch()
+            self.assertNotEqual(unique_output_path(tmp), first)
+
+            out_file = tmp / "kept.xlsx"
+            run_to(tmpdir, "kept.xlsx")
+            before = out_file.read_bytes()
+            with self.assertRaises(FileExistsError):
+                run_to(tmpdir, "kept.xlsx")
+            self.assertEqual(out_file.read_bytes(), before)
+
+            # A side-report collision alone is also refused, before anything is written.
+            fresh = tmp / "fresh.xlsx"
+            side_report_paths(fresh, tmp)["per_class"].write_text("existing")
+            with self.assertRaises(FileExistsError):
+                run_to(tmpdir, "fresh.xlsx")
+            self.assertFalse(fresh.exists())
+
+            run_to(tmpdir, "kept.xlsx", overwrite=True)
+            self.assertTrue(out_file.exists())
 
 if __name__ == "__main__":
     unittest.main()
