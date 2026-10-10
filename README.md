@@ -51,15 +51,19 @@
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 1. Project Name
 
-### **VYOM+ — Intelligent Voucher Classification & GST Intelligence Platform Using Open-Source LLMs**
+### **Accountable — Intelligent Voucher Classification & GST Intelligence Platform Using Open-Source LLMs**
 
-**VYOM+** is an enterprise-grade accounting intelligence system designed to ingest **already-structured transactional records** (such as general ledgers, daybooks, and raw ERP tables) and transform them into standardized statutory accounting events, calibrated voucher classifications, and GST filing-ready schedules.
+**Accountable** is an enterprise-grade accounting intelligence system designed to ingest **already-structured transactional records** (such as general ledgers, daybooks, and raw ERP tables) and transform them into standardized statutory accounting events, calibrated voucher classifications, and GST filing-ready schedules.
 
-Traditional accounting automation relies heavily on rigid regex heuristics or isolated keyword search, both of which collapse under complex multi-field contexts. **VYOM+** addresses this vulnerability by treating voucher identification as a **multi-field semantic transaction reasoning problem**. It bridges the gap between raw transaction data and statutory tax compliance by pairing representation learning with deterministic GST validation rules.
+Traditional accounting automation relies heavily on rigid regex heuristics or isolated keyword search, both of which collapse under complex multi-field contexts. **Accountable** addresses this vulnerability by treating voucher identification as a **multi-field semantic transaction reasoning problem**. It bridges the gap between raw transaction data and statutory tax compliance by pairing representation learning with deterministic GST validation rules.
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 2. Problem Statement
 
@@ -98,9 +102,11 @@ Target: Predict the ground-truth statutory voucher category across 27 distinct a
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 3. Project Overview
 
-VYOM+ establishes a **dual-domain hierarchical neuro-symbolic framework** uniting statistical deep learning with symbolic tax rule validation:
+Accountable establishes a **dual-domain hierarchical neuro-symbolic framework** uniting statistical deep learning with symbolic tax rule validation:
 
 1. **Accounting-Aware Feature Engineering:** Extraction of financial directions, party roles, and movement vectors.
 2. **Dual-Domain Representation Learning:** Co-training between a Global Distribution Encoder and a Hard-Case Boundary Encoder.
@@ -114,15 +120,17 @@ VYOM+ establishes a **dual-domain hierarchical neuro-symbolic framework** unitin
 10. **Statutory Filing-Ready Reporting:** Generation of structured summaries aligned with GSTR-1 and GSTR-3B formats.
 
 > [!NOTE]
-> VYOM+ strictly processes already-structured tabular transaction data. OCR document parsing is decoupled from this architecture, ensuring 100% computational focus on transaction semantics and compliance accuracy.
+> Accountable strictly processes already-structured tabular transaction data. OCR document parsing is decoupled from this architecture, ensuring 100% computational focus on transaction semantics and compliance accuracy.
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 4. Proposed Solution
 
 The proposed solution follows a **dual-domain hierarchical neuro-symbolic architecture**, unifying multi-field feature extraction, dual representation encoders, open LLM arbitration, and a deterministic GST intelligence engine into an integrated operational pipeline.
 
-![Figure 1: VYOM+ Complete Solution Architecture](DATA/technical-approach-2.png)
+![Figure 1: Accountable Complete Solution Architecture](DATA/technical-approach-2.png)
 
 *Figure 1: VYOM+ Complete Solution Architecture (`DATA/Technical Apprach (2).png`) — End-to-End Pipeline from Input Cleaning & Accounting Feature Extraction through Dual-Domain Co-Training, Open-Source LLM Classification, and the Downstream GST Intelligence Layer.*
 
@@ -183,6 +191,8 @@ Global Encoder                             Boundary Encoder
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 5. Objectives
 
 ### Primary AI Objectives
@@ -202,6 +212,8 @@ Global Encoder                             Boundary Encoder
 * **Audit-Proof Artifact Generation:** Produce deterministic JSON, Excel, and PDF schedules ready for GSTR-1 and GSTR-3B filings.
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 6. Target Users & Use Case
 
@@ -239,19 +251,20 @@ System Output:
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 7. Open-Source AI Technology Selected
 
-VYOM+ is built strictly upon **open-source, self-hosted artificial intelligence components**, ensuring zero data leakage and full compliance with corporate financial data privacy standards.
+Accountable is built strictly upon **open-source, self-hosted artificial intelligence components**, ensuring zero data leakage and full compliance with corporate financial data privacy standards.
 
 ### Evaluated Model Families & Core Frameworks
 
-[![Qwen 2.5](https://img.shields.io/badge/Qwen_2.5_(7B/14B)-Alibaba_Cloud-615CED?style=for-the-badge&logo=alibabacloud&logoColor=white)](https://github.com/QwenLM/Qwen2.5)
-[![Meta LLaMA 3.1](https://img.shields.io/badge/LLaMA_3.1_(8B)-Meta_AI-0467DF?style=for-the-badge&logo=meta&logoColor=white)](https://llama.meta.com/)
-[![Mistral NeMo](https://img.shields.io/badge/Mistral_NeMo_(12B)-Mistral_AI-FF7000?style=for-the-badge&logo=mistral&logoColor=white)](https://mistral.ai/)
-[![Google Gemma 2](https://img.shields.io/badge/Gemma_2_(9B)-Google_DeepMind-4285F4?style=for-the-badge&logo=google&logoColor=white)](https://ai.google.dev/gemma)
-[![Hugging Face](https://img.shields.io/badge/Hugging_Face-Transformers-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/)
-[![vLLM](https://img.shields.io/badge/vLLM-PagedAttention-4F46E5?style=for-the-badge&logo=accelerate&logoColor=white)](https://vllm.ai/)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.2+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Gemma 4 E2B](https://img.shields.io/badge/Gemma_4_(E2B)-Google-7c3aed?style=for-the-badge&logo=google&logoColor=white)](https://huggingface.co/google/gemma-4-E2B-it)
+[![Qwen3 4B Instruct](https://img.shields.io/badge/Qwen3_4B_Instruct-Alibaba_Cloud-615CED?style=for-the-badge&logo=alibabacloud&logoColor=white)](https://huggingface.co/Qwen/Qwen3-4B-Instruct-2507)
+[![Hugging Face Transformers](https://img.shields.io/badge/Hugging_Face-Transformers-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/docs/transformers/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-Training_%26_Inference-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-Evaluation-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white)](https://scikit-learn.org/)
+[![Nemotron 3 Nano 4B](https://img.shields.io/badge/Nemotron_3_Nano_(4B)-NVIDIA-76B900?style=for-the-badge&logo=nvidia&logoColor=white)](https://huggingface.co/nvidia/NVIDIA-Nemotron-3-Nano-4B-BF16)
 [![FAISS](https://img.shields.io/badge/FAISS-Vector_Search-0284C7?style=for-the-badge&logo=meta&logoColor=white)](https://github.com/facebookresearch/faiss)
 [![PEFT LoRA](https://img.shields.io/badge/PEFT-LoRA_Adapter-10B981?style=for-the-badge&logo=target&logoColor=white)](https://github.com/huggingface/peft)
 
@@ -270,6 +283,8 @@ Models are benchmarked according to strict enterprise criteria prior to producti
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 8. Why This Technology Was Selected
 
 ### 1. Failure Modes of Keyword Matching
@@ -281,9 +296,11 @@ $$\text{Global Encoder: } \text{"What broad accounting family does this transact
 $$\text{Boundary Encoder: } \text{"Why is this transaction NOT its closest semantic neighbor?"}$$
 
 ### 3. Separation of Concerns: Neural Semantics + Symbolic Rules
-Neural networks frequently struggle with consistent multi-digit floating point arithmetic. By delegating classification to neural models and **tax computation to deterministic Python rules**, VYOM+ delivers zero-hallucination tax compliance.
+Neural networks frequently struggle with consistent multi-digit floating point arithmetic. By delegating classification to neural models and **tax computation to deterministic Python rules**, Accountable delivers zero-hallucination tax compliance.
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 9. AI's Role in the System
 
@@ -305,6 +322,8 @@ from raw fields       for spatial separation    arbitration            dataset r
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 10. System Architecture
 
 The end-to-end processing pipeline operates through four interconnected stages:
@@ -315,6 +334,8 @@ The end-to-end processing pipeline operates through four interconnected stages:
 4. **GST Intelligence & Discrepancy Auditing:** Classified records are verified against statutory GST formulas, reconciled with portal data, and formatted into filing-ready artifacts.
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 11. Component-Level Architecture
 
@@ -352,7 +373,7 @@ The **GST Intelligence Layer** takes classified financial transactions and trans
    * **Financial Encoder:** GST tax slabs, counterparty identities, taxable amounts, and inventory movement indicators.
    * **Temporal Encoder:** Chronological sequences linking invoice date, purchase order date, payment date, and return/debit note date.
 2. **Cross-Field Attention:** Computes multi-head attention across financial attributes and temporal events to understand economic causality.
-3. **Open-Source LLM Serving (vLLM):** Executes local inference using models from the Qwen, LLaMA, or Mistral families, generating constrained, guaranteed-schema JSON output.
+3. **Open-Source LLM Serving (vLLM):** Executes local inference using models from the Qwen, LLaMA, Gemma, Nemotron, generating constrained, guaranteed-schema JSON output.
 4. **Filing Summary & Report Builder:** Aggregates validated transaction records into statutory tables:
    * **GSTR-3B Table 3.1:** Outward taxable supplies and tax breakdowns.
    * **GSTR-3B Table 4:** Eligible and candidate Input Tax Credit (ITC).
@@ -410,6 +431,8 @@ $$\mathcal{L}_{\text{contrastive}} = -\log \frac{\exp(\text{sim}(z_i, z_i^+) / \
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 12. Data / Information Flow
 
 ```text
@@ -448,32 +471,7 @@ $$\mathcal{L}_{\text{contrastive}} = -\log \frac{\exp(\text{sim}(z_i, z_i^+) / \
 
 ---
 
-## 13. Agentic Workflow (If Applicable)
-
-> [!NOTE]
-> **Deterministic Design Philosophy**  
-> VYOM+ strictly avoids unconstrained autonomous agent loops for core transaction classification and tax calculations. Financial records require deterministic, auditable, and repeatable execution.
-
-An **agentic investigation pattern** is activated exclusively for **Discrepancy Resolution & Audit Trail Generation**:
-
-```text
-[Discrepancy Event Detected]
-             │
-             ▼
-[Step 1: Ledger Retrieval] ────────► Query historical transactions for supplier GSTIN
-             │
-             ▼
-[Step 2: Cross-Period Lookback] ───► Inspect prior 6 months for delayed credit notes or payments
-             │
-             ▼
-[Step 3: Variance Hypothesis] ─────► Propose root cause:
-                                     (e.g., "Supplier reported under B2C instead of B2B")
-             │
-             ▼
-[Step 4: Recommendation Engine] ───► Generate action recommendation for tax practitioner review
-```
-
----
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 14. Technology Stack
 
@@ -494,6 +492,8 @@ An **agentic investigation pattern** is activated exclusively for **Discrepancy 
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 15. Expected Features
 
 ### Enterprise Feature Matrix
@@ -511,6 +511,8 @@ An **agentic investigation pattern** is activated exclusively for **Discrepancy 
 ```
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 16. Implementation Approach
 
@@ -531,6 +533,8 @@ Phase 11: Production Reporting ─────► Export of statutory GSTR-1, GS
 ```
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 17. Expected Final Output
 
@@ -575,7 +579,7 @@ Phase 11: Production Reporting ─────► Export of statutory GSTR-1, GS
 
 ```text
 ========================================================================================
-                         VYOM+ GST PERIOD RECONCILIATION SUMMARY
+                         Accountable GST PERIOD RECONCILIATION SUMMARY
                                    PERIOD: SEPTEMBER 2026
 ========================================================================================
 
@@ -603,6 +607,8 @@ AUDIT DISCREPANCIES DETECTED
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 18. Future Scope & Scalability
 
 * **Multi-Modal Document Fusion:** Direct ingest of scanned invoices via open-weight vision-language models (e.g., Qwen-VL) to supplement tabular exports.
@@ -611,6 +617,8 @@ AUDIT DISCREPANCIES DETECTED
 * **Direct Sandbox API Adapters:** Modular GSP (GST Suvidha Provider) integration layers for seamless filing dispatch upon CA review.
 
 ---
+
+[↑ Back to top (Index)](#table-of-contents)
 
 ## 19. Open-Source Dependencies & Components
 
@@ -640,6 +648,8 @@ AUDIT DISCREPANCIES DETECTED
 
 ---
 
+[↑ Back to top (Index)](#table-of-contents)
+
 ## 20. Expected Challenges and Mitigation
 
 | Challenge | Impact | Engineering Mitigation Strategy |
@@ -658,18 +668,18 @@ AUDIT DISCREPANCIES DETECTED
 
 ## Research Basis
 
-The architectural framework of VYOM+ is grounded in established peer-reviewed research in automated financial document understanding, particularly studies showing that structured invoice schemas combined with text representations yield superior performance when classified via hierarchical architectures:
+The architectural framework of Accountable is grounded in established peer-reviewed research in automated financial document understanding, particularly studies showing that structured invoice schemas combined with text representations yield superior performance when classified via hierarchical architectures:
 
 > **Academic Reference:**  
 > Bardelli, C., Rondinelli, A., Vecchio, R., & Figini, S. (2020). *Automatic Electronic Invoice Classification Using Machine Learning Models*. **Machine Learning and Knowledge Extraction**, 2(4), 617–629. DOI: `10.3390/make2040033`.
 
-VYOM+ substantially extends this baseline by introducing **dual-domain co-training**, **contrastive metric boundaries**, and **symbolic GST compliance validation**.
+Accountable substantially extends this baseline by introducing **dual-domain co-training**, **contrastive metric boundaries**, and **symbolic GST compliance validation**.
 
 ---
 
 ## Business Alignment
 
-VYOM+ directly addresses critical friction points across the corporate financial supply chain:
+Accountable directly addresses critical friction points across the corporate financial supply chain:
 
 ```text
                            BUSINESS IMPACT MATRIX
@@ -705,4 +715,4 @@ This project is licensed under the Apache 2.0 Open Source License. See the `LICE
 
 ## Disclaimer
 
-VYOM+ is an artificial intelligence decision support and automation system. While engineered for statutory accuracy, final filing submissions should be reviewed by qualified tax practitioners and Chartered Accountants in accordance with the latest statutory circulars issued by the Central Board of Indirect Taxes and Customs (CBIC), Government of India.
+Accountable is an artificial intelligence decision support and automation system. While engineered for statutory accuracy, final filing submissions should be reviewed by qualified tax practitioners and Chartered Accountants in accordance with the latest statutory circulars issued by the Central Board of Indirect Taxes and Customs (CBIC), Government of India.
