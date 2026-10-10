@@ -1,19 +1,24 @@
-[![Python 3.10+](https://img.shields.io/badge/PYTHON-3.10+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
-[![FastAPI](https://img.shields.io/badge/FASTAPI-0.110+-009688?style=for-the-badge&logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
-[![PyTorch](https://img.shields.io/badge/PYTORCH-2.2+-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white)](https://pytorch.org/)
-[![Hugging Face](https://img.shields.io/badge/HUGGING%20FACE-TRANSFORMERS-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black)](https://huggingface.co/)
-[![vLLM](https://img.shields.io/badge/INFERENCE-vLLM-4F46E5?style=for-the-badge&logo=accelerate&logoColor=white)](https://vllm.ai/)
-[![FAISS](https://img.shields.io/badge/FAISS-VECTOR%20SEARCH-0284C7?style=for-the-badge&logo=meta&logoColor=white)](https://github.com/facebookresearch/faiss)
-[![PostgreSQL](https://img.shields.io/badge/POSTGRESQL-16+-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
-[![Docker](https://img.shields.io/badge/DOCKER-READY-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
+<p align="center">
 
-# 📑 VYOM+ — Intelligent Voucher Classification & GST Intelligence Platform
+  <img src="https://img.shields.io/badge/PYTHON-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white" alt="Python 3.10+">
+  <img src="https://img.shields.io/badge/FASTAPI-0.110%2B-009688?style=for-the-badge&logo=fastapi&logoColor=white" alt="FastAPI">
+  <img src="https://img.shields.io/badge/PYTORCH-2.2%2B-EE4C2C?style=for-the-badge&logo=pytorch&logoColor=white" alt="PyTorch">
+  <img src="https://img.shields.io/badge/HUGGING%20FACE-TRANSFORMERS-FFD21E?style=for-the-badge&logo=huggingface&logoColor=black" alt="Hugging Face Transformers">
+  <img src="https://img.shields.io/badge/INFERENCE-vLLM-4F46E5?style=for-the-badge&logo=accelerate&logoColor=white" alt="vLLM">
+  <img src="https://img.shields.io/badge/FAISS-VECTOR%20SEARCH-0284C7?style=for-the-badge&logo=meta&logoColor=white" alt="FAISS">
+  <img src="https://img.shields.io/badge/POSTGRESQL-16%2B-4169E1?style=for-the-badge&logo=postgresql&logoColor=white" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/DOCKER-READY-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker">
 
-**An end-to-end neuro-symbolic AI system for structured financial transaction understanding, 27-class voucher classification, deterministic GST validation, book-to-tax reconciliation, and filing preparation — powered by open-source LLMs, dual-domain contrastive co-training, and automated compliance intelligence.**
+</p>
 
----
+<h1 align="center"> Accountable — Intelligent Voucher Classification & GST Intelligence Platform</h1>
 
-| 🎯 Core Capability | 🧠 AI Architecture | 🏛️ Model Layer | 📊 Compliance Engine | 🔒 Privacy & Deployment |
+<p align="center">
+  <strong>An end-to-end neuro-symbolic AI system for structured financial transaction understanding, 27-class voucher classification, deterministic GST validation, book-to-tax reconciliation, and filing preparation — powered by open-source LLMs, dual-domain contrastive co-training, and automated compliance intelligence.</strong>
+</p>
+
+
+| Core Capability |  AI Architecture |  Model Layer |  Compliance Engine |  Privacy & Deployment |
 | :--- | :--- | :--- | :--- | :--- |
 | **27-Class Voucher Inference** | Dual-Domain Co-Training + Contrastive Learning | Open-Source LLMs (Qwen / LLaMA / Mistral) | Deterministic GST & ITC Engine | 100% Self-Hosted & Local |
 
@@ -21,6 +26,12 @@
 
 ## Table of Contents
 
+- [UI Preview & Application Interface](#ui-preview--application-interface)
+- [Installation & Setup Guide](#installation--setup-guide)
+  - [Prerequisites](#prerequisites)
+  - [1. Backend Setup (VYOM+ FastAPI Engine)](#1-backend-setup-vyom-engine)
+  - [2. Frontend Setup (Accountable UI)](#2-frontend-setup-accountable-ui)
+  - [3. Accessing the Platform](#3-accessing-the-platform)
 - [1. Project Name & Overview](#1-project-name)
 - [2. Problem Statement](#2-problem-statement)
 - [3. Project Overview](#3-project-overview)
@@ -48,6 +59,126 @@
 - [Business Alignment & Enterprise Value](#business-alignment)
 - [Core Engineering Principles](#project-principle)
 - [License & Legal Disclaimer](#license)
+
+---
+
+[↑ Back to top (Index)](#table-of-contents)
+
+## UI Preview & Application Interface
+
+Accountable features an intuitive, modern interface designed for financial controllers and auditors, supporting both light and dark themes with real-time classification feeds, workbook uploads, and statutory GST breakdowns.
+
+### 1. Administrative Governance Console & System Analytics
+Real-time dashboard summarizing processed transactions, calibration scores, pending review queues, and detected GST exceptions.
+
+![System Analytics & Governance Dashboard](docs/screenshots/01-system-analytics-dashboard.png)
+
+---
+
+### 2. Batch Transaction Upload & AI Classification Modal
+Interactive ingestion workflow classifying multi-row workbooks (`.xlsx`) via the `/predict/file` endpoint with runner-up category predictions, confidence scores, and instant export options.
+
+![Batch Transaction Upload & AI Classification Modal](docs/screenshots/02-transaction-upload-classification.png)
+
+---
+
+### 3. GST Validation & Tax Breakdown Table
+Granular financial ledger audit view detailing counterparty records, GSTIN validation status, taxable values, and automated tax calculations.
+
+![GST Validation & Tax Breakdown Table](docs/screenshots/03-gst-validation-breakdown.png)
+
+---
+
+### 4. GST Intelligence & Compliance Review (Dark Mode)
+Statutory compliance console providing filing readiness status, categorized audit findings (High / Medium / Low severity), and computed potential net GST liabilities.
+
+![GST Intelligence & Compliance Review](docs/screenshots/04-gst-intelligence-review-dark.png)
+
+---
+
+### 5. Audit Ledger & Anomaly Triaging
+High-throughput review queue equipped with instant compliance status tags (`No issues found`, `Issues found`, `Needs review`) for human-in-the-loop validation.
+
+![Audit Ledger & Compliance Status](docs/screenshots/05-gst-status-audit-ledger-dark.png)
+
+---
+
+[↑ Back to top (Index)](#table-of-contents)
+
+## Installation & Setup Guide
+
+Follow this guide to get both the **VYOM+ AI Backend** and the **Accountable Web UI** up and running on your local machine.
+
+### Prerequisites
+
+Ensure you have the following installed on your system:
+- **Node.js**: v18.0.0 or higher ([Download Node.js](https://nodejs.org/))
+- **Python**: 3.10 – 3.12 ([Download Python](https://www.python.org/))
+- **Git**
+
+---
+
+### 1. Backend Setup (VYOM+ Engine)
+
+The backend microservice handles multi-field feature extraction, machine learning classification, and deterministic GST rules via FastAPI.
+
+```bash
+# 1. Navigate to the backend directory
+cd VYOM_PLUS_project
+
+# 2. Create a Python virtual environment
+python -m venv venv
+
+# 3. Activate the virtual environment
+# On Windows (PowerShell):
+.\venv\Scripts\Activate.ps1
+# On Windows (Command Prompt):
+.\venv\Scripts\activate.bat
+# On Linux / macOS:
+source venv/bin/activate
+
+# 4. Install required Python dependencies
+pip install -r requirements.txt
+
+# 5. Start the backend API server
+uvicorn vyom.serve_v2:app --app-dir src --port 8000
+```
+
+> [!TIP]
+> - The backend will be accessible at: `http://127.0.0.1:8000`
+> - Interactive Swagger API documentation: `http://127.0.0.1:8000/docs`
+> - If developing backend code, add `--reload` to the `uvicorn` command for automatic reload on code changes.
+
+---
+
+### 2. Frontend Setup (Accountable UI)
+
+The frontend is built with React 19, TypeScript, Vite, and Tailwind CSS. Open a **new terminal window** in the project root:
+
+```bash
+# 1. Ensure you are in the repository root directory (where package.json is located)
+# cd /path/to/Accountable
+
+# 2. Install Node dependencies
+npm install
+
+# 3. Launch the local development server
+npm run dev
+```
+
+> [!NOTE]
+> The Vite development server runs at `http://localhost:5173` by default and automatically proxies API calls from `/api/*` to the FastAPI backend running at `http://127.0.0.1:8000`.
+
+---
+
+### 3. Accessing the Platform
+
+1. Ensure **both** the backend (`port 8000`) and frontend (`port 5173`) are running.
+2. Open your browser and navigate to:
+   ```
+   http://localhost:5173
+   ```
+3. Use the **Upload Transactions** button to upload sample `.xlsx` workbooks, inspect AI predictions, and run real-time GST analysis!
 
 ---
 
@@ -92,14 +223,6 @@ Target: Predict the ground-truth statutory voucher category across 27 distinct a
 | **Job Work & Outsourcing** | `Job Work In Order`, `Job Work Out Order` |
 | **Human Capital & Overhead** | `Salary / Payroll`, `Attendance`, `Expense`, `Other / Miscellaneous` |
 
-> [!IMPORTANT]
-> **The Core Challenge: Semantic Boundary Ambiguity**  
-> Many voucher classes share identical keywords and overlapping financial attributes:
-> - `Purchase`, `Receipt Note`, and `Material In` all document inward goods flow, but represent commercial liability, physical inventory receipt, and internal transfer respectively.
-> - `Payment`, `Receipt`, and `Contra` all process bank account ledger mutations, differing solely in the directional vector of funds relative to internal accounts.
->
-> Simple keyword search fails systematically. The system requires **multi-field relational reasoning**.
-
 ---
 
 [↑ Back to top (Index)](#table-of-contents)
@@ -132,57 +255,7 @@ The proposed solution follows a **dual-domain hierarchical neuro-symbolic archit
 
 ![Figure 1: Accountable Complete Solution Architecture](DATA/technical-approach-2.png)
 
-*Figure 1: VYOM+ Complete Solution Architecture (`DATA/Technical Apprach (2).png`) — End-to-End Pipeline from Input Cleaning & Accounting Feature Extraction through Dual-Domain Co-Training, Open-Source LLM Classification, and the Downstream GST Intelligence Layer.*
-
-### Pipeline Architecture Breakdown
-
-```text
-Excel Input (.xlsx)
-        │
-        ▼
-Data Cleaning & Normalization
-        │
-        ▼
-Accounting Feature Extraction
-  [ Party roles | Money flow | Inventory flow | Tax/GST fields | Return indicators | Order indicators | Import/export ]
-        │
-        ├─────────────────────────────────────────┐
-        ▼                                         ▼
-General Dataset                             Hard-Case DB
-        │                                         │
-        ▼                                         ▼
-Global Encoder                             Boundary Encoder
-        │                                         │
-        └────────────────────┬────────────────────┘
-                             ▼
-                    Co-Training Gray-Box
-                             │
-                             ▼
-                    Contrastive Learning
-                             │
-                             ▼
-                    Hard-Negative Mining
-                             │
-                             ▼
-             Open-Source LLM Reasoning Engine
-         [ Financial Spatial & Temporal Encoders ]
-                             │
-                             ▼
-               Voucher Classification Head
-  [ Receipt | Refund | Payment | Tax Invoice | Bill of Supply | Debit Note | Credit Note | ISD | Delivery Challan ]
-                             │
-                             ▼
-                   GST Intelligence Layer
-                 Books/Ledger ↔ GST Portal Data
-                             │
-                             ▼
-                     Discrepancy Engine
-         [ Missing ITC | Tax Mismatches | Missing Invoices ]
-                             │
-                             ▼
-                   GST Report-Ready Data
-         [ GSTR-3B Summaries | Period Schedules | Audit Reports ]
-```
+*Figure 1: Accountable Complete Solution Architecture — End-to-End Pipeline from Input Cleaning & Accounting Feature Extraction through Dual-Domain Co-Training, Open-Source LLM Classification, and the Downstream GST Intelligence Layer.*
 
 ### Design Rationale
 
@@ -345,7 +418,7 @@ The core voucher classification engine uses a **Dual-Domain Co-Training Block-Le
 
 ![Figure 2: Co-Training Block-Level Architecture for Voucher Classification](DATA/technical-approach-5.png)
 
-*Figure 2: Component Architecture 1 (`DATA/Technical Apprach (5).png`) — Co-Training Block-Level Architecture for Voucher Classification: Global Encoder, Boundary Encoder, Confidence Estimator, Agreement Pseudo-Labeling, and Boundary Retraining Loop.*
+*Figure 2: Component Architecture 1 — Co-Training Block-Level Architecture for Voucher Classification: Global Encoder, Boundary Encoder, Confidence Estimator, Agreement Pseudo-Labeling, and Boundary Retraining Loop.*
 
 #### Classification Workflow Specification
 
@@ -363,9 +436,9 @@ The core voucher classification engine uses a **Dual-Domain Co-Training Block-Le
 
 The **GST Intelligence Layer** takes classified financial transactions and transforms them into complete, audit-ready data required for GST statutory filing (GSTR-1, GSTR-3B) and period reporting:
 
-![Figure 3: GST Intelligence Layer & Feature Pipeline](DATA/technical-approach-6.png)
+![Figure 3: GST Intelligence Layer & Feature Pipeline](DATA/llm-feature-pipeline.png)
 
-*Figure 3: Component Architecture 2 (`DATA/Technical Apprach (6).png`) — GST Intelligence Layer: Structured Transaction Serialization, Dual Financial & Temporal Encoders, Cross-Field Attention, Open LLM Processing, and Statutory JSON Output Generation.*
+*Figure 3: Component Architecture 2 — GST Intelligence Layer: Structured Transaction Serialization, Dual Financial & Temporal Encoders, Cross-Field Attention, Open LLM Processing, and Statutory JSON Output Generation.*
 
 #### Operational Breakdown
 
@@ -477,18 +550,18 @@ $$\mathcal{L}_{\text{contrastive}} = -\log \frac{\exp(\text{sim}(z_i, z_i^+) / \
 
 | Layer | Technology | Version | Purpose |
 | :--- | :--- | :--- | :--- |
-| **Language Runtime** | **Python** | `3.10+` | Core asynchronous backend runtime |
-| **API Framework** | **FastAPI** | `0.110+` | High-throughput asynchronous REST microservices |
-| **Data Processing** | **Pandas & NumPy** | `2.2+` | Tabular vectorization, cleaning, and normalization |
-| **Spreadsheet Engine** | **OpenPyXL** | `3.1+` | High-performance streaming Excel parsing & formatting |
-| **Deep Learning** | **PyTorch** | `2.2+` | Dual-domain neural encoders and contrastive training |
-| **Model Registry** | **Hugging Face** | `4.38+` | Transformer tokenizers, weights, and PEFT / LoRA |
-| **LLM Inference** | **vLLM** | `0.4+` | PagedAttention local inference engine |
-| **Vector Search** | **FAISS** | `1.8+` | Dense retrieval of known hard-case boundary samples |
-| **Validation Layer** | **Pydantic V2** | `2.6+` | Strict schema validation and statutory type enforcement |
-| **Database** | **PostgreSQL** | `16+` | Transaction audit logs and reconciliation datastore |
-| **Cache & Queuing** | **Redis** | `7.2+` | Hard negative task queue and intermediate result caching |
-| **Containerization** | **Docker** | `25.0+` | Reproducible deployment and GPU container orchestration |
+| Language Runtime | [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB)](https://www.python.org/) | `3.10+` | Core asynchronous backend runtime |
+| API Framework | [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688)](https://fastapi.tiangolo.com/) | `0.110+` | High-throughput asynchronous REST microservices |
+| Data Processing | [![Pandas](https://img.shields.io/badge/Pandas%20%26%20NumPy-2.2%2B-150458)](https://pandas.pydata.org/) | `2.2+` | Tabular vectorization, cleaning, and normalization |
+| Spreadsheet Engine | [![OpenPyXL](https://img.shields.io/badge/OpenPyXL-3.1%2B-2E7D32)](https://openpyxl.readthedocs.io/) | `3.1+` | Excel parsing & formatting |
+| Deep Learning | [![PyTorch](https://img.shields.io/badge/PyTorch-2.2%2B-EE4C2C)](https://pytorch.org/) | `2.2+` | Dual-domain encoders and contrastive training |
+| Model Registry | [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-4.38%2B-FFD21E)](https://huggingface.co/) | `4.38+` | Transformers, weights, and PEFT / LoRA |
+| LLM Inference | [![vLLM](https://img.shields.io/badge/vLLM-0.4%2B-4F46E5)](https://vllm.ai/) | `0.4+` | Local LLM inference |
+| Vector Search | [![FAISS](https://img.shields.io/badge/FAISS-1.8%2B-0284C7)](https://github.com/facebookresearch/faiss) | `1.8+` | Hard-case semantic retrieval |
+| Validation Layer | [![Pydantic](https://img.shields.io/badge/Pydantic_V2-2.6%2B-E92063)](https://docs.pydantic.dev/) | `2.6+` | Schema validation |
+| Database | [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16%2B-4169E1)](https://www.postgresql.org/) | `16+` | Audit logs and reconciliation datastore |
+| Cache & Queuing | [![Redis](https://img.shields.io/badge/Redis-7.2%2B-DC382D)](https://redis.io/) | `7.2+` | Task queue and caching |
+| Containerization | [![Docker](https://img.shields.io/badge/Docker-25.0%2B-2496ED)](https://www.docker.com/) | `25.0+` | Reproducible deployment |
 
 ---
 
@@ -670,8 +743,9 @@ AUDIT DISCREPANCIES DETECTED
 
 The architectural framework of Accountable is grounded in established peer-reviewed research in automated financial document understanding, particularly studies showing that structured invoice schemas combined with text representations yield superior performance when classified via hierarchical architectures:
 
-> **Academic Reference:**  
-> Bardelli, C., Rondinelli, A., Vecchio, R., & Figini, S. (2020). *Automatic Electronic Invoice Classification Using Machine Learning Models*. **Machine Learning and Knowledge Extraction**, 2(4), 617–629. DOI: `10.3390/make2040033`.
+ **Academic Reference:**  
+![Figure 3: Research and Refrences](docs/VYOM_ResearchandReferencesInfographic.png)
+
 
 Accountable substantially extends this baseline by introducing **dual-domain co-training**, **contrastive metric boundaries**, and **symbolic GST compliance validation**.
 
@@ -681,25 +755,10 @@ Accountable substantially extends this baseline by introducing **dual-domain co-
 
 Accountable directly addresses critical friction points across the corporate financial supply chain:
 
-```text
-                           BUSINESS IMPACT MATRIX
-┌─────────────────────────────────┬─────────────────────────────────┐
-│     OPERATIONAL EFFICIENCY      │       COMPLIANCE ASSURANCE      │
-├─────────────────────────────────┼─────────────────────────────────┤
-│ • 85% reduction in manual data  │ • Zero penalties from incorrect │
-│   entry and voucher coding      │   GST slab assignments          │
-│ • Real-time processing of high- │ • 100% auditable deterministic  │
-│   volume multi-thousand-row ERP │   validation trail for every    │
-│   transaction ledgers           │   statutory tax claim           │
-├─────────────────────────────────┼─────────────────────────────────┤
-│        ITC RECOVERY VALUE       │         DATA SOVEREIGNTY        │
-├─────────────────────────────────┼─────────────────────────────────┤
-│ • Immediate identification of   │ • Complete elimination of third-│
-│   unclaimed Input Tax Credit    │   party API data transmission   │
-│ • Automated discovery of non-   │ • Fully on-premise and air-gapped│
-│   filing suppliers              │   deployment capability         │
-└─────────────────────────────────┴─────────────────────────────────┘
-```
+
+![Figure 3: Business Alignment](DATA/business.png)
+
+
 
 ---
 
