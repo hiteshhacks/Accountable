@@ -1,0 +1,29 @@
+,precision,recall,f1-score,support
+Advance / Prepayment,1.0,0.6666666666666666,0.8,6.0
+Attendance,1.0,1.0,1.0,6.0
+Contra,1.0,1.0,1.0,3.0
+Delivery Note,1.0,1.0,1.0,6.0
+Expense,1.0,1.0,1.0,5.0
+Export,1.0,1.0,1.0,5.0
+Import,0.0,0.0,0.0,0.0
+Job Work In Order,1.0,1.0,1.0,10.0
+Job Work Out Order,1.0,1.0,1.0,4.0
+Journal,1.0,1.0,1.0,2.0
+Material In,0.0,0.0,0.0,0.0
+Material Out,1.0,0.6666666666666666,0.8,9.0
+Payment,0.0,0.0,0.0,0.0
+Physical Stock,1.0,1.0,1.0,5.0
+Purchase,1.0,1.0,1.0,10.0
+Purchase Order,0.0,0.0,0.0,0.0
+Purchase Return / Debit Note,0.0,0.0,0.0,0.0
+Receipt,0.8333333333333334,1.0,0.9090909090909091,5.0
+Receipt Note,0.0,0.0,0.0,0.0
+Rejection Out,0.0,0.0,0.0,0.0
+Salary / Payroll,0.0,0.0,0.0,0.0
+Sales,1.0,1.0,1.0,5.0
+Sales Order,1.0,0.8333333333333334,0.9090909090909091,6.0
+Sales Return / Credit Note,0.0,0.0,0.0,0.0
+Stock Journal,1.0,1.0,1.0,6.0
+accuracy,0.9354838709677419,0.9354838709677419,0.9354838709677419,0.9354838709677419
+macro avg,0.6333333333333333,0.6066666666666667,0.6167272727272727,93.0
+weighted avg,0.9910394265232976,0.9354838709677419,0.956989247311828,93.0

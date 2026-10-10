@@ -1,0 +1,23 @@
+[
+  {
+    "model": "TF-IDF baseline",
+    "n_test": 93,
+    "accuracy": 0.967741935483871,
+    "macro_f1_all_training_classes": 0.6216503496503496,
+    "macro_f1_observed_classes": 0.9141916906622789
+  },
+  {
+    "model": "Dual Encoder V2",
+    "n_test": 93,
+    "accuracy": 0.9354838709677419,
+    "macro_f1_all_training_classes": 0.6167272727272727,
+    "macro_f1_observed_classes": 0.8114832535885167
+  },
+  {
+    "model": "Dual Encoder V1",
+    "n_test": 93,
+    "accuracy": 0.8279569892473119,
+    "macro_f1_all_training_classes": 0.5478199969964677,
+    "macro_f1_observed_classes": 0.6847749962455845
+  }
+]

@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vyom-plus"
+version = "0.1.0"
+description = "Structured Excel voucher classification prototype"
+requires-python = ">=3.10"
+dependencies = ["pandas>=2.0,<3.0", "openpyxl>=3.1,<4.0", "scikit-learn>=1.4,<2.0", "numpy>=1.26,<3.0"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]

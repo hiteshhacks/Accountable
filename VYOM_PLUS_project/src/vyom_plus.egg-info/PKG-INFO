@@ -1,0 +1,9 @@
+Metadata-Version: 2.4
+Name: vyom-plus
+Version: 0.1.0
+Summary: Structured Excel voucher classification prototype
+Requires-Python: >=3.10
+Requires-Dist: pandas<3.0,>=2.0
+Requires-Dist: openpyxl<4.0,>=3.1
+Requires-Dist: scikit-learn<2.0,>=1.4
+Requires-Dist: numpy<3.0,>=1.26
