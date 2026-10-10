@@ -1,0 +1,288 @@
+{
+  "model": "vyom_plus_tfidf_baseline_v2.pkl",
+  "created_utc": "2026-10-10T08:48:51+00:00",
+  "caveat": "Trained and evaluated on unverified synthetic labels from one generator. Test rows have unseen narration sentences, but item, status and other field vocabularies are shared with training, so these metrics measure recovery of synthetic labels, not accuracy on real transactions.",
+  "disclosure": "A first run (StratifiedGroupKFold fold 0 as the test split, word features only) was discarded because its test split contained no Job Work In Order or Advance / Prepayment rows. That run's test comparison also showed character n-grams helping, which is why the field_words+text_chars candidate was added. The final split was redrawn per class, and the representation and C were chosen by training-part CV only.",
+  "split": {
+    "method": "per-class group holdout: whole narration-sentence groups drawn per class until >= 20% of its rows (>= 1 group held out, >= 1 kept), numpy default_rng(42)",
+    "group": "narration sentence (narration with generated reference/date sentence removed, digits masked)",
+    "train_rows": 3684,
+    "test_rows": 1605,
+    "train_groups": 176,
+    "test_groups": 62,
+    "test_rows_sharing_non_narration_fields_with_train": 53
+  },
+  "cv_macro_f1": {
+    "field_words, C=0.5": 0.9263,
+    "field_words, C=1.0": 0.9265,
+    "field_words, C=2.0": 0.9273,
+    "field_words, C=4.0": 0.9268,
+    "field_words, C=8.0": 0.9275,
+    "field_words+text_chars, C=0.5": 0.9074,
+    "field_words+text_chars, C=1.0": 0.9074,
+    "field_words+text_chars, C=2.0": 0.9088,
+    "field_words+text_chars, C=4.0": 0.9099,
+    "field_words+text_chars, C=8.0": 0.9054
+  },
+  "chosen_representation": "field_words",
+  "chosen_C": 8.0,
+  "test": {
+    "n": 1605,
+    "correct": 1604,
+    "accuracy": 0.9994,
+    "macro_f1": 0.9994,
+    "weighted_f1": 0.9994,
+    "classes_in_test": 27
+  },
+  "comparisons": {
+    "tfidf_baseline_v2 (this model)": {
+      "n": 1605,
+      "correct": 1604,
+      "accuracy": 0.9994,
+      "macro_f1": 0.9994,
+      "weighted_f1": 0.9994,
+      "classes_in_test": 27
+    },
+    "v1 recipe refit, with document_type": {
+      "n": 1605,
+      "correct": 1605,
+      "accuracy": 1.0,
+      "macro_f1": 1.0,
+      "weighted_f1": 1.0,
+      "classes_in_test": 27
+    },
+    "v1 recipe refit, without document_type": {
+      "n": 1605,
+      "correct": 1599,
+      "accuracy": 0.9963,
+      "macro_f1": 0.9966,
+      "weighted_f1": 0.9963,
+      "classes_in_test": 27
+    },
+    "existing v1 artifact as saved (25 classes), test rows outside the 540 reviewed": {
+      "n": 1469,
+      "correct": 1272,
+      "accuracy": 0.8659,
+      "macro_f1": 0.8165,
+      "weighted_f1": 0.8344,
+      "classes_in_test": 27,
+      "missing_classes": [
+        "Other / Miscellaneous",
+        "Rejection In"
+      ]
+    },
+    "tfidf_baseline_v2 on those same rows": {
+      "n": 1469,
+      "correct": 1468,
+      "accuracy": 0.9993,
+      "macro_f1": 0.9994,
+      "weighted_f1": 0.9993,
+      "classes_in_test": 27
+    }
+  },
+  "stability_other_holdouts": {
+    "seeds": [
+      101,
+      102,
+      103,
+      104,
+      105,
+      106,
+      107,
+      108,
+      109,
+      110
+    ],
+    "summary": {
+      "accuracy": {
+        "mean": 0.9362,
+        "std": 0.0206,
+        "min": 0.9074,
+        "max": 0.9657
+      },
+      "macro_f1": {
+        "mean": 0.9451,
+        "std": 0.0119,
+        "min": 0.9275,
+        "max": 0.9623
+      }
+    },
+    "runs": [
+      {
+        "seed": 101,
+        "n": 1563,
+        "correct": 1439,
+        "accuracy": 0.9207,
+        "macro_f1": 0.934,
+        "weighted_f1": 0.9192,
+        "classes_in_test": 27
+      },
+      {
+        "seed": 102,
+        "n": 1567,
+        "correct": 1489,
+        "accuracy": 0.9502,
+        "macro_f1": 0.9419,
+        "weighted_f1": 0.9374,
+        "classes_in_test": 27
+      },
+      {
+        "seed": 103,
+        "n": 1546,
+        "correct": 1493,
+        "accuracy": 0.9657,
+        "macro_f1": 0.9623,
+        "weighted_f1": 0.9602,
+        "classes_in_test": 27
+      },
+      {
+        "seed": 104,
+        "n": 1489,
+        "correct": 1410,
+        "accuracy": 0.9469,
+        "macro_f1": 0.9535,
+        "weighted_f1": 0.9418,
+        "classes_in_test": 27
+      },
+      {
+        "seed": 105,
+        "n": 1545,
+        "correct": 1402,
+        "accuracy": 0.9074,
+        "macro_f1": 0.9275,
+        "weighted_f1": 0.9065,
+        "classes_in_test": 27
+      },
+      {
+        "seed": 106,
+        "n": 1491,
+        "correct": 1418,
+        "accuracy": 0.951,
+        "macro_f1": 0.9501,
+        "weighted_f1": 0.946,
+        "classes_in_test": 27
+      },
+      {
+        "seed": 107,
+        "n": 1582,
+        "correct": 1440,
+        "accuracy": 0.9102,
+        "macro_f1": 0.9408,
+        "weighted_f1": 0.9102,
+        "classes_in_test": 27
+      },
+      {
+        "seed": 108,
+        "n": 1491,
+        "correct": 1424,
+        "accuracy": 0.9551,
+        "macro_f1": 0.9606,
+        "weighted_f1": 0.9492,
+        "classes_in_test": 27
+      },
+      {
+        "seed": 109,
+        "n": 1486,
+        "correct": 1391,
+        "accuracy": 0.9361,
+        "macro_f1": 0.9319,
+        "weighted_f1": 0.9217,
+        "classes_in_test": 27
+      },
+      {
+        "seed": 110,
+        "n": 1587,
+        "correct": 1458,
+        "accuracy": 0.9187,
+        "macro_f1": 0.9487,
+        "weighted_f1": 0.9187,
+        "classes_in_test": 27
+      }
+    ]
+  },
+  "classes_with_recall_ge_0_8": 27,
+  "classes_with_zero_test_support": [],
+  "top_confusions": [
+    {
+      "true": "Material In",
+      "predicted": "Material Out",
+      "count": 1
+    }
+  ],
+  "review_routed_test_predictions": 57,
+  "data_audit": {
+    "eligible_rows": 5289,
+    "excluded_disputed_rows": 111,
+    "classes": 27,
+    "rows_per_class": {
+      "Advance / Prepayment": 193,
+      "Attendance": 200,
+      "Contra": 192,
+      "Delivery Note": 200,
+      "Expense": 200,
+      "Export": 200,
+      "Import": 200,
+      "Job Work In Order": 200,
+      "Job Work Out Order": 200,
+      "Journal": 194,
+      "Material In": 197,
+      "Material Out": 196,
+      "Other / Miscellaneous": 180,
+      "Payment": 195,
+      "Physical Stock": 200,
+      "Purchase": 198,
+      "Purchase Order": 200,
+      "Purchase Return / Debit Note": 189,
+      "Receipt": 200,
+      "Receipt Note": 200,
+      "Rejection In": 182,
+      "Rejection Out": 186,
+      "Salary / Payroll": 200,
+      "Sales": 200,
+      "Sales Order": 200,
+      "Sales Return / Credit Note": 187,
+      "Stock Journal": 200
+    },
+    "exact_duplicate_rows": 0,
+    "identical_model_inputs_rows": 34,
+    "identical_inputs_with_conflicting_labels": 0,
+    "near_duplicate_rows_except_narration_dates_ids_amounts": 106,
+    "missing_rate_by_field": {
+      "seller_supplier": 0.051,
+      "buyer_customer": 0.047,
+      "invoice_number": 0.347,
+      "transaction_date": 0.0,
+      "item_description": 0.0,
+      "transaction_narration": 0.0,
+      "quantity": 0.382,
+      "unit_price": 0.367,
+      "taxable_value": 0.47,
+      "gst_rate_percent": 0.408,
+      "gst_amount": 0.408,
+      "discount_amount": 0.877,
+      "freight_amount": 0.841,
+      "currency": 0.038,
+      "payment_method": 0.807,
+      "payment_status": 0.0,
+      "order_reference": 0.65,
+      "return_reason": 0.859,
+      "debit_credit_info": 0.77,
+      "payroll_period": 0.924,
+      "employee_count": 0.924,
+      "attendance_days": 0.962,
+      "import_export_reference": 0.924,
+      "customs_duty_amount": 0.924,
+      "warehouse_from": 0.852,
+      "warehouse_to": 0.853,
+      "movement_reason": 0.78,
+      "gross_pay_amount": 0.962,
+      "deductions_amount": 0.962,
+      "net_pay_amount": 0.962
+    },
+    "narration_sentences": 238,
+    "narration_sentences_per_class_min": 3,
+    "narration_sentences_shared_across_split_groups": 138,
+    "label_source": "UNVERIFIED_SYNTHETIC_LABEL",
+    "document_type_excluded": "document_type maps 1:1 to the label for 15 classes; not a model input"
+  }
+}

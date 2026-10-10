@@ -194,3 +194,17 @@ class ContractTabular(BaseEstimator, TransformerMixin):
         if self.relationships:
             cols += [prepared[c].to_numpy(dtype=float) for c in RELATIONSHIP_FEATURES]
         return np.column_stack(cols)
+
+
+class ContractText(BaseEstimator, TransformerMixin):
+    """Stateless: canonical records -> normalised narration and item text (identifiers and digits masked)."""
+
+    def __init__(self, fields=TEXT_FIELDS):
+        self.fields = fields
+
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        prepared = prepare_frame(X)
+        return prepared[list(self.fields)].agg(" ".join, axis=1).str.strip().tolist()
