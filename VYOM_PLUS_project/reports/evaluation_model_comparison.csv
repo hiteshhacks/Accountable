@@ -1,0 +1,5 @@
+model,n_samples,accuracy,macro_f1,weighted_f1,rule_layer
+TF-IDF Baseline Alone,120,0.45,0.38323845952522423,0.38323845952522423,No
+TF-IDF Baseline + Semantic Rules,120,1.0,1.0,1.0,Yes
+Dual Encoder V2 Alone,120,0.375,0.27450037707390645,0.27450037707390645,No
+Dual Encoder V2 + Semantic Rules,120,1.0,1.0,1.0,Yes
