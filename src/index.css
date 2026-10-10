@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 @import 'tailwindcss';
 
 :root {
@@ -158,3 +158,231 @@
     -webkit-backdrop-filter: none;
   }
 }
+
+/* ─── Workspace console (Overview / Transactions / GST Intelligence) ───────────────
+   Theme tokens are scoped to .ws-root so public pages keep their own look.
+   Light is the default; data-theme="dark" switches the same roles. */
+.ws-root {
+  color-scheme: light;
+  --ws-bg: #f7f2e9;
+  --ws-sidebar: #fcfaf5;
+  --ws-surface: #f3ebdd;
+  --ws-surface-2: #ece2d1;
+  --ws-input: #efe6d6;
+  --ws-border: #e1d2b6;
+  --ws-border-strong: #cdb88f;
+  --ws-text: #231c12;
+  --ws-text-2: #5e5340;
+  --ws-muted: #8c7f66;
+  --ws-gold: #b8892e;
+  --ws-gold-btn: #d3a549;
+  --ws-gold-btn-hover: #c4963a;
+  --ws-gold-btn-text: #ffffff;
+  --ws-gold-soft: rgba(201, 154, 61, 0.14);
+  --ws-ok-bg: #dce9d8;
+  --ws-ok-border: #9dbf9f;
+  --ws-ok-text: #2f5d39;
+  --ws-warn-bg: #f6e7c4;
+  --ws-warn-border: #dcbf7a;
+  --ws-warn-text: #7a5a12;
+  --ws-bad-bg: #f3dad4;
+  --ws-bad-border: #d9a296;
+  --ws-bad-text: #86352a;
+  --ws-info-bg: #e3e7ee;
+  --ws-info-border: #b7c0cf;
+  --ws-info-text: #3b4a63;
+  --ws-shadow: 0 1px 2px rgba(60, 45, 20, 0.06), 0 6px 18px rgba(60, 45, 20, 0.06);
+  /* chart roles: categorical slots 1-5 + "other" from the validated reference palette */
+  --viz-1: #2a78d6;
+  --viz-2: #eb6834;
+  --viz-3: #1baf7a;
+  --viz-4: #eda100;
+  --viz-5: #e87ba4;
+  --viz-other: #a39d90;
+  --viz-track: #e6dccb;
+  background-color: var(--ws-bg);
+  color: var(--ws-text);
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.ws-root[data-theme="dark"] {
+  color-scheme: dark;
+  --ws-bg: #0a0805;
+  --ws-sidebar: #100d08;
+  --ws-surface: #17130d;
+  --ws-surface-2: #1d1810;
+  --ws-input: #1d1810;
+  --ws-border: rgba(200, 168, 90, 0.22);
+  --ws-border-strong: rgba(200, 168, 90, 0.42);
+  --ws-text: #f0e5ca;
+  --ws-text-2: #cdbf9f;
+  --ws-muted: #8f8370;
+  --ws-gold: #d8bc78;
+  --ws-gold-btn: #d8bc78;
+  --ws-gold-btn-hover: #e8d29a;
+  --ws-gold-btn-text: #090704;
+  --ws-gold-soft: rgba(200, 168, 90, 0.12);
+  --ws-ok-bg: rgba(78, 122, 88, 0.22);
+  --ws-ok-border: rgba(120, 168, 130, 0.45);
+  --ws-ok-text: #9cc7a4;
+  --ws-warn-bg: rgba(200, 168, 90, 0.16);
+  --ws-warn-border: rgba(200, 168, 90, 0.45);
+  --ws-warn-text: #e8d29a;
+  --ws-bad-bg: rgba(139, 58, 58, 0.25);
+  --ws-bad-border: rgba(196, 98, 86, 0.5);
+  --ws-bad-text: #eba597;
+  --ws-info-bg: rgba(120, 140, 170, 0.18);
+  --ws-info-border: rgba(150, 170, 200, 0.4);
+  --ws-info-text: #b8c6dc;
+  --ws-shadow: 0 4px 24px rgba(0, 0, 0, 0.55);
+  --viz-1: #3987e5;
+  --viz-2: #d95926;
+  --viz-3: #199e70;
+  --viz-4: #c98500;
+  --viz-5: #d55181;
+  --viz-other: #6f6a5f;
+  --viz-track: #2a241a;
+}
+
+.ws-root h1, .ws-root h2, .ws-root h3, .ws-serif {
+  font-family: var(--font-heading);
+  letter-spacing: -0.01em;
+}
+
+.ws-card {
+  background: var(--ws-surface);
+  border: 1px solid var(--ws-border);
+  border-radius: 16px;
+  box-shadow: var(--ws-shadow);
+}
+
+.ws-btn-gold, .ws-btn-outline, .ws-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 12px;
+  padding: 0.65rem 1.15rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: background-color 150ms ease, border-color 150ms ease, color 150ms ease, opacity 150ms ease;
+  cursor: pointer;
+}
+.ws-btn-gold {
+  background: var(--ws-gold-btn);
+  color: var(--ws-gold-btn-text);
+  box-shadow: 0 4px 14px rgba(184, 137, 46, 0.25);
+}
+.ws-btn-gold:hover { background: var(--ws-gold-btn-hover); }
+.ws-btn-outline {
+  background: var(--ws-surface-2);
+  color: var(--ws-text);
+  border: 1px solid var(--ws-border-strong);
+}
+.ws-btn-outline:hover { border-color: var(--ws-gold); }
+.ws-btn-ghost { color: var(--ws-text-2); padding: 0.5rem 0.75rem; }
+.ws-btn-ghost:hover { background: var(--ws-gold-soft); color: var(--ws-text); }
+.ws-btn-gold:disabled, .ws-btn-outline:disabled, .ws-btn-ghost:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.ws-input {
+  width: 100%;
+  background: var(--ws-input);
+  border: 1px solid var(--ws-border);
+  border-radius: 10px;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.875rem;
+  color: var(--ws-text);
+}
+.ws-input::placeholder { color: var(--ws-muted); }
+.ws-input:focus { outline: none; border-color: var(--ws-gold); box-shadow: 0 0 0 3px var(--ws-gold-soft); }
+
+.ws-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ws-text-2);
+  margin-bottom: 0.35rem;
+}
+
+.ws-eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ws-gold);
+}
+
+.ws-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  border: 1px solid;
+  padding: 0.18rem 0.6rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.ws-chip-ok { background: var(--ws-ok-bg); border-color: var(--ws-ok-border); color: var(--ws-ok-text); }
+.ws-chip-warn { background: var(--ws-warn-bg); border-color: var(--ws-warn-border); color: var(--ws-warn-text); }
+.ws-chip-bad { background: var(--ws-bad-bg); border-color: var(--ws-bad-border); color: var(--ws-bad-text); }
+.ws-chip-info { background: var(--ws-info-bg); border-color: var(--ws-info-border); color: var(--ws-info-text); }
+.ws-chip-gold { background: var(--ws-gold-soft); border-color: var(--ws-border-strong); color: var(--ws-gold); }
+
+.ws-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.ws-table th {
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ws-gold);
+  padding: 0.8rem 0.9rem;
+  border-bottom: 1px solid var(--ws-border-strong);
+  white-space: nowrap;
+}
+.ws-table td {
+  padding: 0.85rem 0.9rem;
+  border-bottom: 1px solid var(--ws-border);
+  color: var(--ws-text);
+  vertical-align: middle;
+}
+.ws-table tbody tr:hover td { background: var(--ws-gold-soft); }
+.ws-mono { font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; }
+
+/* Markdown report rendering */
+.ws-markdown { color: var(--ws-text); font-size: 0.92rem; line-height: 1.65; }
+.ws-markdown h1 { font-size: 2rem; margin: 0 0 0.75rem; font-weight: 500; }
+.ws-markdown h2 {
+  font-size: 1.45rem; font-weight: 600; margin: 2rem 0 0.8rem; padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--ws-border);
+}
+.ws-markdown h3 { font-size: 1.15rem; font-weight: 600; margin: 1.4rem 0 0.6rem; }
+.ws-markdown p { margin: 0.55rem 0; }
+.ws-markdown strong { font-weight: 650; color: var(--ws-text); }
+.ws-markdown em { color: var(--ws-text-2); }
+.ws-markdown ul, .ws-markdown ol { margin: 0.5rem 0 0.8rem; padding-left: 1.35rem; }
+.ws-markdown ul { list-style: disc; }
+.ws-markdown ol { list-style: decimal; }
+.ws-markdown li { margin: 0.25rem 0; }
+.ws-markdown li::marker { color: var(--ws-gold); }
+.ws-markdown code {
+  font-family: ui-monospace, 'Cascadia Mono', Consolas, monospace; font-size: 0.8rem;
+  background: var(--ws-surface-2); border: 1px solid var(--ws-border); border-radius: 6px; padding: 0.05rem 0.35rem;
+}
+.ws-markdown blockquote {
+  margin: 0.9rem 0; padding: 0.7rem 1rem; border-left: 3px solid var(--ws-gold);
+  background: var(--ws-gold-soft); border-radius: 0 10px 10px 0; color: var(--ws-text-2);
+}
+.ws-markdown blockquote p { margin: 0; }
+.ws-markdown .ws-md-table { overflow-x: auto; margin: 0.8rem 0 1rem; border: 1px solid var(--ws-border); border-radius: 12px; }
+.ws-markdown table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+.ws-markdown th {
+  text-align: left; padding: 0.6rem 0.8rem; background: var(--ws-surface-2); color: var(--ws-gold);
+  font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--ws-border-strong);
+}
+.ws-markdown td { padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--ws-border); }
+.ws-markdown tr:last-child td { border-bottom: none; }
+.ws-markdown hr { border: none; border-top: 1px solid var(--ws-border); margin: 1.5rem 0; }

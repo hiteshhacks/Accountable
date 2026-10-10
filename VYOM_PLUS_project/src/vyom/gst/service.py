@@ -44,6 +44,27 @@ class GstAnalysisService:
                          request_id: Optional[str] = None) -> Tuple[GstAnalysisResponse, int]:
         return self._run("excel", {"content": content, "filename": filename}, business_gstin, request_id)
 
+    @staticmethod
+    def _row_summaries(final: Dict[str, Any]) -> List[Dict[str, Any]]:
+        """Per-row classification, the GST fields used, and every finding touching the row (for UI tables)."""
+        features = {f["ref"]: f for f in final.get("features", [])}
+        findings = final.get("row_findings", {})
+        rows = []
+        for c in final["voucher_classifications"]:
+            f = features.get(c["source_ref"], {})
+            text = lambda v: None if v is None else str(v)  # noqa: E731
+            gstin = f.get("supplier_gstin") if f.get("group") in ("inward", "debit_notes", "expenses") else f.get("recipient_gstin")
+            rows.append({
+                **{k: c[k] for k in ("source_ref", "category", "score_uncalibrated", "ambiguous", "review_flags")},
+                "group": f.get("group"),
+                "invoice_number": f.get("invoice_number"), "invoice_date": f.get("invoice_date"),
+                "party": f.get("party_name"), "counterparty_gstin": gstin,
+                "taxable_value": text(f.get("taxable")), "tax": text(f.get("tax")),
+                "currency": f.get("currency"),
+                "findings": findings.get(c["source_ref"], []),
+            })
+        return rows
+
     def _run(self, input_type: str, payload: Dict[str, Any], business_gstin: Optional[str],
              request_id: Optional[str], period: Optional[str] = None) -> Tuple[GstAnalysisResponse, int]:
         request_id = request_id or uuid.uuid4().hex
@@ -79,9 +100,7 @@ class GstAnalysisService:
             "balance_summary": final["balance_summary"],
             "missing_fields": final["missing_fields"],
             "calculation_checks": final["calculation_checks"],
-            "classification": {**final["classifier_info"],
-                               "rows": [{k: c[k] for k in ("source_ref", "category", "score_uncalibrated", "ambiguous",
-                                                           "review_flags")} for c in final["voucher_classifications"]]},
+            "classification": {**final["classifier_info"], "rows": self._row_summaries(final)},
             "narrative": {"available": final.get("llm_analysis") is not None, **{k: meta.get(k) for k in
                           ("status", "model", "attempts", "error_kind", "message")}},
             "assumptions": final["assumptions"],

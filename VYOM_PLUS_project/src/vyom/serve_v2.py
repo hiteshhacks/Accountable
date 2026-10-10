@@ -32,6 +32,7 @@ from typing import Any, Dict, List, Optional
 
 import pandas as pd
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
 from pydantic import BaseModel, Field
 
@@ -92,6 +93,14 @@ app = FastAPI(
     title="VYOM+ Voucher Classifier (voucher_classifier.pkl)",
     description=STATUS,
     version="voucher_classifier",
+)
+# Browser access for the Accountable frontend; set VYOM_CORS_ORIGINS (comma-separated) for other origins.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[o.strip() for o in os.environ.get(
+        "VYOM_CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",") if o.strip()],
+    allow_methods=["GET", "POST"],
+    allow_headers=["*"],
 )
 
 

@@ -1,197 +1,198 @@
-import { useNavigate } from 'react-router-dom';
+import { useMemo, useState, type ReactNode } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
 import {
-  FileSpreadsheet,
+  FileText,
   CheckCircle2,
   Clock,
+  Gauge,
+  FileWarning,
+  ListChecks,
+  ShieldCheck,
+  FolderUp,
+  Plus,
   Upload,
   ArrowRight,
-  MoreHorizontal,
-  FolderOpen,
+  FileSpreadsheet,
+  type LucideIcon,
 } from 'lucide-react';
 import { AppLayout } from '../components/common/AppLayout';
-import { useApp } from '../context/AppContext';
+import { BarChart, DonutChart, ScoreGauge, foldSlices } from '../components/workspace/Charts';
+import { CreateInvoiceModal } from '../components/workspace/CreateInvoiceModal';
+import { UploadTransactionsModal } from '../components/workspace/UploadTransactionsModal';
+import { ReportStatusChip, formatDate } from '../components/workspace/format';
+import { REVIEW_SCORE_THRESHOLD, useWorkspace } from '../context/WorkspaceContext';
+
+const READINESS_LABEL: Record<string, string> = {
+  NOT_READY: 'Not ready',
+  REVIEW_REQUIRED: 'Review',
+  PREPARED_FOR_PROFESSIONAL_REVIEW: 'Prepared',
+};
+
+function StatCard({ label, value, icon: Icon, hint }: { label: string; value: string | number; icon: LucideIcon; hint?: string }) {
+  return (
+    <div className="ws-card flex min-h-[108px] flex-col justify-between px-5 py-4" title={hint}>
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-[12px] font-bold tracking-[0.06em] uppercase" style={{ color: 'var(--ws-text-2)' }}>{label}</p>
+        <Icon className="size-[18px] shrink-0" style={{ color: 'var(--ws-gold)' }} />
+      </div>
+      <div>
+        <p className="ws-serif text-[30px] leading-none">{value}</p>
+        {hint && <p className="mt-1 text-[11px]" style={{ color: 'var(--ws-muted)' }}>{hint}</p>}
+      </div>
+    </div>
+  );
+}
+
+function ChartCard({ title, subtitle, children }: { title: string; subtitle: string; children: ReactNode }) {
+  return (
+    <section className="ws-card flex flex-col px-6 py-5">
+      <h3 className="text-[24px] leading-tight">{title}</h3>
+      <p className="mt-0.5 text-[12.5px]" style={{ color: 'var(--ws-text-2)' }}>{subtitle}</p>
+      <div className="my-4 h-px" style={{ background: 'var(--ws-border)' }} />
+      <div className="flex flex-1 flex-col justify-center">{children}</div>
+    </section>
+  );
+}
 
 export function DashboardPage() {
-  const navigate = useNavigate();
-  const { uploads, transactions } = useApp();
+  const { rows, uploads, analysis } = useWorkspace();
+  const [params, setParams] = useSearchParams();
+  const [modal, setModal] = useState<'invoice' | 'upload' | null>(params.get('upload') ? 'upload' : null);
 
-  const totalTransactions = transactions.length;
-  const processedTransactions = transactions.filter((t) => t.status === 'High').length;
-  const lastUploadDate = uploads.length > 0 ? uploads[0].date : 'None';
+  const stats = useMemo(() => {
+    const today = new Date().toDateString();
+    const scored = rows.filter((r) => r.score !== null);
+    const avg = scored.length ? scored.reduce((s, r) => s + (r.score ?? 0), 0) / scored.length : null;
+    const counts: Record<string, number> = {};
+    rows.forEach((r) => { counts[r.category] = (counts[r.category] ?? 0) + 1; });
+    const days = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date();
+      d.setDate(d.getDate() - (6 - i));
+      return d;
+    });
+    const perDay = days.map((d) => {
+      const n = rows.filter((r) => new Date(r.createdAt).toDateString() === d.toDateString()).length;
+      return { label: d.toLocaleDateString('en-IN', { weekday: 'short' }), value: n,
+        title: `${d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short' })}: ${n} rows classified` };
+    });
+    const a = analysis?.analysis;
+    const findingsRows = a?.summary.classification?.rows.filter((r) => r.findings.some((f) => f.severity !== 'INFO')).length;
+    return {
+      total: rows.length,
+      today: rows.filter((r) => new Date(r.createdAt).toDateString() === today).length,
+      review: rows.filter((r) => r.score === null || r.score < REVIEW_SCORE_THRESHOLD).length,
+      avg,
+      slices: foldSlices(counts),
+      perDay,
+      gstExceptions: a ? a.discrepancies.filter((d) => d.severity === 'HIGH' || d.severity === 'MEDIUM').length : null,
+      findingsRows: findingsRows ?? null,
+      readiness: a?.summary.filing_readiness?.level ?? null,
+    };
+  }, [rows, analysis]);
+
+  const closeModal = () => {
+    setModal(null);
+    if (params.get('upload')) setParams({}, { replace: true });
+  };
 
   return (
     <AppLayout>
-      {/* Top Greeting */}
-      <div className="mb-9">
-        <p className="text-xs font-semibold tracking-widest text-[#C8A85A] uppercase">
-          Dashboard Overview
-        </p>
-        <h1 className="mt-1.5 font-serif text-3xl font-normal text-[#F0E5CA] sm:text-4xl lg:text-5xl">
-          Let's process your financial data.
-        </h1>
-      </div>
-
-      {/* Summary Cards */}
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
-        {/* Card 1 */}
-        <div className="rounded-2xl border border-[rgba(200,168,90,0.25)] bg-[#17130D] p-7 shadow-[0_4px_28px_rgba(0,0,0,0.6)] transition-all hover:border-[rgba(200,168,90,0.45)]">
-          <div className="flex items-center gap-5">
-            <div className="flex size-14 items-center justify-center rounded-2xl border border-[rgba(200,168,90,0.35)] bg-[#1D1810] text-[#C8A85A]">
-              <FileSpreadsheet className="size-7" />
-            </div>
-            <div>
-              <p className="font-serif text-3xl font-normal text-[#F0E5CA] sm:text-4xl">
-                {totalTransactions.toLocaleString()}
-              </p>
-              <p className="mt-1 text-sm font-medium text-[#E8D29A]">Total transactions</p>
-            </div>
-          </div>
+      <div className="mb-8 flex flex-wrap items-end justify-between gap-5">
+        <div>
+          <p className="ws-eyebrow">Administrative Governance Console</p>
+          <h1 className="mt-2 text-[44px] leading-[1.05] lg:text-[52px]">System Analytics &amp; Governance Controls</h1>
         </div>
-
-        {/* Card 2 */}
-        <div className="rounded-2xl border border-[rgba(200,168,90,0.25)] bg-[#17130D] p-7 shadow-[0_4px_28px_rgba(0,0,0,0.6)] transition-all hover:border-[rgba(200,168,90,0.45)]">
-          <div className="flex items-center gap-5">
-            <div className="flex size-14 items-center justify-center rounded-2xl border border-[rgba(200,168,90,0.35)] bg-[#1D1810] text-[#C8A85A]">
-              <CheckCircle2 className="size-7" />
-            </div>
-            <div>
-              <p className="font-serif text-3xl font-normal text-[#F0E5CA] sm:text-4xl">
-                {processedTransactions.toLocaleString()}
-              </p>
-              <p className="mt-1 text-sm font-medium text-[#E8D29A]">Processed</p>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 3 */}
-        <div className="rounded-2xl border border-[rgba(200,168,90,0.25)] bg-[#17130D] p-7 shadow-[0_4px_28px_rgba(0,0,0,0.6)] transition-all hover:border-[rgba(200,168,90,0.45)]">
-          <div className="flex items-center gap-5">
-            <div className="flex size-14 items-center justify-center rounded-2xl border border-[rgba(200,168,90,0.35)] bg-[#1D1810] text-[#C8A85A]">
-              <Clock className="size-7" />
-            </div>
-            <div>
-              <p className="font-serif text-2xl font-normal text-[#F0E5CA] sm:text-3xl">
-                {lastUploadDate}
-              </p>
-              <p className="mt-1 text-sm font-medium text-[#E8D29A]">Last uploaded</p>
-            </div>
-          </div>
+        <div className="flex flex-wrap gap-3">
+          <button type="button" className="ws-btn-outline" onClick={() => setModal('invoice')}>
+            <Plus className="size-4" /> Create Invoice
+          </button>
+          <button type="button" className="ws-btn-gold" onClick={() => setModal('upload')}>
+            <Upload className="size-4" /> Upload Transactions
+          </button>
         </div>
       </div>
 
-      {/* Primary Action Horizontal Banner */}
-      <div
-        onClick={() => navigate('/upload')}
-        className="group mt-9 cursor-pointer rounded-2xl border border-[rgba(200,168,90,0.35)] bg-gradient-to-r from-[#17130D] to-[#1D1810] p-8 shadow-[0_8px_40px_rgba(0,0,0,0.65)] transition-all duration-300 hover:border-[#C8A85A] hover:shadow-[0_12px_48px_rgba(200,168,90,0.18)] sm:p-9"
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <div className="flex size-16 items-center justify-center rounded-2xl border border-[rgba(200,168,90,0.4)] bg-[#100D08] text-[#C8A85A] transition-colors group-hover:border-[#C8A85A] group-hover:bg-[#C8A85A] group-hover:text-[#090704]">
-              <Upload className="size-8" />
-            </div>
-            <div>
-              <h2 className="font-serif text-2xl font-normal text-[#F0E5CA] sm:text-3xl">
-                Upload Transactions
-              </h2>
-              <p className="mt-1.5 text-base text-[#E8D29A]">
-                Upload your Excel or CSV file to begin intelligent voucher classification.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex size-14 items-center justify-center rounded-full border border-[rgba(200,168,90,0.4)] bg-[#100D08] text-[#C8A85A] transition-all group-hover:border-[#C8A85A] group-hover:bg-[#C8A85A] group-hover:text-[#090704]">
-            <ArrowRight className="size-6" />
-          </div>
-        </div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <StatCard label="Total Transactions" value={stats.total} icon={FileText} />
+        <StatCard label="Processed Today" value={stats.today} icon={CheckCircle2} />
+        <StatCard label="Pending Reviews" value={stats.review} icon={Clock} hint={`Model score below ${REVIEW_SCORE_THRESHOLD}`} />
+        <StatCard label="Avg. Model Score" value={stats.avg === null ? '—' : stats.avg.toFixed(2)} icon={Gauge}
+          hint="Uncalibrated; not accuracy" />
+        <StatCard label="GST Exceptions" value={stats.gstExceptions ?? '—'} icon={FileWarning}
+          hint={stats.gstExceptions === null ? 'Run a GST analysis' : 'High/medium finding groups'} />
+        <StatCard label="Rows With GST Findings" value={stats.findingsRows ?? '—'} icon={ListChecks}
+          hint={stats.findingsRows === null ? 'Run a GST analysis' : 'In the latest analysis'} />
+        <StatCard label="Filing Readiness" value={stats.readiness ? READINESS_LABEL[stats.readiness] ?? stats.readiness : '—'}
+          icon={ShieldCheck} hint="Prepared for review only; never filed" />
+        <StatCard label="Files Uploaded" value={uploads.length} icon={FolderUp} />
       </div>
 
-      {/* Recent Uploads Section / High-Readability Empty State */}
-      <div className="mt-12">
-        <div className="mb-6 flex items-center justify-between">
-          <h3 className="font-serif text-2xl font-normal text-[#F0E5CA]">
-            Recent uploads
-          </h3>
-          {uploads.length > 0 && (
-            <button
-              type="button"
-              onClick={() => navigate('/results/job-latest')}
-              className="flex items-center gap-2 text-sm font-medium text-[#E8D29A] transition-colors hover:text-[#F0E5CA]"
-            >
-              <span>View classification results</span>
-              <ArrowRight className="size-4" />
-            </button>
+      <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-3">
+        <ChartCard title="Voucher Classification" subtitle="Distribution by predicted voucher category">
+          {stats.total ? <DonutChart slices={stats.slices} centerLabel="Vouchers" /> : <EmptyChart />}
+        </ChartCard>
+        <ChartCard title="Daily Classification Volume" subtitle="Rows classified per day, last 7 days">
+          <BarChart data={stats.perDay} />
+        </ChartCard>
+        <ChartCard title="Model Score Gauge" subtitle="Average top-category score across classified rows">
+          <ScoreGauge value={stats.avg} label="Avg. score (uncalibrated)"
+            sublabel="Classifier scores are not calibrated probabilities and do not measure accuracy; that needs independently labelled data." />
+        </ChartCard>
+      </div>
+
+      <div className="mt-6 grid grid-cols-1 gap-5 lg:grid-cols-[1.4fr_1fr]">
+        <section className="ws-card px-6 py-5">
+          <div className="flex items-center justify-between">
+            <h3 className="text-[24px]">Recent Uploads</h3>
+            <Link to="/transactions" className="ws-btn-ghost text-sm">View transactions <ArrowRight className="size-4" /></Link>
+          </div>
+          {uploads.length === 0 ? (
+            <p className="mt-4 text-sm" style={{ color: 'var(--ws-text-2)' }}>No files uploaded yet. Use “Upload Transactions” to classify a workbook.</p>
+          ) : (
+            <ul className="mt-3 divide-y" style={{ borderColor: 'var(--ws-border)' }}>
+              {uploads.slice(0, 6).map((u) => (
+                <li key={u.id} className="flex items-center gap-3 py-3 text-sm" style={{ borderColor: 'var(--ws-border)' }}>
+                  <FileSpreadsheet className="size-5 shrink-0" style={{ color: 'var(--ws-gold)' }} />
+                  <span className="min-w-0 flex-1 truncate font-medium">{u.fileName}</span>
+                  <span className="tabular-nums" style={{ color: 'var(--ws-text-2)' }}>{u.rows} rows</span>
+                  <span className="text-xs" style={{ color: 'var(--ws-muted)' }}>{formatDate(u.createdAt)}</span>
+                </li>
+              ))}
+            </ul>
           )}
-        </div>
+        </section>
 
-        {uploads.length === 0 ? (
-          /* Empty State */
-          <div className="flex flex-col items-center justify-center rounded-2xl border border-[rgba(200,168,90,0.25)] bg-[#17130D]/90 px-6 py-16 text-center">
-            <div className="flex size-16 items-center justify-center rounded-2xl border border-[rgba(200,168,90,0.3)] bg-[#100D08] text-[#C8A85A]">
-              <FolderOpen className="size-8" />
-            </div>
-            <h4 className="mt-6 font-serif text-2xl font-normal text-[#F0E5CA] sm:text-3xl">
-              No transactions yet.
-            </h4>
-            <p className="mt-2.5 max-w-lg text-base text-[#E8D29A]">
-              Upload your first transaction file to begin intelligent voucher classification and GST intelligence.
-            </p>
-            <button
-              type="button"
-              onClick={() => navigate('/upload')}
-              className="mt-7 inline-flex items-center gap-2.5 rounded-xl bg-[#D8BC78] px-7 py-3.5 text-base font-semibold text-[#090704] transition-all hover:bg-[#E8D29A]"
-            >
-              <Upload className="size-5" />
-              <span>Upload Transactions →</span>
-            </button>
-          </div>
-        ) : (
-          /* Uploads Table */
-          <div className="overflow-hidden rounded-2xl border border-[rgba(200,168,90,0.22)] bg-[#17130D]">
-            {uploads.map((item, index) => (
-              <div
-                key={item.id}
-                onClick={() => navigate('/results/job-latest')}
-                className={`flex cursor-pointer items-center justify-between px-8 py-5.5 transition-colors hover:bg-[#1D1810] ${
-                  index !== uploads.length - 1 ? 'border-b border-[rgba(200,168,90,0.12)]' : ''
-                }`}
-              >
-                <div className="flex items-center gap-5">
-                  <FileSpreadsheet className="size-6 text-[#C8A85A]" />
-                  <span className="font-mono text-base font-medium text-[#F0E5CA]">
-                    {item.filename}
-                  </span>
-                </div>
-
-                <div className="flex items-center gap-9">
-                  <span className="text-base font-mono text-[#E8D29A]">
-                    {item.rows}
-                  </span>
-
-                  <span className="inline-flex items-center gap-2 rounded-full border border-[#4E7A58]/40 bg-[#4E7A58]/20 px-3.5 py-1 text-xs font-semibold text-[#78A882]">
-                    <span className="size-2 rounded-full bg-[#78A882]" />
-                    {item.status}
-                  </span>
-
-                  <span className="text-sm font-medium text-[#B9AD92]">
-                    {item.date}
-                  </span>
-
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate('/results/job-latest');
-                    }}
-                    className="text-[#756B58] transition-colors hover:text-[#C8A85A]"
-                  >
-                    <MoreHorizontal className="size-5" />
-                  </button>
-                </div>
+        <section className="ws-card px-6 py-5">
+          <h3 className="text-[24px]">Latest GST Analysis</h3>
+          {analysis ? (
+            <div className="mt-3 space-y-3 text-sm">
+              <div className="flex flex-wrap items-center gap-2">
+                <ReportStatusChip status={analysis.analysis.status} />
+                <span style={{ color: 'var(--ws-text-2)' }}>{analysis.sourceLabel}</span>
               </div>
-            ))}
-          </div>
-        )}
+              <p style={{ color: 'var(--ws-text-2)' }}>
+                {analysis.analysis.discrepancies.length} finding groups · analysed {formatDate(analysis.createdAt)}
+              </p>
+              <Link to="/gst" className="ws-btn-gold">Open GST Intelligence <ArrowRight className="size-4" /></Link>
+            </div>
+          ) : (
+            <p className="mt-4 text-sm" style={{ color: 'var(--ws-text-2)' }}>
+              No analysis yet. Upload a file or create an invoice, then choose “Run GST analysis”.
+            </p>
+          )}
+        </section>
       </div>
+
+      {modal === 'invoice' && <CreateInvoiceModal onClose={closeModal} />}
+      {modal === 'upload' && <UploadTransactionsModal onClose={closeModal} />}
     </AppLayout>
+  );
+}
+
+function EmptyChart() {
+  return (
+    <p className="py-10 text-center text-sm" style={{ color: 'var(--ws-text-2)' }}>
+      No classified transactions yet.
+    </p>
   );
 }

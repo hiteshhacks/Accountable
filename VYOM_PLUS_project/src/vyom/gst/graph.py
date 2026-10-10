@@ -45,6 +45,7 @@ class GstState(TypedDict, total=False):
     filing_preparation: Dict[str, Any]
     balance_summary: Dict[str, Any]
     discrepancies: List[Dict[str, Any]]
+    row_findings: Dict[str, List[Dict[str, str]]]   # source_ref -> findings touching that row (uncapped)
     missing_fields: List[Dict[str, Any]]
     calculation_checks: List[Dict[str, Any]]
     filing_readiness: Dict[str, Any]
@@ -189,8 +190,19 @@ def make_validate(deps: GraphDeps):
                     source_rows=ledger["source_refs"], evidence={"ledger": ledger["ledger"],
                     "closing_reported": ledger["closing_reported"], "closing_computed": ledger["closing_computed_debit_positive"]},
                     recommended_action="Check the ledger's sign convention and missing entries."))
-        return {"discrepancies": [d.model_dump() for d in found], "missing_fields": missing}
+        return {"discrepancies": [d.model_dump() for d in found], "missing_fields": missing,
+                "row_findings": row_findings(found)}
     return validate_gst
+
+
+def row_findings(found: List[Discrepancy], existing: Optional[Dict[str, List[Dict[str, str]]]] = None
+                 ) -> Dict[str, List[Dict[str, str]]]:
+    """Map every affected row to its findings, using the uncapped row lists."""
+    out = {k: list(v) for k, v in (existing or {}).items()}
+    for d in found:
+        for ref in d.affected_rows():
+            out.setdefault(ref, []).append({"code": d.code, "severity": d.severity, "status": d.status})
+    return out
 
 
 def check_evidence(state: GstState) -> Dict[str, Any]:
@@ -223,6 +235,7 @@ def make_llm_node(deps: GraphDeps, mode: str):
                           "samples": [c.model_dump() for c in clean.possible_classification_mismatches[:10]]},
                 recommended_action="Review these rows' voucher type; the classifier category was not changed.")
             update["discrepancies"] = state["discrepancies"] + [concern.model_dump()]
+            update["row_findings"] = row_findings([concern], state.get("row_findings"))
             if state["status"] == "ANALYSIS_COMPLETE":
                 update["status"] = "REVIEW_REQUIRED"
                 readiness = dict(state["filing_readiness"])

@@ -2,7 +2,7 @@
 
 from typing import Any, Dict, List, Literal, Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, PrivateAttr
 
 
 Severity = Literal["HIGH", "MEDIUM", "LOW", "INFO"]
@@ -53,6 +53,11 @@ class Discrepancy(BaseModel):
     recommended_action: str
     status: FindingStatus
     origin: Literal["validation", "classification", "llm"] = "validation"
+    # Every affected row (source_rows is capped for the response); not serialised.
+    _all_rows: List[str] = PrivateAttr(default_factory=list)
+
+    def affected_rows(self) -> List[str]:
+        return self._all_rows or self.source_rows
 
 
 # ---------- LLM structured output (strict-mode compatible: every field required) ----------

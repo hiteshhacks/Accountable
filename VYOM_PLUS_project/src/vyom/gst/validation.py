@@ -43,9 +43,11 @@ class _Collector:
                 evidence["samples"] = item["samples"]
             if len(rows) > MAX_REFS:
                 evidence["note"] = f"source_rows lists the first {MAX_REFS} of {len(rows)} rows"
-            out.append(Discrepancy(code=item["code"], severity=item["severity"], message=item["message"],
-                                   source_rows=rows[:MAX_REFS], evidence=evidence,
-                                   recommended_action=item["recommended_action"], status=item["status"]))
+            d = Discrepancy(code=item["code"], severity=item["severity"], message=item["message"],
+                            source_rows=rows[:MAX_REFS], evidence=evidence,
+                            recommended_action=item["recommended_action"], status=item["status"])
+            d._all_rows = list(rows)
+            out.append(d)
         return sorted(out, key=lambda d: (SEVERITY_ORDER[d.severity], d.code))
 
 

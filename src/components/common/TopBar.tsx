@@ -1,26 +1,55 @@
-import { ChevronDown } from 'lucide-react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Moon, Search, Sun, UserCog } from 'lucide-react';
+import { useWorkspace } from '../../context/WorkspaceContext';
 
-interface TopBarProps {
-  companyName?: string;
-}
+export function TopBar() {
+  const navigate = useNavigate();
+  const { theme, toggleTheme } = useWorkspace();
+  const [query, setQuery] = useState('');
 
-export function TopBar({ companyName = 'ABC Private Limited' }: TopBarProps) {
   return (
-    <header className="sticky top-0 z-20 flex h-16 items-center justify-end px-8 border-b border-[rgba(200,168,90,0.12)] bg-[#0A0805]/80 backdrop-blur-md">
-      <div className="flex items-center gap-4">
-        {/* Company Selector Pill */}
+    <header
+      className="sticky top-0 z-20 flex h-[70px] items-center justify-between gap-4 border-b px-6 backdrop-blur-md lg:px-9"
+      style={{ borderColor: 'var(--ws-border)', background: 'color-mix(in srgb, var(--ws-bg) 88%, transparent)' }}
+    >
+      <form
+        className="relative w-full max-w-[350px]"
+        onSubmit={(e) => {
+          e.preventDefault();
+          navigate(`/transactions${query.trim() ? `?q=${encodeURIComponent(query.trim())}` : ''}`);
+        }}
+      >
+        <Search className="pointer-events-none absolute top-1/2 left-3.5 size-4 -translate-y-1/2" style={{ color: 'var(--ws-muted)' }} />
+        <input
+          className="ws-input rounded-xl py-2.5 pl-10"
+          placeholder="Search transactions, parties, GSTINs..."
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          aria-label="Search transactions"
+        />
+      </form>
+
+      <div className="flex items-center gap-3">
+        <div className="ws-card flex items-center gap-3 px-3.5 py-2" style={{ boxShadow: 'none' }}>
+          <div className="flex size-8 items-center justify-center rounded-lg border"
+            style={{ borderColor: 'var(--ws-border-strong)', background: 'var(--ws-sidebar)', color: 'var(--ws-gold)' }}>
+            <UserCog className="size-4" />
+          </div>
+          <div className="leading-tight">
+            <p className="text-[13px] font-semibold">Vyom Administrator</p>
+            <p className="text-[11px] font-semibold" style={{ color: 'var(--ws-gold)' }}>Admin</p>
+          </div>
+        </div>
         <button
           type="button"
-          className="flex items-center gap-2 rounded-full border border-[rgba(200,168,90,0.25)] bg-[#17130D] px-3.5 py-1.5 text-xs font-medium text-[#F1E7CF] transition-colors hover:border-[#C8A85A] hover:bg-[#1D1810]"
+          onClick={toggleTheme}
+          className="ws-btn-ghost rounded-full p-2"
+          aria-label={theme === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+          title={theme === 'light' ? 'Dark mode' : 'Light mode'}
         >
-          <span>{companyName}</span>
-          <ChevronDown className="size-3 text-[#C8A85A]" />
+          {theme === 'light' ? <Moon className="size-5" /> : <Sun className="size-5" />}
         </button>
-
-        {/* User Avatar */}
-        <div className="flex size-8 items-center justify-center rounded-full border border-[rgba(200,168,90,0.4)] bg-[#1D1810] text-xs font-semibold text-[#E8D29A] shadow-xs">
-          P
-        </div>
       </div>
     </header>
   );
