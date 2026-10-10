@@ -38,6 +38,8 @@
     color-scheme: dark;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    /* Prevent any browser outline from rendering as a colored line at the page edge */
+    outline: none;
   }
 
   body {
@@ -118,4 +120,41 @@
           drop-shadow(0px 4px 6px rgba(120, 85, 15, 0.95))
           drop-shadow(0px 8px 24px rgba(0, 0, 0, 0.98))
           drop-shadow(0px 20px 55px rgba(240, 200, 95, 0.5));
+}
+
+/* ─── Public Navbar: glassmorphism pill ─────────────────────────────── */
+.public-nav-pill {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+  border: 1px solid rgba(217, 188, 122, 0.30);
+  border-radius: 999px;
+  padding: 10px 28px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* Hover: soft gold tint on individual links */
+.public-nav-link {
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.public-nav-link:hover {
+  background-color: rgba(217, 188, 122, 0.15);
+}
+
+/* Keyboard focus ring inside the pill */
+.public-nav-link:focus-visible {
+  outline: 1.5px solid #C8A85A;
+  outline-offset: 3px;
+}
+
+/* @supports fallback for browsers without backdrop-filter */
+@supports not (backdrop-filter: blur(1px)) {
+  .public-nav-pill {
+    background: rgba(20, 16, 10, 0.55);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
