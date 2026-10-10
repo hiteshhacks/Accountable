@@ -1,0 +1,11 @@
+{
+  "model": "experimental_dual_encoder_style",
+  "backbone": "sentence-transformers/all-MiniLM-L6-v2",
+  "n_train": 273,
+  "n_validation": 61,
+  "n_test_evaluable": 93,
+  "classes_in_training": 25,
+  "test_accuracy": 0.8279569892473119,
+  "test_macro_f1": 0.6847749962455845,
+  "warning": "Experimental only. Labels are provisional and synthetic-derived; test classes absent from training are excluded from evaluation. Not a real-client performance estimate."
+}

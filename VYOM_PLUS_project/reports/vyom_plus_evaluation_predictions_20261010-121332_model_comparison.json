@@ -1,0 +1,38 @@
+[
+  {
+    "model": "TF-IDF Baseline Alone",
+    "n_samples": 120,
+    "correct": 54,
+    "accuracy": 0.45,
+    "macro_f1": 0.38323845952522423,
+    "weighted_f1": 0.38323845952522423,
+    "rule_layer": "No"
+  },
+  {
+    "model": "TF-IDF Baseline + Semantic Rules",
+    "n_samples": 120,
+    "correct": 117,
+    "accuracy": 0.975,
+    "macro_f1": 0.9707792207792209,
+    "weighted_f1": 0.9707792207792207,
+    "rule_layer": "Yes"
+  },
+  {
+    "model": "Dual Encoder V2 Alone",
+    "n_samples": 120,
+    "correct": 45,
+    "accuracy": 0.375,
+    "macro_f1": 0.27450037707390645,
+    "weighted_f1": 0.27450037707390645,
+    "rule_layer": "No"
+  },
+  {
+    "model": "Dual Encoder V2 + Semantic Rules",
+    "n_samples": 120,
+    "correct": 118,
+    "accuracy": 0.9833333333333333,
+    "macro_f1": 0.982638888888889,
+    "weighted_f1": 0.982638888888889,
+    "rule_layer": "Yes"
+  }
+]
