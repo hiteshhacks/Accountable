@@ -1,0 +1,144 @@
+{
+  "model": "vyom_plus_tfidf_baseline_v2.pkl",
+  "created_utc": "2026-10-10T08:48:51+00:00",
+  "status": "EXPERIMENTAL BASELINE - unverified synthetic labels; not validated on real transactions",
+  "input_schema": "Canonical fields as in data/synthetic model_inputs_no_label; pass a pandas DataFrame; missing fields are allowed; extra columns are ignored",
+  "preprocessing": {
+    "contract_version": "v3-experimental-1",
+    "feature_groups": [
+      "narration",
+      "item",
+      "categorical",
+      "presence",
+      "relationships"
+    ],
+    "contract_fields": [
+      "transaction_narration",
+      "item_description",
+      "currency",
+      "payment_method",
+      "payment_status",
+      "return_reason",
+      "debit_credit_info",
+      "warehouse_from",
+      "warehouse_to",
+      "movement_reason",
+      "quantity",
+      "unit_price",
+      "taxable_value",
+      "gst_rate_percent",
+      "gst_amount",
+      "discount_amount",
+      "freight_amount",
+      "customs_duty_amount",
+      "employee_count",
+      "attendance_days",
+      "gross_pay_amount",
+      "deductions_amount",
+      "net_pay_amount",
+      "seller_supplier",
+      "buyer_customer",
+      "invoice_number",
+      "order_reference",
+      "import_export_reference",
+      "payroll_period"
+    ],
+    "excluded_fields": [
+      "transaction_date",
+      "document_type",
+      "voucher_type",
+      "Voucher Category",
+      "target",
+      "provisional_consensus_label",
+      "Correct",
+      "Predicted Voucher Category"
+    ],
+    "identifiers_and_parties": "presence only",
+    "text_masking": "identifier-like tokens -> 'idtoken', digits -> '#', lower-case"
+  },
+  "representation": {
+    "name": "field_words",
+    "description": "field-tagged word uni/bi-grams over the contract (narration, item, categorical, presence, relationships)",
+    "field_words": {
+      "type": "TfidfVectorizer",
+      "token_pattern": "\\S+",
+      "ngram_range": [
+        1,
+        2
+      ],
+      "sublinear_tf": true,
+      "min_df": 2
+    },
+    "text_chars": null
+  },
+  "classifier": {
+    "type": "LogisticRegression",
+    "C": 8.0,
+    "class_weight": "balanced",
+    "max_iter": 3000,
+    "random_state": 42
+  },
+  "hyperparameter_search": {
+    "representations": [
+      "field_words",
+      "field_words+text_chars"
+    ],
+    "C_grid": [
+      0.5,
+      1.0,
+      2.0,
+      4.0,
+      8.0
+    ],
+    "cv": "StratifiedGroupKFold(5) on train part only, grouped by narration sentence, random_state=43",
+    "scores": {
+      "field_words, C=0.5": 0.9263,
+      "field_words, C=1.0": 0.9265,
+      "field_words, C=2.0": 0.9273,
+      "field_words, C=4.0": 0.9268,
+      "field_words, C=8.0": 0.9275,
+      "field_words+text_chars, C=0.5": 0.9074,
+      "field_words+text_chars, C=1.0": 0.9074,
+      "field_words+text_chars, C=2.0": 0.9088,
+      "field_words+text_chars, C=4.0": 0.9099,
+      "field_words+text_chars, C=8.0": 0.9054
+    },
+    "disclosure": "A first run (StratifiedGroupKFold fold 0 as the test split, word features only) was discarded because its test split contained no Job Work In Order or Advance / Prepayment rows. That run's test comparison also showed character n-grams helping, which is why the field_words+text_chars candidate was added. The final split was redrawn per class, and the representation and C were chosen by training-part CV only."
+  },
+  "training_data": {
+    "file": "data/synthetic/synthetic_voucher_dataset_v5_review_ready.xlsx",
+    "sha256": "1865fba9d4d389c1db0b713068dcaf7db496ed6d1ea837ff6a5aea6a4d78d30d",
+    "inputs_sheet": "model_inputs_no_label",
+    "labels": "labelled_data_review.voucher_type",
+    "label_source": "UNVERIFIED_SYNTHETIC_LABEL",
+    "eligible_rows": 5289,
+    "trained_on_rows": 3684
+  },
+  "excluded_records": {
+    "source": "data/synthetic/VYOM_plus_reviewer_comparison_adjudication.xlsx",
+    "sha256": "b3595c2474798cbbf114acced0ebb23a78d76724be59c5714fa92c991b1bce66",
+    "rule": "Adjudication_Queue rows with needs_adjudication = True",
+    "count": 111
+  },
+  "split": {
+    "method": "per-class group holdout: whole narration-sentence groups drawn per class until >= 20% of its rows (>= 1 group held out, >= 1 kept), numpy default_rng(42)",
+    "group": "narration sentence (narration with generated reference/date sentence removed, digits masked)",
+    "train_rows": 3684,
+    "test_rows": 1605,
+    "train_groups": 176,
+    "test_groups": 62,
+    "test_rows_sharing_non_narration_fields_with_train": 53
+  },
+  "scores": "predict_proba is uncalibrated; never report it as confidence",
+  "review_route_labels": [
+    "Other / Miscellaneous"
+  ],
+  "evaluation_workbook_used": false,
+  "environment": {
+    "python": "3.12.10",
+    "scikit_learn": "1.8.0",
+    "pandas": "2.3.3",
+    "numpy": "2.5.3",
+    "git_commit": "af49bd12c2f9e872decc17bbe18d8aa43729aff3"
+  }
+}

@@ -1,0 +1,20 @@
+<<<<<<< HEAD
+.env
+.venv/
+__pycache__/
+.pytest_cache/
+.pytest_tmp/
+.test_runs/
+*.py[cod]
+*.db
+logs/
+dist/
+build/
+=======
+node_modules
+dist
+*.tsbuildinfo
+venv/
+venv
+README copy.md
+>>>>>>> 5fed57743c7dd27fe04863b4bfcc269c39d79d05

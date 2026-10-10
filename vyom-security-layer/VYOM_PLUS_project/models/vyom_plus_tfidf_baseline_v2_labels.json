@@ -1,0 +1,249 @@
+{
+  "taxonomy_source": "data/synthetic/synthetic_voucher_dataset_v5_review_ready.xlsx / label_guidelines_v5 (27 categories)",
+  "index_order": "model.classes_ (alphabetical); index i corresponds to predict_proba column i",
+  "labels": [
+    {
+      "index": 0,
+      "label": "Advance / Prepayment",
+      "train_rows": 126,
+      "eligible_rows": 193,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": "Direction policy unresolved (DEF-07)."
+    },
+    {
+      "index": 1,
+      "label": "Attendance",
+      "train_rows": 134,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": ""
+    },
+    {
+      "index": 2,
+      "label": "Contra",
+      "train_rows": 96,
+      "eligible_rows": 192,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": "Same-entity evidence rule unresolved (DEF-05)."
+    },
+    {
+      "index": 3,
+      "label": "Delivery Note",
+      "train_rows": 149,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": ""
+    },
+    {
+      "index": 4,
+      "label": "Expense",
+      "train_rows": 115,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": "Boundary with Payment / Purchase unresolved (DEF-06)."
+    },
+    {
+      "index": 5,
+      "label": "Export",
+      "train_rows": 117,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": ""
+    },
+    {
+      "index": 6,
+      "label": "Import",
+      "train_rows": 133,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": ""
+    },
+    {
+      "index": 7,
+      "label": "Job Work In Order",
+      "train_rows": 134,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": "Definition provisional (DEF-09)."
+    },
+    {
+      "index": 8,
+      "label": "Job Work Out Order",
+      "train_rows": 134,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": "Definition provisional (DEF-09)."
+    },
+    {
+      "index": 9,
+      "label": "Journal",
+      "train_rows": 154,
+      "eligible_rows": 194,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": ""
+    },
+    {
+      "index": 10,
+      "label": "Material In",
+      "train_rows": 98,
+      "eligible_rows": 197,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": "Scope disputed: internal movement vs subcontracting (DEF-08)."
+    },
+    {
+      "index": 11,
+      "label": "Material Out",
+      "train_rows": 149,
+      "eligible_rows": 196,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": "Scope disputed: internal movement vs subcontracting (DEF-08)."
+    },
+    {
+      "index": 12,
+      "label": "Other / Miscellaneous",
+      "train_rows": 123,
+      "eligible_rows": 180,
+      "review_route": true,
+      "in_existing_v1_artifact": false,
+      "note": "Policy undecided (DEF-10: voucher class or review status). Kept as a class so the taxonomy is complete; its examples are generator records marked unclear / pending review. Predictions are routed to human review. Missing from the v1 artifact."
+    },
+    {
+      "index": 13,
+      "label": "Payment",
+      "train_rows": 145,
+      "eligible_rows": 195,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": "Boundary with Expense / Debit Note unresolved (DEF-04, DEF-06)."
+    },
+    {
+      "index": 14,
+      "label": "Physical Stock",
+      "train_rows": 133,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": ""
+    },
+    {
+      "index": 15,
+      "label": "Purchase",
+      "train_rows": 148,
+      "eligible_rows": 198,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": "Consumables policy unresolved (DEF-06)."
+    },
+    {
+      "index": 16,
+      "label": "Purchase Order",
+      "train_rows": 151,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": ""
+    },
+    {
+      "index": 17,
+      "label": "Purchase Return / Debit Note",
+      "train_rows": 151,
+      "eligible_rows": 189,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": "Boundary with Payment and Rejection In disputed (DEF-02, DEF-04)."
+    },
+    {
+      "index": 18,
+      "label": "Receipt",
+      "train_rows": 159,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": ""
+    },
+    {
+      "index": 19,
+      "label": "Receipt Note",
+      "train_rows": 149,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": ""
+    },
+    {
+      "index": 20,
+      "label": "Rejection In",
+      "train_rows": 138,
+      "eligible_rows": 182,
+      "review_route": false,
+      "in_existing_v1_artifact": false,
+      "note": "Direction convention disputed (DEF-01). 18 of its 20 reviewed rows are disputed and excluded; trained on synthetic labels that follow guideline v5. Missing from the v1 artifact."
+    },
+    {
+      "index": 21,
+      "label": "Rejection Out",
+      "train_rows": 142,
+      "eligible_rows": 186,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": "Direction convention disputed (DEF-01, DEF-02)."
+    },
+    {
+      "index": 22,
+      "label": "Salary / Payroll",
+      "train_rows": 134,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": ""
+    },
+    {
+      "index": 23,
+      "label": "Sales",
+      "train_rows": 150,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": ""
+    },
+    {
+      "index": 24,
+      "label": "Sales Order",
+      "train_rows": 150,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": ""
+    },
+    {
+      "index": 25,
+      "label": "Sales Return / Credit Note",
+      "train_rows": 139,
+      "eligible_rows": 187,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": "Evidence requirement disputed (DEF-03)."
+    },
+    {
+      "index": 26,
+      "label": "Stock Journal",
+      "train_rows": 133,
+      "eligible_rows": 200,
+      "review_route": false,
+      "in_existing_v1_artifact": true,
+      "note": ""
+    }
+  ]
+}

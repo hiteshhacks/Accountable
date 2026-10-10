@@ -1,0 +1,21 @@
+model,split,description,n_records,n_classes,correct,accuracy,macro_f1,weighted_f1,classes_recall_ge_0_8,classes_recall_eq_0
+v1_recipe_with_document_type,narration_sentence_grouped,"Existing TF-IDF recipe, inputs as in train_baseline.py (includes document_type)",5200,26,5200,1.0,1.0,1.0,26,0
+v1_recipe_with_document_type,split_group_grouped,"Existing TF-IDF recipe, inputs as in train_baseline.py (includes document_type)",5200,26,5200,1.0,1.0,1.0,26,0
+v1_recipe_without_document_type,narration_sentence_grouped,Existing TF-IDF recipe without the document_type label proxy,5200,26,5032,0.9677,0.9674,0.9674,24,0
+v1_recipe_without_document_type,status_value_grouped,Existing TF-IDF recipe without the document_type label proxy,5200,26,5200,1.0,1.0,1.0,26,0
+v1_recipe_without_document_type,item_value_grouped,Existing TF-IDF recipe without the document_type label proxy,5200,26,5195,0.999,0.999,0.999,26,0
+v3_field_tfidf_all,narration_sentence_grouped,"Field-aware TF-IDF + LR, all contract groups (pre-specified primary)",5200,26,4964,0.9546,0.9544,0.9544,23,0
+v3_field_tfidf_all,split_group_grouped,"Field-aware TF-IDF + LR, all contract groups (pre-specified primary)",5200,26,5200,1.0,1.0,1.0,26,0
+v3_field_tfidf_all,status_value_grouped,"Field-aware TF-IDF + LR, all contract groups (pre-specified primary)",5200,26,5200,1.0,1.0,1.0,26,0
+v3_field_tfidf_all,item_value_grouped,"Field-aware TF-IDF + LR, all contract groups (pre-specified primary)",5200,26,5200,1.0,1.0,1.0,26,0
+v3_field_tfidf_narration_only,narration_sentence_grouped,"Field-aware TF-IDF + LR, narration only",5200,26,3535,0.6798,0.6365,0.6365,15,3
+v3_field_tfidf_no_narration,narration_sentence_grouped,Field-aware TF-IDF + LR without narration,5200,26,5026,0.9665,0.9663,0.9663,24,0
+v3_tabular_structured,narration_sentence_grouped,"HistGradientBoosting: categorical + numeric + presence + relationships, no text",5200,26,5106,0.9819,0.9819,0.9819,26,0
+v3_tabular_structured,status_value_grouped,"HistGradientBoosting: categorical + numeric + presence + relationships, no text",5200,26,1976,0.38,0.3414,0.3414,4,6
+v3_tabular_structured,item_value_grouped,"HistGradientBoosting: categorical + numeric + presence + relationships, no text",5200,26,4906,0.9435,0.9435,0.9435,22,0
+v3_tabular_structured_item,narration_sentence_grouped,HistGradientBoosting: structured fields + item_description,5200,26,4913,0.9448,0.9425,0.9425,23,0
+v3_tabular_structured_item,status_value_grouped,HistGradientBoosting: structured fields + item_description,5200,26,5020,0.9654,0.9618,0.9618,25,0
+v3_tabular_structured_item,item_value_grouped,HistGradientBoosting: structured fields + item_description,5200,26,1501,0.2887,0.2508,0.2508,2,7
+v3_numeric_presence_only,narration_sentence_grouped,"HistGradientBoosting: numeric + presence + relationships (no categorical, no text)",5200,26,4769,0.9171,0.9166,0.9166,22,0
+v3_presence_only,narration_sentence_grouped,HistGradientBoosting: field-presence flags only (layout baseline),5200,26,3453,0.664,0.6571,0.6571,8,0
+existing_tfidf_artifact,rows_outside_review_queue,models/vyom_plus_tfidf_baseline_model.pkl as saved (25 classes); includes Other / Miscellaneous rows,4860,27,4301,0.885,0.8547,0.8547,23,2
